@@ -1,0 +1,42 @@
+/* =========================================================
+   COMPONENTE · CARDS (padrão D · Misto)
+   Regra: num grupo de cards, UM card é de destaque (fundo azul);
+   os demais são neutros com título em azul.
+   ========================================================= */
+
+.cards {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: var(--gap-cards);
+}
+
+/* Card neutro */
+.card {
+  background: var(--cor-superficie);
+  border: 1px solid var(--cor-borda);
+  border-radius: var(--raio-card);
+  padding: var(--card-interno);
+  display: flex;
+  flex-direction: column;
+  gap: var(--gap-texto);
+  color: var(--cor-texto);
+}
+.card .card-rotulo { /* usa .t-legenda */ color: var(--cor-texto-3); }
+.card .card-titulo { /* usa .t-h3 */      color: var(--cor-destaque-texto); margin: 0; }
+.card .card-texto  { /* usa .t-pequeno */ color: var(--cor-texto-2); margin: 0; }
+.card .card-numero {
+  font: var(--display-peso) var(--display-tamanho)/var(--display-entrelinha) var(--fonte);
+  letter-spacing: var(--display-espaco);
+  color: var(--cor-destaque-texto);
+}
+
+/* Card de destaque: só um por grupo */
+.card.card--destaque {
+  background: var(--cor-destaque);
+  border-color: transparent;
+  color: var(--cor-sobre-destaque);
+}
+.card.card--destaque .card-rotulo { color: var(--cor-sobre-destaque-3); }
+.card.card--destaque .card-titulo,
+.card.card--destaque .card-numero { color: var(--cor-sobre-destaque); }
+.card.card--destaque .card-texto  { color: var(--cor-sobre-destaque-2); }

@@ -1,0 +1,1558 @@
+<!DOCTYPE html>
+<html lang="pt-BR" data-theme="light">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Oak · Sistema de Conteúdo</title>
+<!-- Visual: design system da Artië (tokens de cores, Manrope, espaçamento, raios + componentes) -->
+<link rel="stylesheet" href="artie-design-system/tokens.css">
+<link rel="stylesheet" href="artie-design-system/components/cards.css">
+<link rel="stylesheet" href="artie-design-system/components/botoes.css">
+<style>
+/* =========================================================
+   Oak · Sistema de Conteúdo v0.3 (visual: design system da Artië)
+   Tudo vem do design system: cores, fonte, espaçamento e raios
+   são as variáveis do tokens.css. Nenhuma cor nova.
+   ========================================================= */
+:root{--sw:256px;--topo:64px;--px:var(--pagina-borda-x);--py:var(--pagina-borda-y)}
+*{box-sizing:border-box;min-width:0}
+html{-webkit-text-size-adjust:100%}
+body{margin:0;background:var(--cor-fundo);color:var(--cor-texto);font:var(--pequeno-peso) var(--pequeno-tamanho)/var(--pequeno-entrelinha) var(--fonte);-webkit-font-smoothing:antialiased;overflow-x:clip}
+button,input,select,textarea{font:inherit;color:inherit}
+button{cursor:pointer}
+a{color:inherit}
+:focus-visible{outline:2px solid var(--cor-destaque-texto);outline-offset:2px;border-radius:var(--esp-2)}
+::selection{background:var(--cor-destaque);color:var(--cor-sobre-destaque)}
+.ic{width:var(--esp-4);height:var(--esp-4);flex:none}
+.mute{color:var(--cor-texto-2)}
+.dim{color:var(--cor-texto-3)}
+.sm{font-size:var(--legenda-tamanho)}
+.grow{flex:1}
+.sp{flex:1}
+.ell{overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.num{font-variant-numeric:tabular-nums}
+.azul{color:var(--cor-destaque-texto)}
+.mt{margin-top:var(--gap-cards)}.mb{margin-bottom:var(--gap-cards)}
+.fontbar{position:fixed;top:0;left:0;right:0;z-index:99;background:var(--cor-destaque);color:var(--cor-sobre-destaque);padding:var(--esp-3) var(--esp-5);font-weight:700;text-align:center}
+
+/* ---------- estrutura ---------- */
+.app{display:grid;grid-template-columns:var(--sw) minmax(0,1fr);min-height:100dvh}
+.side{position:sticky;top:0;height:100dvh;background:linear-gradient(var(--cor-superficie),var(--cor-superficie)),var(--cor-fundo);border-right:1px solid var(--cor-borda);display:flex;flex-direction:column;padding:var(--esp-5) var(--esp-3) var(--esp-4);overflow-y:auto;gap:var(--esp-1);z-index:50}
+.ws{display:flex;align-items:center;gap:var(--esp-3);padding:0 var(--esp-3) var(--esp-5)}
+.ws-logo{font:var(--display-peso) var(--t2-tamanho)/1 var(--fonte);letter-spacing:var(--display-espaco);color:var(--cor-texto);flex:none}
+.ws-t{font-size:var(--legenda-tamanho);font-weight:600;color:var(--cor-texto-3);line-height:1.2;padding-left:var(--esp-3);border-left:1px solid var(--cor-borda)}
+.nav-i{display:flex;align-items:center;gap:var(--esp-3);min-height:var(--esp-7);padding:0 var(--esp-3);border-radius:var(--raio-botao);color:var(--cor-texto-2);text-decoration:none;font-weight:600;width:100%;border:0;background:none;text-align:left;line-height:1.25}
+.nav-i:hover{background:var(--cor-superficie);color:var(--cor-texto)}
+.nav-i.on{background:var(--cor-destaque-suave);color:var(--cor-destaque-texto);font-weight:700}
+.nav-i.search{color:var(--cor-texto-3);margin-bottom:var(--esp-3);box-shadow:inset 0 0 0 1px var(--cor-borda);background:var(--cor-fundo);font-weight:500}
+.nav-h{padding:var(--esp-5) var(--esp-3) var(--esp-2);color:var(--cor-texto-3)}
+.kbd{white-space:nowrap;flex:none;margin-left:auto;font-size:var(--legenda-tamanho);font-weight:600;color:var(--cor-texto-3);box-shadow:inset 0 0 0 1px var(--cor-borda);border-radius:var(--esp-1);padding:0 var(--esp-1)}
+.count{margin-left:auto;font-size:var(--legenda-tamanho);font-weight:700;color:var(--cor-texto-3);font-variant-numeric:tabular-nums}
+.count.strong{background:var(--cor-destaque);color:var(--cor-sobre-destaque);border-radius:var(--raio-tag);padding:0 var(--esp-2)}
+.nav-i .chk{margin-left:auto;opacity:0}
+.nav-i.sel{color:var(--cor-texto);font-weight:700}
+.nav-i.sel .chk{opacity:1;color:var(--cor-destaque-texto)}
+.side-foot{margin-top:auto;padding-top:var(--esp-4);border-top:1px solid var(--cor-borda);display:grid;gap:var(--esp-1)}
+.ver{font-size:var(--legenda-tamanho);color:var(--cor-texto-3);padding:var(--esp-2) var(--esp-3) 0}
+main{min-width:0;display:flex;flex-direction:column}
+.top{position:sticky;top:0;z-index:20;height:var(--topo);display:flex;align-items:center;gap:var(--esp-2);padding:0 var(--px);background:var(--cor-fundo);border-bottom:1px solid var(--cor-borda)}
+.crumb{display:flex;align-items:center;gap:var(--esp-2);color:var(--cor-texto-2);white-space:nowrap;overflow:hidden;font-weight:600}
+.crumb b{color:var(--cor-texto);font-weight:700}
+.crumb .sl{color:var(--cor-texto-3)}
+.btn.menu-btn{display:none}
+.page{width:100%;max-width:1680px;margin:0 auto;padding:var(--py) var(--px) var(--esp-12)}
+.page.wide{max-width:none}
+.fade{animation:fade .22s ease}
+@keyframes fade{from{opacity:0;transform:translateY(4px)}to{opacity:1;transform:none}}
+@media (prefers-reduced-motion:reduce){.fade{animation:none}*{transition:none!important}}
+
+/* ---------- botões (base: components/botoes.css) ---------- */
+.btn{white-space:nowrap;justify-content:center;transition:background .12s,box-shadow .12s,opacity .12s;line-height:1}
+.btn .ic{width:var(--esp-4);height:var(--esp-4)}
+.btn--principal:hover{opacity:.88}
+.btn--secundario:hover{background:var(--cor-superficie)}
+.btn--fantasma{background:transparent;color:var(--cor-texto-2)}
+.btn--fantasma:hover{background:var(--cor-superficie);color:var(--cor-texto)}
+.btn.sm{padding:var(--esp-2) var(--esp-4)}
+.btn.icon{padding:var(--esp-2)}
+.btn.sm.icon{padding:var(--esp-2)}
+.btn[disabled]{opacity:.5;pointer-events:none}
+.btn.danger{color:var(--cor-texto-2)}
+.btn.danger.arm{background:var(--cor-texto);color:var(--cor-fundo);box-shadow:none}
+.btns{flex-wrap:wrap}
+
+/* ---------- tags e avatares ---------- */
+.tag{display:inline-flex;align-items:center;gap:var(--esp-1);height:var(--esp-5);padding:0 var(--esp-3);border-radius:var(--raio-tag);background:var(--cor-superficie);font-size:var(--legenda-tamanho);color:var(--cor-texto-2);white-space:nowrap;font-weight:700}
+.tag.line{background:none;box-shadow:inset 0 0 0 1px var(--cor-borda)}
+.tag.strong{background:var(--cor-destaque-suave);color:var(--cor-destaque-texto)}
+.tag.solid{background:var(--cor-destaque);color:var(--cor-sobre-destaque)}
+.sti{width:var(--esp-4);height:var(--esp-4);flex:none;color:var(--cor-texto)}
+.sti .sf{fill:var(--cor-destaque)}
+.sti .sk{stroke:var(--cor-sobre-destaque)}
+.sti .sd{fill:var(--cor-sobre-destaque)}
+.sti .pf{fill:currentColor}
+.sti .pk{stroke:var(--cor-fundo)}
+.av{width:var(--esp-6);height:var(--esp-6);border-radius:50%;display:inline-grid;place-items:center;font-size:var(--legenda-tamanho);font-weight:800;flex:none;line-height:1}
+.av.xs{width:var(--esp-5);height:var(--esp-5)}
+.av.lg{width:var(--esp-8);height:var(--esp-8);font-size:var(--pequeno-tamanho)}
+.t0{background:var(--cor-texto);color:var(--cor-fundo)}
+.t1{background:var(--cor-fundo);color:var(--cor-texto);box-shadow:inset 0 0 0 1.5px var(--cor-texto)}
+.t2{background:var(--cor-destaque);color:var(--cor-sobre-destaque)}
+.t3{background:var(--cor-destaque-suave);color:var(--cor-destaque-texto)}
+
+/* ---------- cabeçalho de página ---------- */
+.ph{display:flex;align-items:flex-end;justify-content:space-between;gap:var(--esp-5) var(--esp-6);flex-wrap:wrap;margin-bottom:var(--gap-blocos)}
+.ph .t-display{margin:0;text-wrap:balance}
+.eyebrow{color:var(--cor-texto-3);margin-bottom:var(--esp-3);display:flex;align-items:center;gap:var(--esp-2)}
+.sub{color:var(--cor-texto-2);margin:var(--esp-3) 0 0;max-width:70ch;text-wrap:pretty}
+.sub b{color:var(--cor-texto);font-weight:700}
+
+/* ---------- cards (base: components/cards.css) ---------- */
+.card{min-width:0}
+.bh{display:flex;align-items:center;gap:var(--esp-3);min-height:var(--esp-5)}
+.bh .card-rotulo{margin:0}
+.g{display:grid;gap:var(--gap-cards);grid-template-columns:repeat(12,minmax(0,1fr))}
+.s3{grid-column:span 3}.s4{grid-column:span 4}.s5{grid-column:span 5}.s6{grid-column:span 6}.s7{grid-column:span 7}.s8{grid-column:span 8}.s12{grid-column:span 12}
+.stack{display:grid;gap:var(--gap-cards);align-content:start}
+.empty{box-shadow:inset 0 0 0 1px var(--cor-borda);border-radius:var(--raio-botao);padding:var(--esp-5);color:var(--cor-texto-2);display:grid;gap:var(--esp-3);justify-items:start}
+.bar{height:var(--esp-2);border-radius:var(--raio-tag);background:var(--cor-borda);overflow:hidden}
+.bar i{display:block;height:100%;background:var(--cor-destaque-texto);border-radius:var(--raio-tag)}
+.card--destaque .bar{background:var(--cor-sobre-destaque-3)}
+.card--destaque .bar i{background:var(--cor-sobre-destaque)}
+.note{font-size:var(--legenda-tamanho);color:var(--cor-texto-3);margin:0}
+.card--destaque .card-numero{font-variant-numeric:tabular-nums}
+
+/* listas */
+.rows{list-style:none;margin:0;padding:0}
+.rows .r{display:flex;align-items:center;gap:var(--esp-3);padding:var(--esp-3);margin:0 calc(-1 * var(--esp-3));border-radius:var(--raio-botao);cursor:pointer}
+.rows .r:hover{background:var(--cor-superficie)}
+.rows .r b{font-weight:700;display:block;line-height:1.3}
+.rows .r small{display:block;color:var(--cor-texto-2);font-size:var(--legenda-tamanho)}
+.rows .r + .r{box-shadow:0 -1px 0 var(--cor-borda)}
+.card--destaque .rows .r{color:var(--cor-sobre-destaque)}
+.card--destaque .rows .r small{color:var(--cor-sobre-destaque-2)}
+.card--destaque .rows .r + .r{box-shadow:0 -1px 0 var(--cor-sobre-destaque-3)}
+.card--destaque .rows .r:hover{background:var(--cor-destaque-escuro)}
+.card--destaque .sti{color:var(--cor-sobre-destaque)}
+.card--destaque .sti .sf{fill:var(--cor-sobre-destaque)}
+.card--destaque .sti .sk{stroke:var(--cor-destaque)}
+.card--destaque .sti .sd{fill:var(--cor-destaque)}
+.card--destaque .dim{color:var(--cor-sobre-destaque-3)}
+
+/* pipeline */
+.sbar{display:flex;height:var(--esp-3);gap:2px;border-radius:var(--raio-tag);overflow:hidden;background:var(--cor-superficie)}
+.sbar i{display:block;height:100%}
+.legend{list-style:none;margin:0;padding:0;display:grid;gap:var(--esp-2);font-size:var(--legenda-tamanho);font-weight:600}
+.legend li{display:flex;align-items:center;gap:var(--esp-2)}
+.legend li.zero{color:var(--cor-texto-3)}
+.legend b{font-variant-numeric:tabular-nums}
+.sw{width:var(--esp-3);height:var(--esp-3);border-radius:var(--esp-1);flex:none}
+.c-ideia{background:var(--cor-borda)}
+.c-texto{background:var(--cor-texto-3)}
+.c-design{background:var(--cor-texto-2)}
+.c-revisar{background:var(--cor-destaque)}
+.c-aprovado{background:repeating-linear-gradient(135deg,var(--cor-texto-2) 0 3px,var(--cor-borda) 3px 6px)}
+.c-agendado{background:repeating-linear-gradient(135deg,var(--cor-texto) 0 3px,var(--cor-texto-3) 3px 6px)}
+.c-publicado{background:var(--cor-texto)}
+
+/* ---------- semana (faixa) ---------- */
+.wstrip{display:grid;grid-template-columns:repeat(7,minmax(0,1fr));gap:var(--esp-2)}
+.wday{min-height:160px;border:1px solid var(--cor-borda);border-radius:var(--raio-botao);padding:var(--esp-2);background:var(--cor-fundo);display:flex;flex-direction:column;gap:var(--esp-2);transition:background .12s}
+.wday.wkend{background:transparent;border-style:dashed}
+.wday.today{border-color:var(--cor-destaque-texto);box-shadow:inset 0 0 0 1px var(--cor-destaque-texto)}
+.wday .dh{display:flex;justify-content:space-between;align-items:center;font-size:var(--legenda-tamanho);font-weight:600;color:var(--cor-texto-3);padding:0 var(--esp-1)}
+.wday .dh b{font-weight:800;color:var(--cor-texto);min-width:var(--esp-5);height:var(--esp-5);display:grid;place-items:center;border-radius:var(--raio-tag)}
+.wday.today .dh b{background:var(--cor-destaque);color:var(--cor-sobre-destaque)}
+.add-slot{margin-top:auto;border:1px dashed var(--cor-borda);border-radius:var(--esp-2);height:var(--esp-6);color:var(--cor-texto-3);background:none;opacity:0;display:grid;place-items:center;transition:opacity .12s}
+.wday:hover .add-slot,.add-slot:focus-visible{opacity:1}
+@media (hover:none){.add-slot{opacity:.7}}
+
+/* ---------- cartão de post no calendário ---------- */
+.pc{background:var(--cor-fundo);border:1px solid var(--cor-borda);border-radius:var(--esp-2);padding:var(--esp-2);cursor:pointer;font-size:var(--legenda-tamanho);line-height:1.35;text-align:left;user-select:none;-webkit-user-select:none;transition:border-color .12s,transform .12s;position:relative}
+.pc:hover{border-color:var(--cor-texto-3)}
+.pc .t{font-weight:700;color:var(--cor-texto);display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden;overflow-wrap:anywhere}
+.pc .m{display:flex;align-items:center;gap:var(--esp-1);margin-top:var(--esp-2);color:var(--cor-texto-3);font-weight:600}
+.pc .m .sp{flex:1}
+.pc.pub .t{color:var(--cor-texto-2)}
+.pc.rev{border-color:var(--cor-destaque-texto);box-shadow:inset 3px 0 0 var(--cor-destaque-texto)}
+.pc.dragging{opacity:.35;transform:scale(.98)}
+.pc.lg{padding:var(--esp-3);font-size:var(--pequeno-tamanho)}
+.pc.lg .t{-webkit-line-clamp:3}
+.pc .snip{color:var(--cor-texto-2);font-size:var(--legenda-tamanho);font-weight:500;margin-top:var(--esp-1);display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden}
+.over{background:var(--cor-destaque-suave)!important;outline:1.5px dashed var(--cor-destaque-texto);outline-offset:-3px}
+
+/* ---------- calendário ---------- */
+.cal-bar{display:flex;align-items:center;gap:var(--esp-3);flex-wrap:wrap;margin-bottom:var(--esp-4)}
+.cal-title{margin:0 var(--esp-2) 0 0;white-space:nowrap}
+.cal-nav{display:inline-flex;gap:var(--esp-1);align-items:center}
+.seg{display:inline-flex;background:var(--cor-superficie);border-radius:var(--raio-botao);padding:var(--esp-1);gap:var(--esp-1)}
+.seg button{height:var(--esp-7);padding:0 var(--esp-4);border:0;background:none;border-radius:var(--esp-2);color:var(--cor-texto-2);display:inline-flex;gap:var(--esp-2);align-items:center;font-weight:700;white-space:nowrap}
+.seg button.on{background:var(--cor-fundo);color:var(--cor-destaque-texto);box-shadow:inset 0 0 0 1px var(--cor-borda)}
+.filters{display:flex;gap:var(--esp-2);flex-wrap:wrap;align-items:center;margin-bottom:var(--esp-4)}
+.chipsel{display:inline-flex;align-items:center;height:var(--esp-7);box-shadow:inset 0 0 0 1px var(--cor-borda);border-radius:var(--raio-tag);padding:0 var(--esp-1) 0 var(--esp-4);font-size:var(--legenda-tamanho);font-weight:600;color:var(--cor-texto-3);background:var(--cor-fundo);gap:var(--esp-1)}
+.chipsel select{border:0;background:none;color:var(--cor-texto);height:var(--esp-6);padding:0 var(--esp-2) 0 var(--esp-1);cursor:pointer;font-size:var(--legenda-tamanho);font-weight:700;max-width:200px}
+.chipsel select:focus{outline:none}
+.chipsel.on{background:var(--cor-destaque-suave);box-shadow:none;color:var(--cor-destaque-texto)}
+.chipsel.on select{color:var(--cor-destaque-texto)}
+.month{border:1px solid var(--cor-borda);border-radius:var(--raio-card);overflow:hidden;background:var(--cor-fundo)}
+.mhead{display:grid;grid-template-columns:repeat(7,minmax(0,1fr));border-bottom:1px solid var(--cor-borda);background:var(--cor-superficie)}
+.mhead div{padding:var(--esp-3);color:var(--cor-texto-3)}
+.mgrid{display:grid;grid-template-columns:repeat(7,minmax(0,1fr));grid-auto-rows:minmax(144px,auto)}
+.cell{border-right:1px solid var(--cor-borda);border-bottom:1px solid var(--cor-borda);padding:var(--esp-2);display:flex;flex-direction:column;gap:var(--esp-1);transition:background .12s}
+.cell:nth-child(7n){border-right:0}
+.mgrid .cell:nth-last-child(-n+7){border-bottom:0}
+.cell.wk{background:var(--cor-superficie)}
+.cell .dn{display:flex;align-items:center;justify-content:flex-end;height:var(--esp-6);gap:var(--esp-1)}
+.cell .dn span{font-size:var(--legenda-tamanho);font-weight:700;color:var(--cor-texto-2);min-width:var(--esp-6);height:var(--esp-6);padding:0 var(--esp-2);display:grid;place-items:center;border-radius:var(--raio-tag);font-variant-numeric:tabular-nums}
+.cell.out .dn span{color:var(--cor-texto-3);font-weight:500}
+.cell.out .pc{opacity:.6}
+.cell.today .dn span{background:var(--cor-destaque);color:var(--cor-sobre-destaque)}
+.cell .dn .add{margin-right:auto;width:var(--esp-6);height:var(--esp-6);border-radius:var(--esp-2);border:0;background:none;color:var(--cor-texto-3);display:grid;place-items:center;opacity:0}
+.cell:hover .dn .add,.cell .dn .add:focus-visible{opacity:1}
+.cell .dn .add:hover{background:var(--cor-destaque-suave);color:var(--cor-destaque-texto)}
+.cell .more{font-size:var(--legenda-tamanho);font-weight:700;color:var(--cor-texto-2);border:0;background:none;text-align:left;padding:var(--esp-1);border-radius:var(--esp-1)}
+.cell .more:hover{background:var(--cor-superficie)}
+.wk7{display:grid;grid-template-columns:repeat(7,minmax(0,1fr));border:1px solid var(--cor-borda);border-radius:var(--raio-card);overflow:hidden;background:var(--cor-fundo);min-height:62vh}
+.wk7 .col{border-right:1px solid var(--cor-borda);display:flex;flex-direction:column}
+.wk7 .col:last-child{border-right:0}
+.wk7 .col.wk{background:var(--cor-superficie)}
+.wk7 .ch{padding:var(--esp-3);border-bottom:1px solid var(--cor-borda);display:flex;align-items:center;gap:var(--esp-2)}
+.wk7 .ch small{color:var(--cor-texto-3);text-transform:capitalize}
+.wk7 .ch b{min-width:var(--esp-6);height:var(--esp-6);display:grid;place-items:center;border-radius:var(--raio-tag)}
+.wk7 .col.today .ch b{background:var(--cor-destaque);color:var(--cor-sobre-destaque)}
+.wk7 .cb{padding:var(--esp-2);display:flex;flex-direction:column;gap:var(--esp-2);flex:1}
+.board{display:grid;grid-auto-flow:column;grid-auto-columns:minmax(264px,1fr);gap:var(--esp-3);overflow-x:auto;padding-bottom:var(--esp-3);scroll-snap-type:x proximity}
+.bcol{background:var(--cor-superficie);border-radius:var(--raio-card);padding:var(--esp-2);min-height:420px;display:flex;flex-direction:column;gap:var(--esp-2);scroll-snap-align:start}
+.bcol-h{display:flex;align-items:center;gap:var(--esp-2);padding:var(--esp-2);font-weight:800}
+.tbl-wrap{border:1px solid var(--cor-borda);border-radius:var(--raio-card);overflow:auto;background:var(--cor-fundo)}
+.tbl{width:100%;border-collapse:collapse;min-width:840px}
+.tbl th{text-align:left;color:var(--cor-texto-3);padding:var(--esp-3) var(--esp-4);border-bottom:1px solid var(--cor-borda);background:var(--cor-superficie);white-space:nowrap}
+.tbl td{padding:var(--esp-3) var(--esp-4);border-bottom:1px solid var(--cor-borda);vertical-align:middle;white-space:nowrap;font-size:var(--legenda-tamanho);font-weight:600;color:var(--cor-texto-2)}
+.tbl tbody tr{cursor:pointer}
+.tbl tbody tr:hover td{background:var(--cor-superficie)}
+.tbl tr.grp td{color:var(--cor-destaque-texto);cursor:default}
+.tbl td.nm{white-space:normal;font-size:var(--pequeno-tamanho);font-weight:700;color:var(--cor-texto);min-width:280px}
+.tbl .stc{display:inline-flex;align-items:center;gap:var(--esp-2)}
+.mini{display:grid;grid-template-columns:repeat(7,minmax(0,1fr));gap:2px;border:1px solid var(--cor-borda);border-radius:var(--raio-card);padding:var(--esp-2)}
+.mini .wh{color:var(--cor-texto-3);text-align:center;padding:var(--esp-1) 0 var(--esp-2)}
+.mini button{border:0;background:none;border-radius:var(--raio-botao);height:var(--esp-9);display:flex;flex-direction:column;align-items:center;justify-content:flex-start;gap:var(--esp-1);padding-top:var(--esp-2);font-weight:700;font-variant-numeric:tabular-nums}
+.mini button.out{color:var(--cor-texto-3);font-weight:500}
+.mini button.today span{color:var(--cor-destaque-texto)}
+.mini button.sel{background:var(--cor-destaque);color:var(--cor-sobre-destaque)}
+.mini button.sel span{color:var(--cor-sobre-destaque)}
+.mini .dots{display:flex;gap:2px;height:var(--esp-1)}
+.mini .dots i{width:var(--esp-1);height:var(--esp-1);border-radius:50%;background:currentColor}
+.agenda{margin-top:var(--esp-5);display:grid;gap:var(--esp-2)}
+.ag-h{margin:var(--esp-1) var(--esp-1) 0}
+.legend-row{display:flex;flex-wrap:wrap;gap:var(--esp-2) var(--esp-4);margin-top:var(--esp-4);color:var(--cor-texto-2);font-size:var(--legenda-tamanho);font-weight:600}
+.legend-row span{display:inline-flex;align-items:center;gap:var(--esp-2)}
+
+/* ---------- perfis ---------- */
+.prow{display:grid;grid-template-columns:minmax(200px,1.3fr) minmax(140px,.8fr) minmax(0,1.7fr) 128px minmax(140px,.9fr);gap:var(--esp-5);align-items:center;padding:var(--esp-3);margin:0 calc(-1 * var(--esp-3));border-radius:var(--raio-botao);cursor:pointer}
+.prow + .prow{box-shadow:0 -1px 0 var(--cor-borda)}
+.prow:hover{background:var(--cor-fundo)}
+.prow.hd{cursor:default;color:var(--cor-texto-3);padding-top:0}
+.prow.hd:hover{background:none}
+.c-who{display:flex;align-items:center;gap:var(--esp-3)}
+.c-who b{font-weight:800;display:block;line-height:1.25}
+.c-who small,.c-week small,.c-meta small{color:var(--cor-texto-3);font-size:var(--legenda-tamanho);font-weight:600;display:block}
+.c-week{display:flex;align-items:center;gap:var(--esp-3)}
+.wdots{display:flex;gap:var(--esp-1)}
+.wdots i{width:var(--esp-3);height:var(--esp-3);border-radius:var(--esp-1);box-shadow:inset 0 0 0 1.5px var(--cor-borda)}
+.wdots i.on{background:var(--cor-destaque-texto);box-shadow:none}
+.wdots i.half{background:repeating-linear-gradient(135deg,var(--cor-destaque-texto) 0 2px,transparent 2px 4px);box-shadow:inset 0 0 0 1.5px var(--cor-destaque-texto)}
+.c-next{display:flex;align-items:center;gap:var(--esp-2);font-size:var(--legenda-tamanho);font-weight:600}
+.c-meta{display:grid;gap:var(--esp-1)}
+.pgrid{display:grid;grid-template-columns:repeat(auto-fill,minmax(280px,1fr));gap:var(--gap-cards)}
+.pcard{text-align:left;cursor:pointer;font:inherit;transition:border-color .12s}
+.pcard:hover{border-color:var(--cor-texto-3)}
+.pcard .who{display:flex;gap:var(--esp-3);align-items:center}
+.pcard .who small{display:block;color:var(--cor-texto-2);font-size:var(--legenda-tamanho);font-weight:600}
+.pcard .stats{display:grid;grid-template-columns:repeat(3,1fr);gap:var(--esp-2);border-top:1px solid var(--cor-borda);padding-top:var(--esp-4);margin-top:var(--esp-1)}
+.pcard .stats b{display:block;font:var(--t3-peso) var(--t3-tamanho)/var(--t3-entrelinha) var(--fonte);color:var(--cor-destaque-texto);font-variant-numeric:tabular-nums}
+.pcard .stats small{color:var(--cor-texto-3);font-size:var(--legenda-tamanho);font-weight:600}
+.pcard.new{border-style:dashed;background:none;place-items:center;align-items:center;justify-content:center;color:var(--cor-texto-2);min-height:200px;font-weight:700}
+.sec-h{margin:var(--gap-blocos) 0 var(--esp-4);color:var(--cor-texto-3);display:flex;align-items:center;gap:var(--esp-2)}
+
+/* ---------- ideias ---------- */
+.cap{display:flex;align-items:center;gap:var(--esp-2);box-shadow:inset 0 0 0 1.5px var(--cor-borda);border-radius:var(--raio-botao);padding:var(--esp-2) var(--esp-2) var(--esp-2) var(--esp-4);background:var(--cor-fundo);transition:box-shadow .12s}
+.cap:focus-within{box-shadow:inset 0 0 0 1.5px var(--cor-destaque-texto)}
+.cap .ic{color:var(--cor-texto-3)}
+.cap input{flex:1;border:0;background:none;height:var(--esp-7);font-size:var(--pequeno-tamanho);font-weight:600;outline:none;min-width:120px}
+.cap input::placeholder{color:var(--cor-texto-3)}
+.cap select{border:0;background:var(--cor-superficie);border-radius:var(--esp-2);height:var(--esp-6);padding:0 var(--esp-2);font-size:var(--legenda-tamanho);font-weight:700;max-width:220px}
+.split{display:grid;grid-template-columns:minmax(0,1fr) 360px;gap:var(--gap-cards);align-items:start}
+.icols{display:grid;grid-template-columns:repeat(auto-fit,minmax(264px,1fr));gap:var(--esp-4)}
+.icol{background:var(--cor-superficie);border-radius:var(--raio-card);padding:var(--esp-3);display:flex;flex-direction:column;gap:var(--esp-2)}
+.icol-h{display:flex;align-items:center;gap:var(--esp-2);padding:var(--esp-1) var(--esp-1) var(--esp-2);font-weight:800}
+.icard{background:var(--cor-fundo);border:1px solid var(--cor-borda);border-radius:var(--raio-botao);padding:var(--esp-3);display:grid;gap:var(--esp-2)}
+.icard p{margin:0;line-height:1.4;font-weight:700}
+.icard .m{font-size:var(--legenda-tamanho);font-weight:600;color:var(--cor-texto-3);display:flex;gap:var(--esp-1);flex-wrap:wrap;align-items:center}
+.icard .acts{display:flex;gap:var(--esp-1);opacity:0;transition:opacity .12s}
+.icard:hover .acts,.icard:focus-within .acts{opacity:1}
+@media (hover:none){.icard .acts{opacity:1}}
+
+/* ---------- estúdio ---------- */
+.studio{display:grid;grid-template-columns:minmax(0,1fr) minmax(400px,600px);gap:var(--gap-cards);align-items:start}
+.pv{position:sticky;top:calc(var(--topo) + var(--esp-5));display:grid;gap:var(--esp-3)}
+.pv-bg{background:var(--cor-superficie);border-radius:var(--raio-card);padding:var(--esp-6);display:grid;place-items:start center;min-height:420px}
+.fld{display:grid;gap:var(--esp-2)}
+.lbl{font-size:var(--legenda-tamanho);color:var(--cor-texto-3);font-weight:700}
+.in{width:100%;border:0;box-shadow:inset 0 0 0 1.5px var(--cor-borda);background:var(--cor-fundo);border-radius:var(--raio-botao);padding:var(--esp-3) var(--esp-4);font-size:var(--pequeno-tamanho);font-weight:600;transition:box-shadow .12s}
+.in:focus{outline:none;box-shadow:inset 0 0 0 1.5px var(--cor-destaque-texto)}
+.in::placeholder{color:var(--cor-texto-3)}
+textarea.in{resize:vertical;line-height:var(--corpo-entrelinha);font-weight:500}
+select.in{height:var(--esp-8);padding:0 var(--esp-3)}
+.row{display:flex;gap:var(--esp-2);align-items:center;flex-wrap:wrap}
+.two{display:grid;grid-template-columns:1fr 1fr;gap:var(--esp-4)}
+.pills{display:flex;gap:var(--esp-2);flex-wrap:wrap}
+.pill{height:var(--esp-7);padding:0 var(--esp-4);border-radius:var(--raio-tag);border:0;box-shadow:inset 0 0 0 1.5px var(--cor-borda);background:var(--cor-fundo);font-size:var(--legenda-tamanho);font-weight:700;color:var(--cor-texto-2)}
+.pill:hover{box-shadow:inset 0 0 0 1.5px var(--cor-texto-3);color:var(--cor-texto)}
+.pill.on{background:var(--cor-destaque-suave);color:var(--cor-destaque-texto);box-shadow:inset 0 0 0 1.5px var(--cor-destaque-texto)}
+.cc{display:flex;justify-content:space-between;gap:var(--esp-3);font-size:var(--legenda-tamanho);font-weight:600;color:var(--cor-texto-3);flex-wrap:wrap}
+.cc b{color:var(--cor-texto)}
+.hooks{list-style:none;margin:var(--esp-2) 0 0;padding:0;display:grid;gap:var(--esp-2)}
+.hooks li{display:flex;gap:var(--esp-3);align-items:flex-start;box-shadow:inset 0 0 0 1px var(--cor-borda);border-radius:var(--raio-botao);padding:var(--esp-3);font-weight:600}
+.hooks small{display:block;color:var(--cor-texto-3);font-size:var(--legenda-tamanho)}
+.ai-dot{width:var(--esp-2);height:var(--esp-2);border-radius:50%;background:currentColor;display:inline-block;animation:pulse 1s infinite}
+@keyframes pulse{50%{opacity:.25}}
+.studio .card{gap:var(--esp-5)}
+
+/* ---------- marca / raio-x ---------- */
+.pil .top2{display:flex;justify-content:space-between;gap:var(--esp-3);font-weight:800;margin-bottom:var(--esp-2)}
+.pil small{display:block;color:var(--cor-texto-2);font-size:var(--legenda-tamanho);font-weight:500;margin-top:var(--esp-2)}
+.pil + .pil{margin-top:var(--esp-4)}
+.chips{display:flex;gap:var(--esp-2);flex-wrap:wrap}
+.chips.no .tag{text-decoration:line-through;text-decoration-color:var(--cor-texto-3);color:var(--cor-texto-3);background:none;box-shadow:inset 0 0 0 1px var(--cor-borda)}
+.ol{margin:0;padding:0;list-style:none;counter-reset:n}
+.ol li{counter-increment:n;display:grid;grid-template-columns:var(--esp-6) 1fr;gap:var(--esp-2);padding:var(--esp-3) 0;border-top:1px solid var(--cor-borda);color:var(--cor-texto-2)}
+.ol li:first-child{border-top:0;padding-top:0}
+.ol li::before{content:counter(n,decimal-leading-zero);font-size:var(--legenda-tamanho);font-weight:800;color:var(--cor-destaque-texto);padding-top:2px}
+.rx{display:grid;grid-template-columns:var(--esp-6) minmax(0,1fr);gap:var(--esp-4);padding:var(--esp-4) 0;border-top:1px solid var(--cor-borda)}
+.rx:first-of-type{border-top:0;padding-top:0}
+.rx b{display:block;font:var(--t3-peso) var(--pequeno-tamanho)/1.4 var(--fonte);color:var(--cor-destaque-texto);margin-bottom:var(--esp-1)}
+.dot{width:var(--esp-6);height:var(--esp-6);border-radius:50%;display:grid;place-items:center;font-weight:800}
+.dot.mini{width:var(--esp-4);height:var(--esp-4);font-size:var(--legenda-tamanho)}
+.d-alerta{background:var(--cor-destaque);color:var(--cor-sobre-destaque)}
+.d-oportunidade{box-shadow:inset 0 0 0 1.5px var(--cor-destaque-texto);color:var(--cor-destaque-texto)}
+.d-forca{background:var(--cor-superficie);box-shadow:inset 0 0 0 1px var(--cor-borda)}
+.cmp{display:grid;grid-template-columns:1fr 1fr;gap:var(--gap-cards)}
+.vbox{box-shadow:inset 0 0 0 1px var(--cor-borda);border-radius:var(--raio-botao);padding:var(--esp-5);background:var(--cor-fundo)}
+.vbox.new{box-shadow:inset 0 0 0 1.5px var(--cor-destaque-texto)}
+.vbox .lbl{display:block;margin-bottom:var(--esp-1)}
+.vbox p{margin:0 0 var(--esp-4);white-space:pre-wrap}
+
+/* ---------- resultados ---------- */
+.kpis{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:var(--gap-cards);margin-bottom:var(--gap-cards)}
+.hbar{display:grid;grid-template-columns:minmax(0,180px) minmax(0,1fr) 56px;gap:var(--esp-3);align-items:center;font-size:var(--legenda-tamanho);font-weight:600}
+.hbar + .hbar{margin-top:var(--esp-3)}
+.hbar b{text-align:right;font-variant-numeric:tabular-nums}
+.tbl input{width:96px;text-align:right;border:0;box-shadow:inset 0 0 0 1px transparent;background:none;border-radius:var(--esp-2);padding:var(--esp-1) var(--esp-2);font-size:var(--pequeno-tamanho);font-weight:700;font-variant-numeric:tabular-nums}
+.tbl input:hover{box-shadow:inset 0 0 0 1px var(--cor-borda)}
+.tbl input:focus{outline:none;box-shadow:inset 0 0 0 1.5px var(--cor-destaque-texto);background:var(--cor-fundo)}
+.tbl td.n,.tbl th.n{text-align:right}
+.card .tbl-wrap{border:0;background:none}
+.card .tbl th{background:none}
+
+/* ---------- biblioteca ---------- */
+.lib{display:grid;grid-template-columns:repeat(auto-fill,minmax(264px,1fr));gap:var(--gap-cards)}
+.lib code{font-size:var(--legenda-tamanho);font-weight:600;color:var(--cor-texto-3);font-family:var(--fonte)}
+
+/* ---------- aprovação ---------- */
+.apr{max-width:680px;margin:0 auto;display:grid;gap:var(--gap-cards)}
+
+/* ---------- prévia LinkedIn ---------- */
+.li{background:var(--cor-fundo);color:var(--cor-texto);border-radius:var(--esp-2);border:1px solid var(--cor-borda);width:100%;max-width:560px;margin-inline:auto;overflow:hidden;text-align:left;transition:max-width .25s;font-size:var(--pequeno-tamanho)}
+.li.mob{max-width:376px}
+.li-h{display:flex;gap:var(--esp-2);padding:var(--esp-3) var(--esp-4) var(--esp-1)}
+.li-h .av{width:var(--esp-8);height:var(--esp-8);font-size:var(--pequeno-tamanho)}
+.li-h b{display:block;font-weight:800;line-height:1.3}
+.li-h small{display:block;color:var(--cor-texto-2);font-size:var(--legenda-tamanho);font-weight:500;line-height:1.35;display:-webkit-box;-webkit-line-clamp:1;-webkit-box-orient:vertical;overflow:hidden}
+.li-t{padding:var(--esp-2) var(--esp-4) var(--esp-3);white-space:pre-wrap;overflow-wrap:anywhere;font-weight:500;line-height:1.45}
+.li-more{border:0;background:none;color:var(--cor-texto-2);padding:0;font:inherit;font-weight:700;cursor:pointer}
+.li-more:hover{color:var(--cor-destaque-texto)}
+.li-ph{color:var(--cor-texto-3)}
+.li-img{aspect-ratio:4/5;background:var(--cor-destaque);color:var(--cor-sobre-destaque);display:flex;flex-direction:column;justify-content:flex-end;padding:var(--esp-6);position:relative;overflow:hidden}
+.li-img.img{aspect-ratio:1/1}
+.li-img svg{position:absolute;right:calc(-1 * var(--esp-6));top:calc(-1 * var(--esp-6));width:72%;color:var(--cor-sobre-destaque-3);opacity:.6}
+.li-img p{font:var(--display-peso) var(--t2-tamanho)/var(--t2-entrelinha) var(--fonte);letter-spacing:var(--t2-espaco);margin:0;position:relative;text-wrap:balance}
+.li-img .by{font-size:var(--legenda-tamanho);font-weight:700;letter-spacing:var(--legenda-espaco);text-transform:uppercase;color:var(--cor-sobre-destaque-2);margin-top:var(--esp-3);position:relative}
+.li-img .pg{position:absolute;top:var(--esp-4);right:var(--esp-4);background:var(--cor-destaque-escuro);border-radius:var(--raio-tag);padding:var(--esp-1) var(--esp-3);font-size:var(--legenda-tamanho);font-weight:700}
+.li-img .kick{position:absolute;top:var(--esp-5);left:var(--esp-6);font-size:var(--legenda-tamanho);font-weight:700;letter-spacing:var(--legenda-espaco);text-transform:uppercase;color:var(--cor-sobre-destaque-2)}
+.li-quote{background:var(--cor-superficie);padding:var(--esp-7) var(--esp-6);aspect-ratio:1/1;display:flex;flex-direction:column;justify-content:center}
+.li-quote span{font:var(--display-peso) var(--display-tamanho)/.6 var(--fonte);color:var(--cor-destaque-texto)}
+.li-quote p{font:var(--t2-peso) var(--t2-tamanho)/var(--t2-entrelinha) var(--fonte);margin:var(--esp-4) 0}
+.li-quote small{font-size:var(--legenda-tamanho);font-weight:700;letter-spacing:var(--legenda-espaco);text-transform:uppercase;color:var(--cor-texto-3)}
+.li-photo{aspect-ratio:4/5;background:var(--cor-superficie);display:grid;place-items:center;align-content:center;gap:var(--esp-2);color:var(--cor-texto-3);font-weight:700}
+.li-photo .ic{width:var(--esp-9);height:var(--esp-9);stroke-width:1}
+.li-vid{aspect-ratio:16/9;background:var(--cor-texto);color:var(--cor-fundo);display:grid;place-items:center;align-content:center;gap:var(--esp-3);padding:var(--esp-5);text-align:center}
+.li-vid i{width:var(--esp-9);height:var(--esp-9);border-radius:50%;box-shadow:inset 0 0 0 1.5px var(--cor-fundo);display:grid;place-items:center}
+.li-vid i::after{content:"";border-left:14px solid var(--cor-fundo);border-top:9px solid transparent;border-bottom:9px solid transparent;margin-left:var(--esp-1)}
+.li-vid p{margin:0;font:var(--t3-peso) var(--t3-tamanho)/var(--t3-entrelinha) var(--fonte);max-width:80%}
+.li-poll{margin:0 var(--esp-4) var(--esp-3);box-shadow:inset 0 0 0 1px var(--cor-borda);border-radius:var(--esp-2);padding:var(--esp-4)}
+.li-poll div{box-shadow:inset 0 0 0 1.5px var(--cor-destaque-texto);color:var(--cor-destaque-texto);border-radius:var(--raio-tag);padding:var(--esp-2) var(--esp-3);text-align:center;font-weight:800;margin-top:var(--esp-2)}
+.li-poll small{display:block;color:var(--cor-texto-3);margin-top:var(--esp-3);font-size:var(--legenda-tamanho);font-weight:600}
+.li-f{display:flex;justify-content:space-between;padding:var(--esp-2) var(--esp-4);color:var(--cor-texto-3);font-size:var(--legenda-tamanho);font-weight:600}
+.li-a{display:grid;grid-template-columns:repeat(4,1fr);border-top:1px solid var(--cor-borda);margin:0 var(--esp-3)}
+.li-a span{text-align:center;padding:var(--esp-3) 0;color:var(--cor-texto-2);font-weight:700;font-size:var(--legenda-tamanho)}
+
+/* ---------- painel lateral (side peek) ---------- */
+.scrim{position:fixed;inset:0;background:var(--cor-fundo);opacity:0;pointer-events:none;transition:opacity .2s;z-index:45}
+.scrim.on{opacity:.72;pointer-events:auto}
+.peek{position:fixed;top:0;right:0;bottom:0;width:min(680px,100%);background:var(--cor-fundo);border-left:1px solid var(--cor-borda);transform:translateX(104%);transition:transform .26s cubic-bezier(.2,.8,.2,1);z-index:46;display:flex;flex-direction:column;visibility:hidden}
+.peek.on{transform:none;visibility:visible}
+.pk-top{height:var(--topo);display:flex;align-items:center;gap:var(--esp-1);padding:0 var(--esp-4);border-bottom:1px solid var(--cor-borda);flex:none}
+.pk-top .crumb{margin-left:var(--esp-1)}
+.pk-body{overflow-y:auto;padding:var(--esp-7) var(--esp-8) var(--esp-12);flex:1;overscroll-behavior:contain}
+.pk-title{font:var(--t2-peso) var(--t2-tamanho)/var(--t2-entrelinha) var(--fonte);letter-spacing:var(--t2-espaco);border:0;background:none;width:100%;resize:none;padding:0;outline:none;overflow:hidden;color:var(--cor-texto)}
+.pk-title::placeholder{color:var(--cor-texto-3)}
+.props{display:grid;grid-template-columns:160px minmax(0,1fr);gap:2px var(--esp-2);margin:var(--esp-5) 0}
+.props .k{display:flex;align-items:center;gap:var(--esp-2);color:var(--cor-texto-3);min-height:var(--esp-7);font-weight:600}
+.props .v{display:flex;align-items:center;gap:var(--esp-2);border-radius:var(--esp-2);padding-left:var(--esp-2);font-weight:700}
+.props .v:hover{background:var(--cor-superficie)}
+.props .v select,.props .v input{height:var(--esp-7);border:0;background:none;padding:0 var(--esp-1);width:100%;cursor:pointer;-webkit-appearance:none;appearance:none;font-weight:700;outline:none}
+.props .v input[type=date]::-webkit-calendar-picker-indicator{opacity:.5}
+.hr{height:1px;background:var(--cor-borda);margin:0 0 var(--esp-5)}
+details.tg{margin:0 0 var(--esp-3)}
+details.tg summary{list-style:none;display:flex;align-items:center;gap:var(--esp-2);font-weight:800;cursor:pointer;padding:var(--esp-2);margin:0 calc(-1 * var(--esp-2));border-radius:var(--esp-2);user-select:none}
+details.tg summary::-webkit-details-marker{display:none}
+details.tg summary:hover{background:var(--cor-superficie)}
+details.tg summary .chev{transition:transform .15s;color:var(--cor-texto-3)}
+details.tg[open] summary .chev{transform:rotate(90deg)}
+details.tg summary .ic:not(.chev){color:var(--cor-destaque-texto)}
+.tg-b{padding:var(--esp-2) 0 var(--esp-2) var(--esp-6)}
+.doc{width:100%;border:0;background:none;resize:none;font:var(--corpo-peso) var(--corpo-tamanho)/var(--corpo-entrelinha) var(--fonte);padding:var(--esp-1) 0;outline:none;min-height:120px;overflow:hidden;color:var(--cor-texto)}
+.doc.short{min-height:var(--esp-7)}
+.doc::placeholder{color:var(--cor-texto-3)}
+.callout{display:flex;gap:var(--esp-3);background:var(--cor-destaque-suave);color:var(--cor-destaque-texto);border-radius:var(--raio-botao);padding:var(--esp-4);margin-bottom:var(--esp-5);font-weight:600}
+.callout b{display:block;font-weight:800}
+.mgrid4{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:var(--esp-2)}
+.mgrid4 label{display:grid;gap:var(--esp-1);font-size:var(--legenda-tamanho);font-weight:700;color:var(--cor-texto-3)}
+.mgrid4 input{border:0;box-shadow:inset 0 0 0 1.5px var(--cor-borda);border-radius:var(--esp-2);padding:var(--esp-2);background:var(--cor-fundo);font-weight:700;font-variant-numeric:tabular-nums;width:100%}
+.pk-foot{margin-top:var(--esp-7);padding-top:var(--esp-4);border-top:1px solid var(--cor-borda);display:flex;gap:var(--esp-2);flex-wrap:wrap}
+
+/* ---------- busca (Ctrl K), modal, aviso ---------- */
+.cmd,.ov{position:fixed;inset:0;display:none;align-items:flex-start;justify-content:center;padding:12vh var(--esp-4) var(--esp-4)}
+.cmd{z-index:70}.ov{z-index:80;overflow:auto;padding-top:8vh}
+.cmd.on,.ov.on{display:flex}
+.cmd::before,.ov::before{content:"";position:fixed;inset:0;background:var(--cor-fundo);opacity:.78}
+.cmd-box,.md{position:relative;background:var(--cor-fundo);border:1px solid var(--cor-borda);border-radius:var(--raio-card);overflow:hidden;animation:fade .16s ease}
+.cmd-box{width:min(680px,100%)}
+.cmd-in{display:flex;align-items:center;gap:var(--esp-3);padding:0 var(--esp-5);border-bottom:1px solid var(--cor-borda)}
+.cmd-in .ic{color:var(--cor-destaque-texto)}
+.cmd-in input{flex:1;border:0;background:none;height:var(--esp-9);font-size:var(--corpo-tamanho);font-weight:600;outline:none}
+.cmd-in input::placeholder{color:var(--cor-texto-3)}
+.cmd-list{max-height:min(56vh,480px);overflow-y:auto;padding:var(--esp-2)}
+.cmd-g{color:var(--cor-texto-3);padding:var(--esp-3) var(--esp-3) var(--esp-1)}
+.cmd-i{display:flex;align-items:center;gap:var(--esp-3);padding:var(--esp-2) var(--esp-3);border-radius:var(--raio-botao);cursor:pointer;font-weight:600}
+.cmd-i .ic{color:var(--cor-texto-3)}
+.cmd-i small{margin-left:auto;color:var(--cor-texto-3);font-size:var(--legenda-tamanho);white-space:nowrap}
+.cmd-i.on{background:var(--cor-destaque-suave);color:var(--cor-destaque-texto)}
+.cmd-i.on .ic{color:var(--cor-destaque-texto)}
+.cmd-foot{display:flex;gap:var(--esp-4);padding:var(--esp-3) var(--esp-5);border-top:1px solid var(--cor-borda);font-size:var(--legenda-tamanho);font-weight:600;color:var(--cor-texto-3)}
+.md{width:min(640px,100%);padding:var(--card-interno);display:grid;gap:var(--esp-4)}
+.md .t-h2{margin:0}
+.toast{position:fixed;bottom:var(--esp-5);left:50%;transform:translate(-50%,var(--esp-2));background:var(--cor-texto);color:var(--cor-fundo);padding:var(--esp-3) var(--esp-5);border-radius:var(--raio-botao);font-weight:700;opacity:0;transition:opacity .18s,transform .18s;pointer-events:none;z-index:90;white-space:nowrap}
+.toast.on{opacity:1;transform:translate(-50%,0)}
+
+/* ---------- barra inferior (celular) ---------- */
+.tabbar{display:none;position:fixed;bottom:0;left:0;right:0;z-index:30;grid-template-columns:repeat(5,1fr);background:var(--cor-fundo);border-top:1px solid var(--cor-borda);padding:var(--esp-2) var(--esp-2) calc(var(--esp-2) + env(safe-area-inset-bottom))}
+.tabbar a,.tabbar button{display:flex;flex-direction:column;align-items:center;gap:var(--esp-1);font-size:var(--legenda-tamanho);font-weight:700;color:var(--cor-texto-3);text-decoration:none;padding:var(--esp-1) 0;border:0;background:none}
+.tabbar .on{color:var(--cor-destaque-texto)}
+.tabbar .ic{width:var(--esp-5);height:var(--esp-5)}
+.tabbar .fab{width:var(--esp-9);height:var(--esp-8);border-radius:var(--raio-botao);background:var(--cor-destaque);color:var(--cor-sobre-destaque);display:grid;place-items:center;place-self:center;padding:0}
+
+/* ---------- v0.4 · seletor de perfil ---------- */
+.psw{display:grid;gap:var(--esp-2);margin:0 0 var(--esp-3);padding:var(--esp-2);border-radius:var(--raio-card);background:var(--cor-fundo);box-shadow:inset 0 0 0 1px var(--cor-borda)}
+.psw-h{color:var(--cor-texto-3);padding:var(--esp-1) var(--esp-2) 0}
+.psw-cur{display:flex;align-items:center;gap:var(--esp-3);width:100%;border:0;background:none;padding:var(--esp-2);border-radius:var(--raio-botao);text-align:left;cursor:pointer}
+.psw-cur:hover{background:var(--cor-superficie)}
+.psw-cur b{display:block;font-weight:800;line-height:1.25}
+.psw-cur small{display:block;color:var(--cor-texto-3);font-size:var(--legenda-tamanho);font-weight:600}
+.psw-cur .chev{color:var(--cor-texto-3);transition:transform .15s}
+.psw.open .psw-cur .chev{transform:rotate(90deg)}
+.psw-av{display:flex;gap:var(--esp-1);flex-wrap:wrap;padding:0 var(--esp-2) var(--esp-1)}
+.psw-av button{border:0;background:none;padding:2px;border-radius:50%;cursor:pointer;display:grid}
+.psw-av button.on{box-shadow:0 0 0 2px var(--cor-destaque-texto)}
+.psw-list{display:none;border-top:1px solid var(--cor-borda);padding-top:var(--esp-2)}
+.psw.open .psw-list{display:grid;gap:2px}
+.psw-q{width:100%;border:0;box-shadow:inset 0 0 0 1px var(--cor-borda);border-radius:var(--esp-2);background:var(--cor-fundo);padding:var(--esp-2) var(--esp-3);font-weight:600;margin-bottom:var(--esp-1)}
+.psw-q:focus{outline:none;box-shadow:inset 0 0 0 1.5px var(--cor-destaque-texto)}
+.psw-g{padding:var(--esp-2) var(--esp-3) var(--esp-1);color:var(--cor-texto-3)}
+.av .ic{width:var(--esp-4);height:var(--esp-4)}
+.eyebrow{flex-wrap:wrap}
+.active-chip{display:inline-flex;align-items:center;gap:var(--esp-2);height:var(--esp-6);padding:0 var(--esp-2) 0 var(--esp-1);border-radius:var(--raio-tag);background:var(--cor-destaque-suave);color:var(--cor-destaque-texto);font-size:var(--legenda-tamanho);font-weight:800;border:0;cursor:pointer;white-space:nowrap;max-width:100%}
+.active-chip span{overflow:hidden;text-overflow:ellipsis}
+.active-chip .chev{opacity:.7}
+.active-chip:hover{box-shadow:inset 0 0 0 1.5px var(--cor-destaque-texto)}
+.top .active-chip{max-width:240px}
+
+/* ---------- v0.4 · copiar texto, comentários, kit ---------- */
+.pc .cp{position:absolute;top:var(--esp-1);right:var(--esp-1);width:var(--esp-6);height:var(--esp-6);border-radius:var(--esp-2);border:0;background:var(--cor-fundo);box-shadow:inset 0 0 0 1px var(--cor-borda);color:var(--cor-texto-2);display:grid;place-items:center;opacity:0;transition:opacity .12s,background .12s;cursor:pointer;z-index:1}
+.pc:hover .cp,.pc:focus-within .cp,.pc .cp:focus-visible{opacity:1}
+.pc .cp:hover,.pc .cp.ok{background:var(--cor-destaque);color:var(--cor-sobre-destaque);box-shadow:none;opacity:1}
+.pc.lg .t{padding-right:var(--esp-6)}
+@media (hover:none){.pc .cp{opacity:1}.pc .t{padding-right:var(--esp-6)}}
+.cm-badge{display:inline-flex;align-items:center;gap:2px;color:var(--cor-destaque-texto);font-weight:800}
+.cm-badge .ic{width:var(--esp-3);height:var(--esp-3)}
+.flash{animation:flash 1.8s ease}
+@keyframes flash{0%,45%{box-shadow:0 0 0 3px var(--cor-destaque-texto)}100%{box-shadow:0 0 0 0 transparent}}
+.cg{display:grid;gap:var(--esp-2);padding:var(--esp-3) 0}
+.cg + .cg{border-top:1px solid var(--cor-borda)}
+.cg-h{display:flex;align-items:center;gap:var(--esp-2);border:0;background:none;padding:0;text-align:left;cursor:pointer;font-weight:800;width:100%;min-width:0}
+.cg-h .ell{flex:1}
+.cg-h:hover{color:var(--cor-destaque-texto)}
+.cg-h small{color:var(--cor-texto-3);font-size:var(--legenda-tamanho);font-weight:600;margin-left:auto;white-space:nowrap}
+.cmt{display:grid;gap:var(--esp-1);padding:var(--esp-3);border-radius:var(--raio-botao);background:var(--cor-superficie);border:0;text-align:left;width:100%;font:inherit;color:inherit}
+button.cmt{cursor:pointer}
+button.cmt:hover{box-shadow:inset 0 0 0 1.5px var(--cor-destaque-texto)}
+.cmt-h{display:flex;align-items:center;gap:var(--esp-2);flex-wrap:wrap}
+.cmt-h b{font-weight:800}
+.cmt-h small{color:var(--cor-texto-3);font-size:var(--legenda-tamanho);font-weight:600}
+.cmt-t{color:var(--cor-texto-2);font-weight:500}
+.cmt.res{opacity:.55}
+.cmt.res .cmt-t{text-decoration:line-through}
+.cmts{display:grid;gap:var(--esp-2)}
+.up{display:grid;grid-template-columns:auto minmax(0,1fr) auto;gap:var(--esp-3);align-items:center}
+.up-d{min-width:var(--esp-8);text-align:center;border-radius:var(--raio-botao);background:var(--cor-superficie);padding:var(--esp-1) var(--esp-2);font-size:var(--legenda-tamanho);font-weight:800;line-height:1.2}
+.up-d b{display:block;font-size:var(--t3-tamanho);color:var(--cor-destaque-texto)}
+.pill .ic{width:var(--esp-3);height:var(--esp-3);margin-right:var(--esp-1);vertical-align:-1px}
+.pill.kit{box-shadow:inset 0 0 0 1.5px var(--cor-destaque-texto)}
+.pill.kit:not(.on){color:var(--cor-destaque-texto)}
+.pin{display:inline-flex;align-items:center;gap:var(--esp-1);height:var(--esp-6);padding:0 var(--esp-3);border-radius:var(--raio-tag);border:0;box-shadow:inset 0 0 0 1px var(--cor-borda);background:var(--cor-fundo);color:var(--cor-texto-2);font-size:var(--legenda-tamanho);font-weight:800;cursor:pointer;white-space:nowrap}
+.pin .ic{width:var(--esp-3);height:var(--esp-3)}
+.pin.on{background:var(--cor-destaque-suave);color:var(--cor-destaque-texto);box-shadow:none}
+.pin.on .ic{fill:currentColor}
+.librow{display:flex;align-items:center;gap:var(--esp-3);padding:var(--esp-3) 0;border-top:1px solid var(--cor-borda)}
+.librow:first-of-type{border-top:0}
+.librow b{font-weight:800;display:block}
+.librow small{display:block;color:var(--cor-texto-2);font-size:var(--legenda-tamanho);font-weight:500}
+.libsec{display:grid;gap:var(--esp-2)}
+.libsec + .libsec{padding-top:var(--esp-4);border-top:1px solid var(--cor-borda)}
+.libsec-h{display:flex;align-items:center;gap:var(--esp-2)}
+.kitline{display:grid;gap:var(--esp-2)}
+.kitline .lbl{margin-top:var(--esp-1)}
+.refgrid{display:grid;grid-template-columns:repeat(auto-fill,minmax(300px,1fr));gap:var(--gap-cards)}
+.reflink{color:var(--cor-destaque-texto);font-weight:700;overflow-wrap:anywhere;text-decoration:none}
+.reflink:hover{text-decoration:underline}
+.refform{display:grid;grid-template-columns:auto minmax(0,1.3fr) minmax(0,1.3fr) auto auto;gap:var(--esp-2);align-items:center}
+.flow{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:var(--esp-2)}
+.flow div{border-radius:var(--raio-botao);background:var(--cor-superficie);padding:var(--esp-3);display:grid;gap:var(--esp-1)}
+.flow b{color:var(--cor-destaque-texto);font-weight:800}
+.flow small{color:var(--cor-texto-2);font-size:var(--legenda-tamanho);font-weight:600}
+@media (max-width:1279px){.refform{grid-template-columns:1fr 1fr}.refform .in:nth-child(2),.refform .in:nth-child(3){grid-column:span 2}}
+@media (max-width:719px){.flow{grid-template-columns:1fr}.refform{grid-template-columns:1fr}.refform .in:nth-child(2),.refform .in:nth-child(3){grid-column:auto}.top .active-chip{max-width:150px}}
+
+/* ---------- responsivo ---------- */
+@media (max-width:1439px){:root{--px:var(--esp-8);--py:var(--esp-7)}}
+@media (max-width:1279px){
+ .s3,.s4,.s5{grid-column:span 6}.s7,.s8{grid-column:span 12}
+ .wide-md{grid-column:span 12;grid-template-columns:1fr 1fr}
+ .split{grid-template-columns:minmax(0,1fr)}
+ .split > aside{display:grid;grid-template-columns:1fr 1fr;gap:var(--gap-cards)}
+ .studio{grid-template-columns:minmax(0,1fr) minmax(360px,480px)}
+ .prow{grid-template-columns:minmax(200px,1.3fr) minmax(130px,.8fr) minmax(0,1.6fr) 128px}
+ .prow .c-meta{display:none}
+ .ph .t-display{font-size:var(--t1-tamanho);line-height:var(--t1-entrelinha)}
+ .kpis .card-numero{font-size:var(--t1-tamanho)}
+}
+@media (max-width:1099px){
+ .wstrip{grid-template-columns:none;grid-auto-flow:column;grid-auto-columns:minmax(160px,1fr);overflow-x:auto;scroll-snap-type:x mandatory;padding-bottom:var(--esp-1)}
+ .wday{scroll-snap-align:start}
+ .studio{grid-template-columns:minmax(0,1fr)}
+ .pv{position:static}
+ .kpis{grid-template-columns:repeat(2,minmax(0,1fr))}
+}
+@media (max-width:959px){
+ :root{--px:var(--esp-6);--py:var(--esp-6)}
+ .app{grid-template-columns:minmax(0,1fr)}
+ .side{position:fixed;left:0;top:0;bottom:0;width:min(304px,86vw);transform:translateX(-104%);transition:transform .24s cubic-bezier(.2,.8,.2,1)}
+ .side.on{transform:none}
+ .btn.menu-btn{display:inline-flex}
+ .s3,.s4,.s5,.s7,.s8{grid-column:span 12}
+ .mgrid{grid-auto-rows:minmax(120px,auto)}
+ .cell{padding:var(--esp-1)}
+ .pc{padding:var(--esp-1) var(--esp-2)}
+ .pc .m .lab{display:none}
+ .prow{grid-template-columns:minmax(0,1fr) auto;gap:var(--esp-2) var(--esp-4)}
+ .prow.hd{display:none}
+ .prow .c-next{grid-column:1/-1;order:3}
+ .prow .c-rev{display:none}
+ .pk-body{padding:var(--esp-6) var(--esp-6) var(--esp-12)}
+}
+@media (max-width:719px){
+ :root{--px:var(--esp-4);--py:var(--esp-5);--card-interno:var(--esp-5)}
+ .tabbar{display:grid}
+ .page{padding-bottom:128px}
+ .hide-m{display:none!important}
+ .s6{grid-column:span 12}
+ .wide-md{grid-template-columns:1fr}
+ .split > aside{grid-template-columns:1fr}
+ .two,.cmp{grid-template-columns:1fr}
+ .props{grid-template-columns:120px minmax(0,1fr)}
+ .wk7{grid-template-columns:1fr;min-height:0}
+ .wk7 .col{border-right:0;border-bottom:1px solid var(--cor-borda)}
+ .wk7 .col:last-child{border-bottom:0}
+ .wk7 .cb{min-height:var(--esp-9)}
+ .board{grid-auto-columns:minmax(78vw,1fr);margin:0 calc(-1 * var(--px));padding-inline:var(--px);scroll-padding-inline:var(--px)}
+ .kpis{gap:var(--esp-3)}
+ .kpis .card-numero{font-size:var(--t2-tamanho)}
+ .card-numero{font-size:var(--t1-tamanho)}
+ .hbar{grid-template-columns:minmax(0,112px) minmax(0,1fr) 48px}
+ .ph .t-display{font-size:var(--t2-tamanho);line-height:var(--t2-entrelinha)}
+ .cal-title{font-size:var(--t3-tamanho)}
+ .t-h1.quote{font-size:var(--t2-tamanho)}
+ .mgrid4{grid-template-columns:1fr 1fr}
+ .toast{bottom:calc(96px + env(safe-area-inset-bottom))}
+ .cmd{padding-top:8vh}
+ .pk-body{padding:var(--esp-5) var(--esp-4) var(--esp-12)}
+ .pk-title{font-size:var(--t3-tamanho)}
+ .tg-b{padding-left:0}
+ .filters{flex-wrap:nowrap;overflow-x:auto;margin:0 calc(-1 * var(--px)) var(--esp-4);padding:0 var(--px) 2px;scrollbar-width:none}
+ .filters::-webkit-scrollbar{display:none}
+ .chipsel{flex:none}
+ .chipsel select{max-width:136px}
+ .btn{padding:var(--esp-3) var(--esp-5)}
+}
+@media (max-width:420px){.hide-s{display:none}}
+
+/* =========================================================
+   v0.5 · Barra lateral flutuante
+   Vidro fosco escuro nos dois temas: o <aside> leva data-theme="dark",
+   então a barra e o seletor usam sempre os valores escuros abaixo.
+   ========================================================= */
+:root{
+ --sbw:240px;--sb-gap:16px;
+ --sb-bg-top:var(--cor-superficie);--sb-bg-bottom:var(--cor-superficie);
+ --sb-border:var(--cor-borda);--sb-highlight:transparent;--sb-shadow:0 0 0 transparent;
+ --sb-text:var(--cor-texto-2);--sb-text-strong:var(--cor-texto);--sb-text-muted:var(--cor-texto-3);
+ --sb-divider:var(--cor-borda);--sb-hover:var(--cor-superficie);
+ --sb-accent:var(--cor-destaque);--sb-accent-soft:var(--cor-destaque-suave);--sb-active-fade:transparent;--sb-accent-glow:transparent;--sb-ind-glow:0 0 0 transparent;
+ --sb-active-border:var(--cor-borda);--sb-active-text:var(--cor-destaque-texto);--sb-active-inset:transparent;
+ --sb-badge-border:var(--cor-borda);--sb-dot-ring:var(--cor-fundo);
+ --sb-radius:24px;--sb-item-radius:999px;
+}
+html.sb-col{--sbw:72px}
+[data-theme=dark]{
+ --sb-bg-top:#1c1c1f;--sb-bg-bottom:#0d0d0f;
+ --sb-border:rgba(255,255,255,.08);--sb-highlight:rgba(255,255,255,.06);--sb-shadow:0 20px 40px rgba(0,0,0,.5);
+ --sb-text:#d4d4d8;--sb-text-strong:#ffffff;--sb-text-muted:#8a8a93;
+ --sb-divider:rgba(255,255,255,.06);--sb-hover:rgba(255,255,255,.04);
+ --sb-accent:#0F2DBD;--sb-accent-soft:rgba(15,45,189,.45);--sb-active-fade:rgba(255,255,255,.03);--sb-accent-glow:rgba(15,45,189,.40);--sb-ind-glow:0 0 10px #0F2DBD,0 0 4px rgba(255,255,255,.3);
+ --sb-active-border:rgba(255,255,255,.12);--sb-active-text:#ffffff;--sb-active-inset:rgba(255,255,255,.08);
+ --sb-badge-border:rgba(255,255,255,.18);--sb-dot-ring:#0d0d0f;
+}
+.app{display:block}
+main{margin-left:calc(var(--sbw) + var(--sb-gap) * 2);transition:margin-left .25s ease;min-height:100dvh}
+.sb{position:fixed;top:var(--sb-gap);bottom:var(--sb-gap);left:var(--sb-gap);width:var(--sbw);z-index:50;padding:20px 12px;display:flex;flex-direction:column;gap:4px;
+ background:linear-gradient(160deg,var(--sb-bg-top),var(--sb-bg-bottom) 60%),var(--cor-fundo);
+ border:1px solid var(--sb-border);border-radius:var(--sb-radius);
+ box-shadow:inset 0 1px 0 var(--sb-highlight),var(--sb-shadow);
+ color:var(--sb-text);font-family:var(--fonte);
+ transition:width .25s ease,border-radius .25s ease,transform .24s cubic-bezier(.2,.8,.2,1)}
+.sb .ic{width:20px;height:20px;stroke-width:1.5}
+.sb-brand{display:flex;align-items:center;gap:12px;padding:0 4px 16px;min-height:40px}
+.sb-mark{width:40px;height:40px;flex:none;border-radius:12px;display:grid;place-items:center;font:var(--display-peso) var(--t3-tamanho)/1 var(--fonte);letter-spacing:-.02em;color:var(--sb-text-strong);background:var(--sb-hover);box-shadow:inset 0 0 0 1px var(--sb-border)}
+.sb-name{display:grid;line-height:1.2;min-width:0;flex:1}
+.sb-name b{font:var(--display-peso) var(--pequeno-tamanho)/1.15 var(--fonte);color:var(--sb-text-strong);letter-spacing:-.01em}
+.sb-name small{font-size:var(--legenda-tamanho);font-weight:600;color:var(--sb-text-muted);white-space:nowrap}
+.sb-psw{position:relative}
+.sb-prof{position:relative;display:flex;align-items:center;gap:12px;width:100%;min-height:52px;padding:5px 12px 5px 5px;border:1px solid var(--sb-border);border-radius:999px;background:var(--sb-hover);color:var(--sb-text);text-align:left;cursor:pointer;font-family:var(--fonte);transition:border-color .15s,background .15s}
+.sb-prof:hover,.sb-prof[aria-expanded=true]{border-color:var(--sb-active-border)}
+.sb-prof .av{width:40px;height:40px}
+.sb-prof-t{display:grid;min-width:0;flex:1;line-height:1.25}
+.sb-prof-t b{font-size:14px;font-weight:700;color:var(--sb-text-strong)}
+.sb-prof-t small{font-size:12px;font-weight:600;color:var(--sb-text-muted)}
+.sb-prof-chev{color:var(--sb-text-muted);display:grid}
+.sb-prof-chev .ic{width:16px;height:16px}
+.sbp{position:absolute;top:0;left:calc(100% + 24px);width:288px;z-index:60;padding:12px;display:grid;gap:4px;background:linear-gradient(160deg,var(--sb-bg-top),var(--sb-bg-bottom) 60%),var(--cor-fundo);border:1px solid var(--sb-border);border-radius:20px;box-shadow:inset 0 1px 0 var(--sb-highlight),var(--sb-shadow);color:var(--sb-text);animation:fade .16s ease}
+.sbp-h{color:var(--sb-text-muted);padding:4px 8px}
+.sbp .psw-q{background:transparent;color:var(--sb-text-strong);box-shadow:inset 0 0 0 1px var(--sb-border);border-radius:999px;padding:8px 14px;font-size:14px;margin:4px 0}
+.sbp .psw-q::placeholder{color:var(--sb-text-muted)}
+.sbp .psw-q:focus{box-shadow:inset 0 0 0 1.5px var(--sb-active-text)}
+.sbp .psw-list{display:grid;gap:2px;border:0;padding:0}
+.sbp-g{color:var(--sb-text-muted);padding:8px 10px 2px}
+.sbp-i{display:flex;align-items:center;gap:10px;width:100%;min-height:40px;padding:0 10px;border:0;border-radius:999px;background:none;color:var(--sb-text);font:600 14px/1.2 var(--fonte);text-align:left;cursor:pointer}
+.sbp-i:hover{background:var(--sb-hover);color:var(--sb-text-strong)}
+.sbp-i .ic{width:16px;height:16px}
+.sbp-i .chk{margin-left:auto;opacity:0;color:var(--sb-active-text)}
+.sbp-i.sel{color:var(--sb-text-strong)}
+.sbp-i.sel .chk{opacity:1}
+.sb-div{height:1px;background:var(--sb-divider);margin:12px 8px;flex:none}
+.sb-scroll,.sb-foot{display:flex;flex-direction:column;gap:4px}
+.sb-foot{margin-top:auto}
+.sb-item{position:relative;display:flex;align-items:center;gap:12px;height:44px;padding:0 14px;color:var(--sb-text);font:600 14px/1 var(--fonte);text-decoration:none;border:1px solid transparent;border-radius:var(--sb-item-radius);transition:background .15s ease,color .15s ease;white-space:nowrap;flex:none}
+.sb-item:hover{background:var(--sb-hover);color:var(--sb-text-strong)}
+.sb-item.on{background:linear-gradient(90deg,var(--sb-accent-soft),var(--sb-active-fade) 70%);border-color:var(--sb-active-border);box-shadow:0 0 20px var(--sb-accent-glow),inset 0 1px 0 var(--sb-active-inset);color:var(--sb-active-text)}
+.sb-item.on::before{content:"";position:absolute;left:-13px;top:50%;width:3px;height:20px;transform:translateY(-50%);background:var(--sb-accent);border-radius:0 3px 3px 0;box-shadow:var(--sb-ind-glow)}
+.sb-badge{margin-left:auto;min-width:22px;height:18px;padding:0 6px;display:grid;place-items:center;font:600 11px/1 var(--fonte);color:var(--sb-text);border:1px solid var(--sb-badge-border);border-radius:999px;font-variant-numeric:tabular-nums}
+.sb-item.on .sb-badge{color:var(--sb-active-text)}
+.sb-dot{display:none}
+.sb-toggle{position:absolute;top:30px;right:-13px;width:26px;height:26px;border-radius:50%;display:grid;place-items:center;border:1px solid var(--sb-border);background:linear-gradient(160deg,var(--sb-bg-top),var(--sb-bg-bottom)),var(--cor-fundo);color:var(--sb-text);cursor:pointer;z-index:2;padding:0}
+.sb-toggle .ic{width:14px;height:14px}
+.sb-toggle:hover{color:var(--sb-text-strong);border-color:var(--sb-active-border)}
+.sb .menu-btn{color:var(--sb-text)}
+@media (min-width:960px){
+ html.sb-col .sb{align-items:center;border-radius:36px}
+ html.sb-col .sb .sb-lbl,html.sb-col .sb .sb-badge{display:none}
+ html.sb-col .sb-brand{padding:0 0 16px;justify-content:center}
+ html.sb-col .sb-psw{display:flex;justify-content:center;width:100%}
+ html.sb-col .sb-prof{width:48px;height:48px;min-height:0;padding:3px;justify-content:center;border-radius:50%}
+ html.sb-col .sb-scroll,html.sb-col .sb-foot{align-items:center;width:100%}
+ html.sb-col .sb-item{width:44px;padding:0;justify-content:center;border-radius:50%}
+ html.sb-col .sb-item.on::before{left:-14px}
+ html.sb-col .sb-div{width:32px;margin:12px auto}
+ html.sb-col .sb-dot{display:grid;position:absolute;top:-2px;right:-4px;min-width:18px;height:18px;padding:0 4px;place-items:center;border-radius:999px;background:var(--sb-accent);color:#ffffff;font:700 10px/1 var(--fonte);box-shadow:0 0 0 2px var(--sb-dot-ring)}
+ html.sb-col .sb-ver{display:none}
+ .sb .menu-btn{display:none}
+}
+/* v0.6: todos os itens de antes; a lista rola por dentro quando a tela é baixa */
+.sb-scroll{flex:1 1 auto;min-height:0;overflow-y:auto;overflow-x:hidden;margin:4px -12px 0;padding:2px 12px 4px;scrollbar-width:none}
+.sb-scroll::-webkit-scrollbar{display:none}
+.sb-scroll.more{-webkit-mask-image:linear-gradient(to bottom,#000 calc(100% - 40px),transparent);mask-image:linear-gradient(to bottom,#000 calc(100% - 40px),transparent)}
+.sb-foot{margin-top:0}
+.sb-h{color:var(--sb-text-muted);padding:0 14px 6px;margin-top:-4px}
+.sb .sb-div{margin:10px 8px}
+button.sb-item{background:none;width:100%;cursor:pointer;text-align:left}
+button.sb-item:hover{background:var(--sb-hover)}
+.sb-kbd{font-size:10px;letter-spacing:.02em}
+.sb-ver{font-size:12px;font-weight:600;color:var(--sb-text-muted);padding:8px 14px 0;white-space:nowrap}
+.sb-tip{position:fixed;transform:translateY(-50%);padding:7px 12px;border-radius:999px;white-space:nowrap;font:600 13px/1 var(--fonte);color:var(--sb-text-strong);background:linear-gradient(160deg,var(--sb-bg-top),var(--sb-bg-bottom)),var(--cor-fundo);border:1px solid var(--sb-border);pointer-events:none;z-index:70;opacity:0;transition:opacity .12s}
+.sb-tip.on{opacity:1}
+/* v0.6 · seletor de tema no topo */
+.th-seg{flex:none}
+.th-seg button{height:var(--esp-6);padding:0 var(--esp-3)}
+@media (max-width:1099px){.th-seg button:not(.on) .lab{display:none}.top .active-chip{max-width:170px}}
+@media (max-width:719px){.th-seg button{padding:0 var(--esp-2)}.top .crumb .sl,.top .crumb > b{display:none}.top .active-chip{max-width:none}}
+@media (min-width:960px){html.sb-col .sb-scroll,html.sb-col .sb-foot{align-items:center}html.sb-col .sb-scroll{width:auto;align-self:stretch}}
+@media (max-width:959px){
+ main{margin-left:0}
+ .sb{top:12px;bottom:12px;left:12px;width:min(300px,calc(100vw - 24px));transform:translateX(calc(-100% - 24px));overflow-y:auto}
+ .sb.on{transform:none}
+ .sb-toggle{display:none}
+ .sbp{position:absolute;left:0;right:0;top:calc(100% + 8px);width:auto}
+}
+/* abas das telas que ficaram dentro de um item da barra */
+.subnav{display:inline-flex;margin-bottom:var(--esp-5);max-width:100%;overflow-x:auto;scrollbar-width:none}
+.subnav::-webkit-scrollbar{display:none}
+.subnav a{height:var(--esp-7);padding:0 var(--esp-4);border-radius:var(--esp-2);color:var(--cor-texto-2);display:inline-flex;gap:var(--esp-2);align-items:center;font-weight:700;white-space:nowrap;text-decoration:none;flex:none}
+.subnav a:hover{color:var(--cor-texto)}
+.subnav a.on{background:var(--cor-fundo);color:var(--cor-destaque-texto);box-shadow:inset 0 0 0 1px var(--cor-borda)}
+.subnav .count{margin-left:0}
+.apr .subnav{justify-self:start}
+</style>
+</head>
+<body>
+<div class="app">
+ <!-- A barra é sempre escura (vidro fosco), nos dois temas: data-theme="dark" vale só para ela -->
+ <aside class="sb" id="side" data-theme="dark" aria-label="Navegação"></aside>
+ <main>
+  <header class="top" id="top"></header>
+  <div id="view"></div>
+ </main>
+</div>
+<nav class="tabbar" id="tabbar" aria-label="Navegação rápida"></nav>
+<div class="scrim" id="scrim" data-act="closeAll"></div>
+<aside class="peek" id="peek" aria-label="Detalhes do post"></aside>
+<div class="cmd" id="cmd" data-act="cmdBg"><div class="cmd-box" role="dialog" aria-label="Buscar ou comandar"><div class="cmd-in"><svg class="ic" viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"><circle cx="9" cy="9" r="5.5"/><path d="m13.2 13.2 3.3 3.3"/></svg><input id="cmdIn" placeholder="Buscar posts, perfis e telas, ou escreva uma ideia" autocomplete="off" spellcheck="false"><span class="kbd">esc</span></div><div class="cmd-list" id="cmdList"></div><div class="cmd-foot"><span>↑↓ navegar</span><span>↵ abrir</span><span>N novo post</span></div></div></div>
+<div class="ov" id="ov" data-act="ovBg"><div class="md" id="md" role="dialog"></div></div>
+<div class="toast" id="toast" role="status" aria-live="polite"></div>
+
+<script>
+(()=>{
+'use strict';
+/* ================= utilitários ================= */
+const $=s=>document.querySelector(s),$$=s=>[...document.querySelectorAll(s)];
+const h=s=>String(s??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+const today=new Date();today.setHours(0,0,0,0);
+const iso=d=>d.getFullYear()+'-'+String(d.getMonth()+1).padStart(2,'0')+'-'+String(d.getDate()).padStart(2,'0');
+const parse=s=>{const[y,m,d]=String(s).split('-').map(Number);return new Date(y,(m||1)-1,d||1)};
+const addD=(d,n)=>{const x=new Date(d);x.setDate(x.getDate()+n);return x};
+const monday=d=>addD(d,-((d.getDay()+6)%7));
+const TODAY=iso(today);
+const DOW=['dom','seg','ter','qua','qui','sex','sáb'];
+const DOWL=['domingo','segunda','terça','quarta','quinta','sexta','sábado'];
+const WK=['Seg','Ter','Qua','Qui','Sex','Sáb','Dom'];
+const MES=['janeiro','fevereiro','março','abril','maio','junho','julho','agosto','setembro','outubro','novembro','dezembro'];
+const cap=s=>s.charAt(0).toUpperCase()+s.slice(1);
+const fmtS=s=>{if(!s)return'sem data';const d=parse(s);return DOW[d.getDay()]+' '+d.getDate()+'/'+(d.getMonth()+1)};
+const fmtL=s=>{const d=parse(s);return DOWL[d.getDay()]+', '+d.getDate()+' de '+MES[d.getMonth()]};
+const wd=off=>{let d=addD(today,off);const w=d.getDay();if(off>=0){if(w===6)d=addD(d,2);if(w===0)d=addD(d,1)}else{if(w===6)d=addD(d,-1);if(w===0)d=addD(d,-2)}return iso(d)};
+const ini=n=>(n||'?').split(/\s+/).filter(Boolean).slice(0,2).map(w=>w[0]).join('').toUpperCase();
+const first=n=>(n||'').split(' ')[0];
+const num=n=>(+n||0).toLocaleString('pt-BR');
+const byDate=(a,b)=>a.data<b.data?-1:a.data>b.data?1:0;
+const uid=p=>p+Date.now().toString(36)+Math.random().toString(36).slice(2,5);
+const ME='Arthur';
+const MARCA='Oak';
+const DS='artie-design-system/assets/logo/';
+
+const IC={
+home:'<path d="M3.5 9 10 3.5 16.5 9v7a1 1 0 0 1-1 1h-3.5v-5h-4v5H4.5a1 1 0 0 1-1-1z"/>',
+cal:'<rect x="3" y="4.5" width="14" height="12.5" rx="2"/><path d="M3 8.5h14M7 2.5v3M13 2.5v3"/>',
+bulb:'<path d="M7.5 14.5h5M8 17h4M10 2.5a5 5 0 0 0-3 9c.6.5 1 1.2 1 2v1h4v-1c0-.8.4-1.5 1-2a5 5 0 0 0-3-9z"/>',
+pen:'<path d="M4 16l.8-3.2L13 4.6a1.4 1.4 0 0 1 2 0l.4.4a1.4 1.4 0 0 1 0 2L7.2 15.2zM11.5 6l2.5 2.5"/>',
+chart:'<path d="M3.5 16.5h13M6 13.5v-4M10 13.5V5.5M14 13.5v-6"/>',
+target:'<circle cx="10" cy="10" r="6.5"/><circle cx="10" cy="10" r="2.6"/>',
+scan:'<path d="M3 7V4.5A1.5 1.5 0 0 1 4.5 3H7M13 3h2.5A1.5 1.5 0 0 1 17 4.5V7M17 13v2.5a1.5 1.5 0 0 1-1.5 1.5H13M7 17H4.5A1.5 1.5 0 0 1 3 15.5V13M6.5 10h7"/>',
+check:'<rect x="3" y="3" width="14" height="14" rx="3.5"/><path d="m7 10 2 2 4-4.5"/>',
+users:'<circle cx="7.5" cy="7" r="2.8"/><path d="M2.5 16c.6-2.6 2.6-4 5-4s4.4 1.4 5 4M13 4.5a2.6 2.6 0 0 1 0 5M14.5 12.3c1.6.4 2.7 1.6 3 3.7"/>',
+user:'<circle cx="10" cy="7" r="3"/><path d="M4 17c.8-3 3.2-4.5 6-4.5s5.2 1.5 6 4.5"/>',
+book:'<path d="M4 4.5A1.5 1.5 0 0 1 5.5 3H16v12H5.5A1.5 1.5 0 0 0 4 16.5zM4 16.5A1.5 1.5 0 0 0 5.5 18H16"/>',
+search:'<circle cx="9" cy="9" r="5.5"/><path d="m13.2 13.2 3.3 3.3"/>',
+plus:'<path d="M10 4.5v11M4.5 10h11"/>',
+sun:'<circle cx="10" cy="10" r="3.2"/><path d="M10 2.5v1.5M10 16v1.5M2.5 10H4M16 10h1.5M4.7 4.7l1 1M14.3 14.3l1 1M4.7 15.3l1-1M14.3 5.7l1-1"/>',
+moon:'<path d="M16 11.5A6.5 6.5 0 0 1 8.5 4a6.5 6.5 0 1 0 7.5 7.5z"/>',
+menu:'<path d="M3.5 6h13M3.5 10h13M3.5 14h13"/>',
+chl:'<path d="m12 5-5 5 5 5"/>',chr:'<path d="m8 5 5 5-5 5"/>',
+x:'<path d="m5.5 5.5 9 9M14.5 5.5l-9 9"/>',
+board:'<rect x="3" y="3.5" width="4" height="13" rx="1"/><rect x="8" y="3.5" width="4" height="9" rx="1"/><rect x="13" y="3.5" width="4" height="6" rx="1"/>',
+list:'<path d="M7.5 5.5H17M7.5 10H17M7.5 14.5H17M3.5 5.5h.01M3.5 10h.01M3.5 14.5h.01"/>',
+week:'<rect x="3" y="4" width="14" height="12" rx="2"/><path d="M7.7 4v12M12.3 4v12"/>',
+spark:'<path d="M10 2.5l1.7 4.8 4.8 1.7-4.8 1.7L10 15.5l-1.7-4.8L3.5 9l4.8-1.7z"/>',
+image:'<rect x="3" y="4" width="14" height="12" rx="2"/><circle cx="7.5" cy="8.5" r="1.3"/><path d="m4 15 4.5-4.5 3 3 2-2 3.5 3.5"/>',
+text:'<path d="M4 5h12M4 9h12M4 13h8"/>',
+funnel:'<path d="M3 4.5h14l-5.5 6.5v4.5l-3 1.5v-6z"/>',
+status:'<circle cx="10" cy="10" r="6.5" stroke-dasharray="2.6 2.6"/>',
+copy:'<rect x="7" y="7" width="10" height="10" rx="2"/><path d="M13 4.5V4a1 1 0 0 0-1-1H4a1 1 0 0 0-1 1v8a1 1 0 0 0 1 1h.5"/>',
+trash:'<path d="M4 6h12M8 6V4h4v2M5.5 6l.8 10a1 1 0 0 0 1 1h5.4a1 1 0 0 0 1-1l.8-10"/>',
+eye:'<path d="M2.5 10s2.7-5 7.5-5 7.5 5 7.5 5-2.7 5-7.5 5-7.5-5-7.5-5z"/><circle cx="10" cy="10" r="2.2"/>',
+link:'<path d="M8.5 11.5a3 3 0 0 0 4.2 0l2.6-2.6a3 3 0 0 0-4.2-4.2l-.8.8M11.5 8.5a3 3 0 0 0-4.2 0l-2.6 2.6a3 3 0 0 0 4.2 4.2l.8-.8"/>',
+phone:'<rect x="6" y="2.5" width="8" height="15" rx="2"/><path d="M9 15h2"/>',
+desk:'<rect x="2.5" y="4" width="15" height="10" rx="1.5"/><path d="M7 17h6M10 14v3"/>',
+msg:'<path d="M4 4.5h12a1 1 0 0 1 1 1v7a1 1 0 0 1-1 1H9l-4 3v-3H4a1 1 0 0 1-1-1v-7a1 1 0 0 1 1-1z"/>',
+grid:'<rect x="3" y="3" width="6" height="6" rx="1.5"/><rect x="11" y="3" width="6" height="6" rx="1.5"/><rect x="3" y="11" width="6" height="6" rx="1.5"/><rect x="11" y="11" width="6" height="6" rx="1.5"/>',
+bookmark:'<path d="M5.5 3.5h9a1 1 0 0 1 1 1V17l-5.5-3.5L4.5 17V4.5a1 1 0 0 1 1-1z"/>',
+magnet:'<path d="M5 3.5v6a5 5 0 0 0 10 0v-6M5 3.5h3v6a2 2 0 0 0 4 0v-6h3M5 7h3M12 7h3"/>',
+star:'<path d="m10 3 2.1 4.4 4.8.6-3.5 3.3.9 4.7L10 13.7 5.7 16l.9-4.7L3.1 8l4.8-.6z"/>',
+ext:'<path d="M11 3.5h5.5V9M16.5 3.5 9 11M8 5H4.5a1 1 0 0 0-1 1v9.5a1 1 0 0 0 1 1H14a1 1 0 0 0 1-1V12"/>',
+check2:'<path d="m4.5 10.5 3.5 3.5 7.5-8"/>',
+gear:'<circle cx="10" cy="10" r="2.6"/><path d="M10 2.5v2M10 15.5v2M2.5 10h2M15.5 10h2M4.7 4.7l1.4 1.4M13.9 13.9l1.4 1.4M4.7 15.3l1.4-1.4M13.9 6.1l1.4-1.4"/><circle cx="10" cy="10" r="5.2"/>',
+updown:'<path d="m6.5 8 3.5-3.5L13.5 8M6.5 12l3.5 3.5 3.5-3.5"/>'
+};
+const I=(n,c='')=>`<svg class="ic ${c}" viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">${IC[n]||''}</svg>`;
+const LOGO=`<span class="ws-logo">${MARCA}</span>`;
+
+/* ================= vocabulário (o mesmo do Notion) ================= */
+const ST={ideia:'Ideia',texto:'Texto pronto',design:'Design pronto',revisar:'Revisar',aprovado:'Aprovado',agendado:'Agendado',publicado:'Publicado'};
+const STK=Object.keys(ST);
+const MOD={img:'Imagem estática',txt:'Apenas texto',cit:'Citação',foto:'Foto pessoal',car:'Carrossel',info:'Infográfico',vid:'Vídeo',enq:'Enquete'};
+const FUN={topo:'Topo de funil',meio:'Meio de funil',fundo:'Fundo de funil'};
+const stI=k=>{const o='<svg class="sti" viewBox="0 0 16 16" aria-hidden="true">',ring='<circle cx="8" cy="8" r="6.25" fill="none" stroke="currentColor" stroke-width="1.5"/>';
+ switch(k){
+ case'ideia':return o+'<circle cx="8" cy="8" r="6.25" fill="none" stroke="currentColor" stroke-width="1.5" stroke-dasharray="2.3 2.1"/></svg>';
+ case'texto':return o+ring+'<path class="pf" d="M8 8V4.25A3.75 3.75 0 0 1 11.75 8Z"/></svg>';
+ case'design':return o+ring+'<path class="pf" d="M8 8V4.25A3.75 3.75 0 0 1 8 11.75Z"/></svg>';
+ case'revisar':return o+'<circle class="sf" cx="8" cy="8" r="7"/><path class="sk" d="M8 4.6v4.1" stroke-width="1.7" stroke-linecap="round"/><circle class="sd" cx="8" cy="11.1" r="1"/></svg>';
+ case'aprovado':return o+ring+'<path class="pf" d="M8 8V4.25A3.75 3.75 0 1 1 4.25 8Z"/></svg>';
+ case'agendado':return o+ring+'<path d="M8 4.9v3.3l2.2 1.4" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/></svg>';
+ case'publicado':return o+'<circle class="pf" cx="8" cy="8" r="7"/><path class="pk" d="m5.2 8.2 1.9 1.9 3.7-3.9" fill="none" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"/></svg>';}
+ return '';};
+const FR={pas:['PAS','Problema, agitação, solução',['O problema','Por que ele custa caro','O que resolve']],
+aida:['AIDA','Atenção, interesse, desejo, ação',['O que chama atenção','Por que importa','O que você ganha','O que fazer agora']],
+bab:['BAB','Antes, depois, a ponte',['Antes','Depois','A ponte']],
+star:['STAR','Situação, tarefa, ação, resultado',['A situação','O desafio','O que a gente fez','O resultado']],
+slay:['SLAY','História, lição, ação, você',['A história','A lição','O que fazer com isso','E você?']],
+pastor:['PASTOR','Problema, amplificar, história, transformação, oferta, resposta',['O problema','O que acontece se nada mudar','A história','A transformação','A oferta','O próximo passo']],
+p4:['4P','Cena, promessa, prova, empurrão',['A cena','A promessa','A prova','O empurrão']],
+app:['APP','Concordar, prometer, prévia',['Algo que você já sabe','O que eu prometo','O que vem a seguir']]};
+const HOOKS=['O Educativo','O Contraditório','A Transformação','O Contraste','O Específico','A Citação','A Maturação','A Referência','O Direto','A Lista','O Utilitário','A Isca'];
+
+/* ================= dados de exemplo ================= */
+function seed(){
+ const arthur={id:'arthur',tone:0,tipo:'interno',nome:'Arthur Martins',cargo:'Sócio',empresa:'Oak',headline:'Marca pessoal no LinkedIn para founders · Sócio na Oak',
+  marca:{rascunho:true,posicionamento:'Estratégia de LinkedIn explicada com analogias que qualquer founder entende.',frase:'Rascunho montado a partir dos posts do Calendário Editorial no Notion. Revise com o Lucas.',
+   publico:'Founders e empresários B2B que sabem que precisam aparecer no LinkedIn, mas não sabem o que postar nem como transformar post em cliente.',promessa:'Ele traduz o algoritmo e a estratégia em algo que dá para aplicar na semana seguinte.',
+   pilares:[{id:'P1',nome:'Estratégia de LinkedIn',pct:40,desc:'Como o algoritmo e a estratégia funcionam, explicados com analogia (Sistema Solar, Matriz X e Y, 3 camadas).'},{id:'P2',nome:'Founder no LinkedIn',pct:35,desc:'O que o founder deve postar, bastidores e decisões, e como isso vira cliente.'},{id:'P3',nome:'Ferramentas e IA',pct:25,desc:'As ferramentas e skills que a Oak usa para produzir conteúdo mais rápido.'}],
+   tom:{sempre:['Didático','Analogias visuais','Direto','Com número'],nunca:['Guru','Motivacional','"Não é X, é Y"','Travessão']},
+   vocabulario:['founder','funil','posicionamento','autoridade','alcance'],
+   teses:['Sem posicionamento não tem audiência fiel.','O LinkedIn saiu de um modelo baseado em quem você conhece para um baseado no que você domina.','Quando o alcance cai, é mais a pessoa do que o algoritmo.'],
+   historias:['Perdeu 89% das impressões em um ano e foi analisar os próprios dados com o Lucas.','Quase 2 anos de dados no próprio perfil.'],
+   provas:['Cerca de 6 mil seguidores','2 anos de dados próprios']},
+  perfil:{atual:{headline:'(preencher com a headline atual)',sobre:''},otimizado:{headline:'Marca pessoal no LinkedIn para founders · Sócio na Oak',sobre:'Proposta a definir depois do Raio-X completo.'}},
+  raiox:{nota:null,resumo:'Quase 2 anos de dados e cerca de 6 mil seguidores. As impressões caíram 89% em relação ao ano anterior; a leitura da call com o Lucas aponta mais para constância e formato do que para o algoritmo.',
+   pontos:[{tipo:'alerta',titulo:'Queda de 89% nas impressões',texto:'Comparando com o ano anterior. Antes de culpar o algoritmo, olhar frequência, formato e gancho dos últimos 30 posts.'},{tipo:'oportunidade',titulo:'Analogias que viram série',texto:'Sistema Solar, GTA VI e Matriz X e Y funcionam como formato próprio. Dá para transformar em série fixa.'},{tipo:'forca',titulo:'Base de 6 mil seguidores',texto:'Audiência que já conhece o trabalho e responde a conteúdo didático.'}],
+   plano:['Calendário sempre 2 semanas à frente','3 posts por semana, um deles de fundo de funil','Rodar a skill de análise de perfil para completar este Raio-X']},
+  metas:{atual:6000,alvo:8000,label:'seguidores até março'},
+  ideias:[{t:'Por que o alcance caiu 89% (e não foi o algoritmo)',pilar:'P2',origem:'Call com o Lucas',off:-2},{t:'O funil do LinkedIn explicado como uma padaria',pilar:'P1',origem:'Captura rápida',off:-1},{t:'As 5 skills que escrevem um post inteiro',pilar:'P3',origem:'Radar: Charlie Hills',off:0}],
+  referencias:[{nome:'Charlie Hills',motivo:'Mostra o próprio sistema e dá número'},{nome:'Justin Welsh',motivo:'Matriz de conteúdo e constância'}],
+  ganchos:[{padrao:'O Contraste',texto:'O LinkedIn funciona igual ao Sistema Solar.'},{padrao:'O Específico',texto:'Minhas impressões caíram 89% em um ano.'}],
+  inbox:[]};
+ const lucas={id:'lucas',tone:1,tipo:'interno',nome:'Lucas Caboclo',cargo:'CEO e sócio',empresa:'Oak',headline:'Para founders que postam e não geram clientes',
+  marca:{posicionamento:'Crescimento no LinkedIn com IA, feito por quem testa no próprio perfil.',frase:'Conteúdo feito com IA que gera conexões, autoridade e vendas, sem cara de IA.',
+   publico:'Founder B2B ocupado, com um negócio que deu certo e faturamento parado. Já posta ou já postou, muitas vezes com IA, e não engaja.',promessa:'Esse cara testa tudo com IA no próprio perfil antes de vender.',
+   pilares:[{id:'P1',nome:'Bastidores com IA',pct:35,desc:'O que ele monta e testa com o Claude no próprio perfil, com número.'},{id:'P2',nome:'Claude na prática',pct:40,desc:'Como usar o Claude para crescer no LinkedIn: skills, prompts, fluxos.'},{id:'P3',nome:'Visão e notícias de IA',pct:25,desc:'Opinião sobre IA no conteúdo e notícias comentadas por quem cria e vende.'}],
+   tom:{sempre:['Direto','Próximo','Prático','Honesto sobre os limites','Empolgado quando funciona'],nunca:['Professoral','Corporativo','Inspiracional','"Não é X, é Y"','Frase de efeito no fim','Travessão']},
+   vocabulario:['a gente','founder','marca pessoal','deu muito bom','trocar ideia','mão na roda','rodar','digamos assim'],
+   teses:['Marca pessoal é o maior ativo que um empresário pode construir.','A IA já escreve o post. O que ela não tem é a experiência de quem testou.','Quando o alcance cai, é uns 80% da pessoa e uns 20% do algoritmo.'],
+   historias:['Saiu da engenharia civil em 2018 para o digital.','Agência que passou de seis dígitos em 2020 só com prospecção ativa.','Mentorou mais de mil empreendedores no Clube SSM e na Webliv.'],
+   provas:['+200 empresas atendidas','+1 mil mentorados','10 anos no digital']},
+  perfil:{atual:{headline:'Para founders que postam e não geram clientes',sobre:'Seção Sobre atual do perfil.'},otimizado:{headline:'Para founders que postam e não geram clientes · Crescimento no LinkedIn com IA',sobre:'Proposta em teste: citar IA só depois de ver a reação aos primeiros posts do novo posicionamento.'}},
+  raiox:{nota:null,resumo:'Perfil em transição para o novo posicionamento (desde 18/11). É o laboratório da Oak: tudo que vai para cliente é testado aqui primeiro.',pontos:[{tipo:'forca',titulo:'Prova forte e verificável',texto:'+200 empresas e +1 mil mentorados já aparecem na headline e na Experiência.'},{tipo:'oportunidade',titulo:'IA ainda fora da vitrine',texto:'Headline, banner e Sobre não citam IA. Decisão em aberto até ver a reação aos primeiros posts.'},{tipo:'oportunidade',titulo:'Lead magnets como motor',texto:'Skills e sistemas viram iscas com a chamada só na imagem.'}],plano:['Meta pública: de 1.500 para 4.000 seguidores até janeiro','5 posts por semana, terça e quinta sem isca','Revisar headline depois das 2 primeiras semanas do novo pilar']},
+  metas:{atual:1500,alvo:4000,label:'seguidores até janeiro'},
+  ideias:[{t:'O sistema que roda o LinkedIn da Oak, etapa por etapa, com o nome de cada skill',pilar:'P1',origem:'Radar: Charlie Hills',off:-2},{t:'O que a gente faz depois que alguém comenta no lead magnet',pilar:'P2',origem:'Radar: André Nogueira',off:-1},{t:'O IPO da Anthropic e o que muda para quem cria conteúdo',pilar:'P3',origem:'Call 20/11',off:0},{t:'Deixei o Claude no Chrome mandando mensagem por mim: o que deu certo e os limites',pilar:'P2',origem:'Captura rápida',off:-4}],
+  referencias:[{nome:'Charlie Hills',motivo:'Mostra o próprio sistema, testa e dá número'},{nome:'André Nogueira',motivo:'Agência de conteúdo que usa Claude; máquina de lead magnets'},{nome:'Jessie van Breugel',motivo:'Só a mecânica: isca em quase todo post'}],
+  ganchos:[{padrao:'O Específico',texto:'Montei um portal de prospecção em um dia e gastei 16 centavos de dólar.'},{padrao:'O Contraditório',texto:'Pare de brigar com o alcance do LinkedIn.'},{padrao:'A Transformação',texto:'Em 2020 a minha agência cresceu só com prospecção.'}],
+  inbox:[]};
+ const marina={id:'marina',tone:2,tipo:'cliente',exemplo:true,nome:'Marina Duarte',cargo:'CEO e cofundadora',empresa:'Fluxa',headline:'Ajudo donos de PME a saberem quanto lucraram antes do fim do mês | CEO da Fluxa',
+  marca:{posicionamento:'A founder que mostra, com número, como PME sai do caixa no escuro.',frase:'Finanças de PME explicadas por quem já quebrou a cara com elas.',
+   publico:'Donos de PMEs de serviço com 10 a 80 funcionários, que tomam decisão de caixa no feeling e chegam no fim do mês sem saber se lucraram.',promessa:'Ela mostra o próprio caixa e o dos clientes, sem jargão de banco.',
+   pilares:[{id:'P1',nome:'Caixa na vida real',pct:40,desc:'Erros e acertos financeiros de PMEs, com o número junto.'},{id:'P2',nome:'Bastidores da Fluxa',pct:35,desc:'Construir um SaaS de Série A: time, produto, decisões.'},{id:'P3',nome:'Opinião de mercado',pct:25,desc:'Juros, crédito, regras novas, comentados pelo lado do dono de PME.'}],
+   tom:{sempre:['Didática sem ser professoral','Número em tudo','Bem-humorada','Franca sobre os erros'],nunca:['Jargão de banco','Motivacional','Lista genérica de dicas','Emoji em excesso']},
+   vocabulario:['caixa','dono de PME','fim do mês','na ponta do lápis','pró-labore','sem mágica'],
+   teses:['PME não quebra por falta de lucro, quebra por falta de caixa.','Planilha não é controle financeiro se ninguém olha.','Pró-labore fixo é a primeira decisão de gestão de um founder.'],
+   historias:['Quase fechou a primeira empresa em 2017 por um buraco de caixa de 3 meses.','Saiu de um banco de investimento para atender a padaria da mãe.','Fluxa levantou a Série A em 2025.'],
+   provas:['4.200 PMEs usando a Fluxa','Série A em 2025','8 anos no mercado financeiro']},
+  perfil:{atual:{headline:'CEO @ Fluxa | Finanças para PMEs | Ex-XP | Mentora | Palestrante | Investidora anjo',sobre:'Apaixonada por empreendedorismo e inovação. Acredito que a tecnologia pode transformar a vida dos pequenos empresários. Fale comigo sobre parcerias, mentorias e palestras.'},otimizado:{headline:'Ajudo donos de PME a saberem quanto lucraram antes do fim do mês | CEO da Fluxa (4.200 PMEs)',sobre:'Em 2017 eu quase fechei a minha primeira empresa por um buraco de caixa de 3 meses. Ninguém tinha me ensinado a olhar o caixa antes do lucro.\n\nHoje a Fluxa ajuda 4.200 PMEs a fazer isso toda semana. Aqui eu conto o que aprendo com elas, com número.'}},
+  raiox:{nota:54,resumo:'Boa audiência e boa história, mas o perfil tenta vender cinco coisas ao mesmo tempo e esconde a maior prova.',pontos:[{tipo:'alerta',titulo:'Cinco chamadas diferentes',texto:'Mentoria, palestra, investimento, parceria e o produto disputam a mesma vitrine. Quem chega não sabe o que fazer.'},{tipo:'alerta',titulo:'Público desalinhado',texto:'Os posts que mais alcançam falam com gente de finanças; a oferta é para dono de PME.'},{tipo:'alerta',titulo:'Posts de oferta rendem 3x menos',texto:'Os posts que citam a Fluxa ficam bem abaixo da mediana do perfil.'},{tipo:'oportunidade',titulo:'A maior prova está escondida',texto:'4.200 PMEs e a Série A não aparecem na headline nem no Sobre.'},{tipo:'forca',titulo:'História de origem forte',texto:'O quase fechamento de 2017 é um gancho que nenhum concorrente tem.'}],plano:['Semana 1: headline, Sobre e destaque com uma chamada só','Semanas 1 a 4: 3 posts por semana nos 3 pilares','Semana 3: primeiro lead magnet (planilha de caixa de 13 semanas)','Semana 4: revisão dos números e ajuste de pilares']},
+  metas:{atual:6800,alvo:10000,label:'seguidores em 90 dias'},
+  ideias:[{t:'O dia em que eu descobri que lucro e caixa são coisas diferentes',pilar:'P1',origem:'Áudio no carro',off:-1},{t:'Por que a gente demitiu nosso melhor vendedor logo depois da Série A',pilar:'P2',origem:'Captura rápida',off:-2},{t:'Selic caindo: o que muda no capital de giro de uma PME de serviço',pilar:'P3',origem:'Radar: notícias',off:0},{t:'3 números que todo dono de PME devia olhar toda segunda',pilar:'P1',origem:'Radar: post salvo',off:-3}],
+  referencias:[{nome:'Founder de fintech com 40 mil seguidores',motivo:'Formato de bastidor com print de planilha'},{nome:'Consultor financeiro de PME',motivo:'Carrosséis didáticos com caso real'}],
+  ganchos:[{padrao:'A Transformação',texto:'Em 2017 eu quase fechei minha empresa com o caixa no azul no papel.'},{padrao:'O Específico',texto:'4.200 PMEs usam a Fluxa. 61% delas erram o mesmo número.'}],
+  inbox:[{quem:'Rafael, dono de agência',onde:'Comentário',texto:'Isso de olhar o caixa de 13 semanas mudou meu mês. Tem modelo?'},{quem:'Carla, CFO',onde:'Mensagem',texto:'Adorei o post de ontem, vocês atendem empresa de 120 pessoas?'},{quem:'Bruno, founder',onde:'Comentário',texto:'Discordo em parte: pró-labore fixo no começo trava o crescimento.'}]};
+ const P=(pid,titulo,status,off,modelo,pilar,funil,texto='',r=null,arte='')=>({id:uid('p'),pid,titulo,status,data:wd(off),modelo,pilar,funil,texto,arte,r});
+ const posts=[
+  P('arthur','Explicando o LinkedIn com o Sistema Solar','publicado',-12,'info','P1','topo','Sem Terra não tem vida. Sem posicionamento não tem audiência fiel.\n\nEu gosto de explicar o LinkedIn como um sistema solar. Cada planeta é uma parte da sua estratégia, e todos giram em volta da mesma coisa.',{impressoes:5400,reacoes:96,comentarios:24,conversas:2},'O LinkedIn é um sistema solar'),
+  P('arthur','Matriz X e Y do algoritmo do LinkedIn','publicado',-8,'img','P1','topo','O LinkedIn saiu de um modelo baseado em quem você conhece para um modelo baseado no que você realmente domina.',{impressoes:3900,reacoes:71,comentarios:15,conversas:1},'A matriz X e Y do algoritmo'),
+  P('arthur','3 camadas de uma estratégia de LinkedIn','publicado',-4,'car','P1','meio','',{impressoes:2600,reacoes:44,comentarios:9,conversas:1},'3 camadas de uma estratégia'),
+  P('arthur','Roda de ferramentas p/ LinkedIn iguais ao GTA VI','revisar',1,'img','P3','topo','Hoje é dia de GTA 6.\n\nEntão eu montei a minha roda de ferramentas de LinkedIn no estilo do jogo.\n\n✱ Gravações → Fathom. Grava e transcreve as calls. Muita ideia de post sai de conversa.\n✱ Formatação → um formatador de texto para negrito e listas.',null,'A roda de ferramentas'),
+  P('arthur','O que o Founder deve postar no LinkedIn','design',3,'car','P2','meio','O que o founder deve postar no LinkedIn quando não sabe por onde começar:\n\n→ O que deu errado essa semana?\n→ Bastidores de uma decisão difícil.\n→ Print de um feedback real de cliente.\n→ Sua história de origem (o "porquê").',null,'O que o founder deve postar'),
+  P('arthur','Por que o alcance caiu 89%','ideia',8,'txt','P2','fundo'),
+  P('lucas','Hook primeiro ou no final?','publicado',-10,'img','P2','topo','',{impressoes:3100,reacoes:58,comentarios:19,conversas:2}),
+  P('lucas','Pare de brigar com o alcance do LinkedIn','publicado',-6,'img','P3','topo','Pare de brigar com o alcance do LinkedIn.\n\nMeu sócio perdeu 89% em um ano.\n\nNuma call de análise, eu abri os números do perfil do Arthur Martins. Ele tem quase 2 anos de dados e uns 6 mil seguidores. Comparando com o ano passado, as impressões dele caíram 89%.\n\nA reação mais comum diante de um número desses é uma só: o LinkedIn derrubou o alcance.\n\nEu falei pra ele o que eu penso. O LinkedIn não tirou 89% do alcance dele.\n\nNa minha visão, quando o alcance cai, é uns 80% da pessoa e uns 20% do algoritmo.',{impressoes:6200,reacoes:132,comentarios:41,conversas:4},'Pare de brigar com o alcance'),
+  P('lucas','6 agentes que escrevem um post, você só aprova','texto',1,'car','P2','meio'),
+  P('lucas','Distribuição é prospecção','revisar',2,'txt','P1','fundo','Em 2020 a minha agência cresceu só com prospecção.\n\nHoje eu trabalho com marca pessoal. E não larguei nenhuma das duas.\n\nCom uns amigos da faculdade e duas pessoas no time, a gente passou de seis dígitos em um ano, em plena pandemia. Era mensagem, reunião e follow-up. Todo dia.\n\nFuncionou. Só que cobrava um preço alto: se eu parasse de prospectar, o cliente parava de chegar.'),
+  P('lucas','Portal de prospecção em um dia','agendado',3,'img','P1','meio','Montei um portal de prospecção em um dia e gastei 16 centavos de dólar.',null,'Portal de prospecção em 1 dia'),
+  P('lucas','O sistema que roda o LinkedIn da Oak','design',4,'info','P1','meio'),
+  P('lucas','Como eu rodo uma semana inteira de LinkedIn em X horas','ideia',9,'vid','P1','topo'),
+  P('marina','Lucro no papel, caixa no vermelho','publicado',-9,'img','P1','topo','Em 2017 eu quase fechei minha empresa com o caixa no azul no papel.',{impressoes:8800,reacoes:212,comentarios:48,conversas:3}),
+  P('marina','Nosso primeiro board pós Série A','publicado',-7,'txt','P2','meio','',{impressoes:4100,reacoes:96,comentarios:22,conversas:1}),
+  P('marina','Conheça o novo módulo da Fluxa','publicado',-5,'img','P2','fundo','',{impressoes:1700,reacoes:41,comentarios:6,conversas:0}),
+  P('marina','Juros e capital de giro','publicado',-2,'car','P3','topo','',{impressoes:6300,reacoes:134,comentarios:31,conversas:2}),
+  P('marina','3 números para olhar toda segunda','aprovado',1,'car','P1','meio','Todo dono de PME devia olhar 3 números toda segunda-feira.\n\nNa Fluxa a gente acompanha 4.200 empresas, e as que chegam bem no fim do mês têm uma coisa em comum: olham o caixa das próximas 13 semanas antes de olhar o resultado do mês passado.\n\nOs 3 números:\n\n→ Saldo projetado da semana 4\n→ Contas a receber vencidas há mais de 15 dias\n→ Quanto do caixa já está comprometido com folha',null,'3 números para toda segunda'),
+  P('marina','A conversa com o vendedor que demitimos','revisar',2,'txt','P2','meio','Logo depois da Série A, a gente demitiu o nosso melhor vendedor.\n\nEle batia meta todo mês. E era o motivo de metade do time querer sair.'),
+  P('marina','Selic caindo e a PME de serviço','texto',4,'enq','P3','topo','',null,'A Selic caindo muda o seu capital de giro?')
+ ];
+ [arthur,lucas,marina].forEach(p=>p.ideias=p.ideias.map(i=>({id:uid('i'),t:i.t,pilar:i.pilar,origem:i.origem,data:iso(addD(today,i.off))})));
+ return {v:3,profiles:[arthur,lucas,marina],posts};
+}
+
+/* ================= estado ================= */
+const LS={get(k,d){try{const v=localStorage.getItem(k);return v?JSON.parse(v):d}catch(e){return d}},set(k,v){try{localStorage.setItem(k,JSON.stringify(v))}catch(e){}}};
+let S=LS.get('artie.data',null);if(!S||S.v!==3||!Array.isArray(S.profiles))S=seed();
+/* Migração: a v0.3 chegou a usar "Artië" como nome do produto; o produto é Oak. */
+S.profiles.forEach(p=>{if(p.empresa==='Artië')p.empresa='Oak';['headline'].forEach(k=>{if(p[k])p[k]=p[k].replace(/Artië/g,'Oak')});if(p.perfil&&p.perfil.otimizado&&p.perfil.otimizado.headline)p.perfil.otimizado.headline=p.perfil.otimizado.headline.replace(/Artië/g,'Oak');(p.marca.pilares||[]).forEach(x=>{if(x.desc)x.desc=x.desc.replace(/Artië/g,'Oak')})});
+const save=()=>LS.set('artie.data',S);
+const prof=id=>S.profiles.find(p=>p.id===id);
+const post=id=>S.posts.find(p=>p.id===id);
+const ui=LS.get('artie.ui',{});
+const U={view:'overview',scope:(ui.scope==='all'||prof(ui.scope))?ui.scope:'all',theme:ui.theme||(matchMedia('(prefers-color-scheme: dark)').matches?'dark':'light'),
+ cal:{mode:ui.calMode||'mes',cursor:iso(new Date(today.getFullYear(),today.getMonth(),1)),sel:TODAY},f:{status:'',pessoa:'',pilar:'',modelo:''},peek:null,device:'desk'};
+U.sbc=!!ui.sbc;
+const saveUI=()=>LS.set('artie.ui',{scope:U.scope,calMode:U.cal.mode,theme:U.theme,sbc:!!U.sbc});
+const applySb=()=>document.documentElement.classList.toggle('sb-col',!!U.sbc);
+applySb();
+const applyTheme=()=>{document.documentElement.dataset.theme=U.theme};
+applyTheme();
+const cur=()=>U.scope==='all'?null:prof(U.scope);
+const scopePosts=()=>S.posts.filter(p=>U.scope==='all'||p.pid===U.scope);
+const pilOf=(pr,id)=>{const x=pr&&pr.marca.pilares.find(q=>q.id===id);return x?x.id+' · '+x.nome:'Sem pilar'};
+const isMobile=()=>matchMedia('(max-width:719px)').matches;
+/* ================= biblioteca (skills) ================= */
+const SKILLS=[
+ {id:'niche-research',n:'Pesquisa de nicho',g:'Pesquisa',d:'As 20 histórias mais relevantes do nicho na semana, com link e data.'},
+ {id:'profile-audit',n:'Análise de perfil',g:'Pesquisa',d:'Lê headline, Sobre, banner e posts pelo navegador e gera o Raio-X.'},
+ {id:'profile-optimizer',n:'Otimizador de perfil',g:'Perfil',d:'Headline, Sobre, Experiência, destaque e prompts de imagem.'},
+ {id:'voice-builder',n:'Construtor de voz',g:'Perfil',d:'Entrevista curta + 3 a 5 textos e sai o about-me e o voice.'},
+ {id:'content-matrix',n:'Matriz de conteúdo',g:'Ideias',d:'32 ideias cruzando pilares com 8 formatos.'},
+ {id:'viral-hook-creator',n:'Ganchos',g:'Escrita',st:1,d:'12 padrões de gancho testados, escolhidos pelo material.',p:'Abra com um gancho de um dos 12 padrões testados (O Específico, O Contraditório, A Transformação etc.), escolhido pelo material do post.'},
+ {id:'linkedin-post-structure',n:'Estrutura do post',g:'Escrita',st:1,d:'Ângulo, formato e framework antes de escrever.',p:'Antes de escrever, defina ângulo e objetivo e monte o esqueleto bloco a bloco seguindo o framework escolhido.'},
+ {id:'linkedin-copy',n:'Copy na voz',g:'Escrita',st:1,d:'Escreve o post a partir do cérebro da marca.',p:'Escreva como copywriter sênior, na voz do perfil, formatado para leitura no celular.'},
+ {id:'linkedin-anti-ai',n:'Anti-IA',g:'Escrita',st:1,d:'Tira o que denuncia texto de IA, sem mexer na estrutura.',p:'Revise o texto final tirando padrões que denunciam IA, sem mexer na estrutura nem no formato.'},
+ {id:'lead-magnet-generator',n:'Lead magnet',g:'Escrita',st:1,d:'Post de isca com a chamada na imagem.',p:'Transforme o post em isca: o leitor comenta para receber o material gratuito, e a chamada fica na imagem.'},
+ {id:'linkedin-post-design',n:'Design do post',g:'Design',st:1,d:'Cheatsheets, grades e comparativos em 1080x1350.',p:'Proponha a frase da arte pensando num design de cheatsheet, grade ou comparativo em 1080x1350.'},
+ {id:'engraving-portrait-prompt',n:'Gravura editorial',g:'Design',d:'Prompt para ilustração em gravura preto e branco.'},
+ {id:'gemini-infographic',n:'Infográfico whiteboard',g:'Design',d:'Infográfico desenhado à mão a partir de um post.'}];
+const SKN=Object.fromEntries(SKILLS.map(s=>[s.id,s]));
+
+/* ================= migração v0.4 (comentários, kit, referências, lead magnets) ================= */
+function ensure(){
+ S.refs=S.refs||[];S.lms=S.lms||[];
+ const KIT={arthur:{fr:['pas','aida'],mod:['info','car']},lucas:{fr:['slay','pas'],mod:['img','car']},marina:{fr:['star','bab'],mod:['car','txt']}};
+ S.profiles.forEach(p=>{
+  if(!p.kit){const k=KIT[p.id]||{fr:['pas'],mod:['img']};p.kit={fr:k.fr,mod:k.mod,sk:['viral-hook-creator','linkedin-copy','linkedin-anti-ai']}}
+  if(Array.isArray(p.referencias)){p.referencias.forEach(r=>S.refs.push({id:uid('r'),tipo:'perfil',pid:p.id,url:'',titulo:r.nome,nota:r.motivo,data:TODAY}));delete p.referencias}
+ });
+ S.posts.forEach(p=>{p.comentarios=p.comentarios||[];if(p.ajuste){p.comentarios.push({id:uid('c'),autor:first(prof(p.pid)?.nome),tipo:'ajuste',texto:p.ajuste,data:TODAY,resolvido:false});delete p.ajuste}});
+ if(!S.m4){
+  const add=(titulo,autor,tipo,texto,off)=>{const p=S.posts.find(x=>x.titulo===titulo);if(p)p.comentarios.push({id:uid('c'),autor,tipo,texto,data:iso(addD(today,off)),resolvido:false})};
+  add('A conversa com o vendedor que demitimos','Marina','ajuste','Troca "demitiu" por "desligou". E dá para dizer que ele continua amigo do time?',-1);
+  add('A conversa com o vendedor que demitimos','Marina','comentario','Gostei do gancho, só não quero que pareça que estou expondo ele.',0);
+  add('3 números para olhar toda segunda','Marina','comentario','Aprovado! Se der, coloca o print da planilha no slide 3.',-1);
+  add('Distribuição é prospecção','Lucas','ajuste','Corta o parágrafo da faculdade, fica mais direto.',0);
+  add('Roda de ferramentas p/ LinkedIn iguais ao GTA VI','Arthur','comentario','Falta o Claude na roda. Coloca como a ferramenta principal.',-1);
+  const an=S.refs.find(r=>r.titulo==='André Nogueira');if(an)an.url='https://www.linkedin.com/in/andrenogueira3/';
+  S.refs.push({id:uid('r'),tipo:'post',pid:'lucas',url:'https://www.linkedin.com/feed/update/urn:li:activity:7526785048688148480/',titulo:'André Nogueira: como ele roda uma semana de LinkedIn',nota:'Base do post "Como eu rodo uma semana inteira de LinkedIn em X horas". Formato: rotina cronometrada, passo a passo.',data:TODAY});
+  if(!S.lms.length)S.lms.push({id:'lm-analise',nome:'Análise de Perfil',skill:'profile-audit',entrada:'Link do LinkedIn',saida:'PDF com o diagnóstico',status:'Em construção',gerados:0});
+  S.m4=true;
+ }
+}
+ensure();save();
+
+/* ================= estado do Estúdio (um rascunho por perfil) ================= */
+const freshStudio=pid=>({pid,ideia:'',modelo:'',frame:'',pilar:'',funil:'topo',titulo:'',texto:'',data:wd(1),editId:null,skills:null,ref:''});
+let studio=freshStudio(U.scope!=='all'?U.scope:null);
+const drafts={};
+let SAMPLE=null;
+if(window.claude&&claude.use){claude.use('sample').then(s=>{SAMPLE=s;if(U.view==='estudio')renderView()}).catch(()=>{})}
+
+/* ================= pequenos componentes ================= */
+const B={p:'btn btn--principal',s:'btn btn--secundario',f:'btn btn--fantasma'};
+const av=(p,sz='')=>p?`<span class="av ${sz} t${p.tone||0}" title="${h(p.nome)}">${sz==='xs'?ini(p.nome).charAt(0):ini(p.nome)}</span>`:'';
+const avAll=(sz='')=>`<span class="av ${sz} t3" title="Todos os perfis">${I('users')}</span>`;
+const empty=(t,v,l)=>`<div class="empty"><span>${t}</span>${v?`<button class="${B.s} sm" data-act="go" data-v="${v}">${l}</button>`:''}</div>`;
+const rot=t=>`<span class="card-rotulo t-legenda">${t}</span>`;
+const toast=t=>{const e=$('#toast');e.textContent=t;e.classList.add('on');clearTimeout(toast.t);toast.t=setTimeout(()=>e.classList.remove('on'),2400)};
+const copy=async(t,msg='Copiado')=>{let ok=false;try{await navigator.clipboard.writeText(t);ok=true}catch(e){try{const ta=document.createElement('textarea');ta.value=t;ta.setAttribute('readonly','');ta.style.position='fixed';ta.style.opacity='0';document.body.appendChild(ta);ta.select();ok=document.execCommand('copy');ta.remove()}catch(_){}}toast(ok?msg:'Não deu para copiar aqui');return ok};
+const openCmts=p=>(p.comentarios||[]).filter(c=>!c.resolvido);
+const safeUrl=u=>/^https?:\/\//i.test(u||'')?u:'';
+function pcard(p,o={}){const pr=prof(p.pid);const all=U.scope==='all';const nc=openCmts(p).length;
+ return `<div class="pc ${p.status==='publicado'?'pub':''} ${p.status==='revisar'?'rev':''} ${o.lg?'lg':''}" draggable="true" role="button" tabindex="0" data-act="open" data-id="${p.id}"><button class="cp" data-act="copyText" data-id="${p.id}" title="Copiar texto" aria-label="Copiar texto do post">${I('copy')}</button>
+ <div class="t">${h(p.titulo||'Sem título')}</div>${o.lg&&p.texto?`<div class="snip">${h(p.texto.slice(0,160))}</div>`:''}
+ <div class="m">${stI(p.status)}<span class="lab ell">${o.lg?ST[p.status]+' · '+MOD[p.modelo]:MOD[p.modelo]}</span><span class="sp"></span>${nc?`<span class="cm-badge" title="${nc} comentário(s) do cliente">${I('msg')}${nc}</span>`:''}${all?av(pr,'xs'):''}</div></div>`}
+const rowPost=p=>{const pr=prof(p.pid);return `<li class="r" data-act="open" data-id="${p.id}">${stI(p.status)}<span class="grow"><b>${h(p.titulo||'Sem título')}</b><small>${fmtS(p.data)} · ${MOD[p.modelo]}${U.scope==='all'?' · '+h(first(pr.nome)):''}</small></span>${I('chr','dim')}</li>`};
+function weekStrip(days,ps){return `<div class="wstrip">${days.map((d,i)=>{const dp=ps.filter(p=>p.data===d);return `<div class="wday ${d===TODAY?'today':''} ${i>4?'wkend':''}" data-drop="${d}"><div class="dh"><span>${WK[i]}</span><b>${parse(d).getDate()}</b></div>${dp.map(p=>pcard(p)).join('')}<button class="add-slot" data-act="new" data-d="${d}" aria-label="Novo post em ${fmtS(d)}">${I('plus')}</button></div>`}).join('')}</div>`}
+function pipeline(ps){const c=STK.map(k=>[k,ps.filter(p=>p.status===k).length]);
+ return `<div class="sbar">${c.filter(x=>x[1]).map(([k,n])=>`<i class="c-${k}" style="flex:${n}" title="${ST[k]}: ${n}"></i>`).join('')}</div><ul class="legend">${c.map(([k,n])=>`<li class="${n?'':'zero'}"><span class="sw c-${k}"></span>${stI(k)}<span class="grow">${ST[k]}</span><b>${n}</b></li>`).join('')}</ul>`}
+const GRID='<svg viewBox="0 0 200 200" fill="none" stroke="currentColor" stroke-width=".7"><circle cx="100" cy="100" r="92"/><circle cx="100" cy="100" r="64"/><circle cx="100" cy="100" r="34"/><path d="M8 100h184M100 8v184M35 35l130 130M165 35 35 165"/></svg>';
+const expanded=new Set();
+function liPost(p,o={}){const pr=prof(p.pid)||S.profiles[0];const t=p.texto||'';const key=p.id||'draft';
+ const long=t.length>210&&!expanded.has(key);
+ const body=t?(long?h(t.slice(0,210).replace(/\s+\S*$/,''))+`<button class="li-more" data-act="more" data-id="${h(key)}">… mais</button>`:h(t)):'<span class="li-ph">O texto do post aparece aqui.</span>';
+ const art=h(p.arte||p.titulo||'Frase da arte');let media='';
+ if(['img','info','car'].includes(p.modelo))media=`<div class="li-img ${p.modelo}">${GRID}${p.modelo==='car'?'<span class="pg">1 / 8</span>':''}${p.modelo==='info'?'<span class="kick">Infográfico</span>':''}<p>${art}</p><span class="by">${h(pr.nome)}</span></div>`;
+ else if(p.modelo==='cit')media=`<div class="li-quote"><span>“</span><p>${art}</p><small>${h(pr.nome)}</small></div>`;
+ else if(p.modelo==='foto')media=`<div class="li-photo">${I('user')}<span>Foto pessoal</span></div>`;
+ else if(p.modelo==='vid')media=`<div class="li-vid"><i></i><p>${art}</p></div>`;
+ else if(p.modelo==='enq')media=`<div class="li-poll"><b>${art}</b><div>Sim</div><div>Não</div><div>Depende do setor</div><small>Enquete · 1 semana restante</small></div>`;
+ const r=p.r||{};
+ return `<article class="li ${o.mobile?'mob':''}"><div class="li-h">${av(pr)}<div><b>${h(pr.nome)}</b><small>${h(pr.headline)}</small><small>${p.data?fmtS(p.data):'agora'} · Público</small></div></div><div class="li-t">${body}</div>${media}<div class="li-f"><span>${r.reacoes?num(r.reacoes)+' reações':'Seja o primeiro a reagir'}</span><span>${r.comentarios?num(r.comentarios)+' comentários':''}</span></div><div class="li-a"><span>Gostei</span><span>Comentar</span><span>Repostar</span><span>Enviar</span></div></article>`}
+const greet=()=>{const hr=new Date().getHours();return hr<12?'Bom dia':hr<18?'Boa tarde':'Boa noite'};
+const ideaForm=P=>`<form class="cap" data-form="idea">${I('bulb')}<input name="t" placeholder="Teve uma ideia? Anota antes que ela fuja" autocomplete="off" aria-label="Nova ideia">${P?`<select name="pilar" aria-label="Pilar">${P.marca.pilares.map(x=>`<option value="${x.id}">${x.id} · ${h(x.nome)}</option>`).join('')}</select>`:`<select name="pid" aria-label="Pessoa">${S.profiles.map(x=>`<option value="${x.id}">${h(first(x.nome))}</option>`).join('')}</select>`}<button class="${B.p} sm">Guardar</button></form>`;
+/* Perfil ativo: aparece no topo de toda tela; clicar abre o seletor */
+const scopeChip=()=>{const P=cur();return `<button class="active-chip" data-act="pswOpen" title="Perfil ativo · clique para trocar">${P?av(P,'xs'):avAll('xs')}<span>${P?h(P.nome):'Todos os perfis'}</span>${I('chr','chev')}</button>`};
+const pageHead=(title,sub,actions='',extra='')=>`<header class="ph"><div>${extra?`<div class="eyebrow"><span class="t-legenda">${extra}</span></div>`:''}<h1 class="t-display">${title}</h1>${sub?`<p class="sub t-corpo">${sub}</p>`:''}</div>${actions?`<div class="ph-a btns">${actions}</div>`:''}</header>`;
+const pickProfile=(title,sub)=>pageHead(title,sub)+`<div class="pgrid">${S.profiles.map(profileCard).join('')}</div>`;
+const tipoTag=P=>`<span class="tag ${P.tipo==='interno'?'strong':'line'}">${P.tipo==='interno'?MARCA:'Cliente'}</span>${P.exemplo?'<span class="tag line">exemplo</span>':''}`;
+const WEEKEND=today.getDay()===0||today.getDay()===6;
+const WTITLE=WEEKEND?'Próxima semana':'Esta semana';
+const WDAYS=[...Array(7)].map((_,i)=>iso(addD(monday(WEEKEND?addD(today,2):today),i)));
+function profileCard(P){const pp=S.posts.filter(p=>p.pid===P.id);const days=WDAYS.slice(0,5);
+ const cov=days.filter(d=>pp.some(p=>p.data===d)).length;const rv=pp.filter(p=>p.status==='revisar').length;const m=P.metas;
+ return `<button class="card pcard" data-act="scope" data-id="${P.id}"><span class="who">${av(P,'lg')}<span><span class="card-titulo t-h3" style="display:block">${h(P.nome)}</span><small>${h(P.cargo)} · ${h(P.empresa)}</small></span></span><span class="row">${tipoTag(P)}</span><span class="stats"><span><b>${cov}/5</b><small>dias com post</small></span><span><b>${rv}</b><small>para revisar</small></span><span><b>${m?num(m.atual):'–'}</b><small>seguidores</small></span></span></button>`}
+/* Kit da Biblioteca do perfil (frameworks, modelos e skills marcados) */
+function kitCard(P,o={}){const k=P.kit;
+ return `<section class="card ${o.cls||''}"><div class="bh">${rot('Kit da Biblioteca · '+h(first(P.nome)))}<span class="sp"></span><button class="${B.s} sm" data-act="go" data-v="biblioteca">${I('book')}Abrir Biblioteca</button></div>
+ <div class="kitline"><span class="lbl">Frameworks de escrita</span><div class="chips">${k.fr.map(x=>`<span class="tag strong" title="${h(FR[x][1])}">${FR[x][0]}</span>`).join('')||'<span class="note">Nenhum marcado</span>'}</div>
+ <span class="lbl">Modelos de post</span><div class="chips">${k.mod.map(x=>`<span class="tag">${MOD[x]}</span>`).join('')||'<span class="note">Nenhum marcado</span>'}</div>
+ <span class="lbl">Skills</span><div class="chips">${k.sk.map(x=>`<span class="tag line" title="${h(SKN[x]?.d||'')}">${h(SKN[x]?.n||x)}</span>`).join('')||'<span class="note">Nenhuma marcada</span>'}</div></div>
+ <p class="note">O Estúdio mostra o kit primeiro, marcado com ★.</p></section>`}
+
+/* ================= telas ================= */
+const V={};
+const VIEWS=[['overview','Overview','home'],['calendario','Calendário','cal'],['ideias','Ideias','bulb'],['estudio','Estúdio','pen'],['resultados','Resultados','chart'],['marca','Cérebro da marca','target'],['raiox','Raio-X do perfil','scan'],['aprovacao','Aprovação','check'],['biblioteca','Biblioteca','book'],['referencias','Referências','bookmark'],['leadmagnets','Lead magnets','magnet'],['perfis','Perfis e clientes','users'],['config','Configurações','gear']];
+const VN=Object.fromEntries(VIEWS.map(v=>[v[0],v[1]]));
+const newBtn=`<button class="${B.p}" data-act="new">${I('plus')}Novo post</button>`;
+const calBtn=`<button class="${B.s}" data-act="go" data-v="calendario">${I('cal')}Calendário</button>`;
+const lastCmt=p=>openCmts(p).reduce((a,c)=>c.data>a?c.data:a,'');
+const actionCount=()=>{const ps=scopePosts();return ps.filter(p=>p.status==='revisar').length+ps.reduce((a,p)=>a+openCmts(p).length,0)};
+
+V.overview=()=>{const P=cur();const ps=scopePosts();const days=WDAYS;
+ const apr=ps.filter(p=>p.status==='revisar').sort(byDate);
+ const cm=ps.filter(p=>openCmts(p).length).sort((a,b)=>lastCmt(a)<lastCmt(b)?1:-1);
+ const ncm=cm.reduce((a,p)=>a+openCmts(p).length,0);
+ const prox=ps.filter(p=>p.data>=TODAY&&p.status!=='publicado').sort(byDate).slice(0,6);
+ const n=apr.length+ncm;
+ const acoes=`<div class="g mb">
+  <section class="card card--destaque s4"><span class="card-rotulo t-legenda">Aguardando aprovação do cliente</span><div class="card-numero">${apr.length}</div><p class="card-texto t-pequeno">${apr.length?'posts esperando o OK. Clique para abrir o post.':'Nada aguardando aprovação.'}</p>${apr.length?`<ul class="rows">${apr.map(rowPost).join('')}</ul>`:''}</section>
+  <section class="card s4"><span class="card-rotulo t-legenda">Comentários e pedidos de ajuste</span><div class="card-numero">${ncm}</div><p class="card-texto t-pequeno">${ncm?`em ${cm.length} ${cm.length>1?'posts':'post'}. Clique no comentário para ir direto a ele.`:'Nenhum comentário em aberto.'}</p>
+   ${cm.map(p=>{const pr=prof(p.pid);return `<div class="cg"><button class="cg-h" data-act="open" data-id="${p.id}">${stI(p.status)}<span class="ell">${h(p.titulo)}</span><small>${U.scope==='all'?h(first(pr.nome))+' · ':''}${fmtS(p.data)}</small></button>${openCmts(p).map(c=>`<button class="cmt" data-act="openCmt" data-id="${p.id}" data-c="${c.id}"><span class="cmt-h">${c.tipo==='ajuste'?'<span class="tag solid">Pedido de ajuste</span>':'<span class="tag">Comentário</span>'}<b>${h(c.autor)}</b><small>${fmtS(c.data)}</small></span><span class="cmt-t">${h(c.texto)}</span></button>`).join('')}</div>`}).join('')}</section>
+  <section class="card s4"><span class="card-rotulo t-legenda">Próximos no calendário</span><div class="card-numero">${prox.length}</div><p class="card-texto t-pequeno">${prox.length?'posts a partir de hoje. Clique para ver o card no calendário.':'Nada agendado.'}</p>
+   ${prox.length?`<ul class="rows">${prox.map(p=>{const d=parse(p.data);return `<li class="r up" data-act="calFocus" data-id="${p.id}"><span class="up-d">${DOW[d.getDay()]}<b>${d.getDate()}</b></span><span class="grow"><b>${h(p.titulo||'Sem título')}</b><small>${stI(p.status)} ${ST[p.status]} · ${MOD[p.modelo]}${U.scope==='all'?' · '+h(first(prof(p.pid).nome)):''}</small></span>${I('chr','dim')}</li>`}).join('')}</ul>`:empty('Transforme uma ideia em post no Estúdio.','estudio','Abrir Estúdio')}</section>
+ </div>`;
+ const head=pageHead('Overview',`${greet()}, ${ME}. ${n?`${n} ${n>1?'itens pedem':'item pede'} ação${P?' no perfil de '+h(first(P.nome)):''}.`:'Nada pedindo ação agora.'}`,calBtn+newBtn,fmtL(TODAY));
+ if(!P){
+  return head+acoes+`<section class="card mb"><div class="bh">${rot('Perfis')}<span class="sp"></span><button class="${B.s} sm" data-act="newProfile">${I('plus')}Novo founder</button></div>
+  <div><div class="prow hd t-legenda"><span>Perfil</span><span>Semana</span><span>Próximo post</span><span class="c-rev">Ação</span><span class="c-meta">Meta</span></div>
+  ${S.profiles.map(P=>{const pp=ps.filter(p=>p.pid===P.id);const nx=pp.filter(p=>p.data>=TODAY&&p.status!=='publicado').sort(byDate)[0];const ac=pp.filter(p=>p.status==='revisar').length+pp.reduce((a,p)=>a+openCmts(p).length,0);const m=P.metas;const pct=m&&m.alvo?Math.min(100,Math.round(m.atual/m.alvo*100)):0;const cov=days.slice(0,5).filter(d=>pp.some(p=>p.data===d)).length;
+   return `<div class="prow" data-act="scope" data-id="${P.id}" role="button" tabindex="0"><div class="c-who">${av(P)}<span class="grow"><b>${h(P.nome)}</b><small>${h(P.cargo)} · ${h(P.empresa)}</small></span></div>
+   <div class="c-week"><span class="wdots">${days.slice(0,5).map(d=>{const x=pp.find(p=>p.data===d);return `<i class="${x?(['publicado','agendado','aprovado'].includes(x.status)?'on':'half'):''}" title="${fmtS(d)}${x?': '+h(x.titulo):''}"></i>`}).join('')}</span><small>${cov}/5</small></div>
+   <div class="c-next">${nx?`${stI(nx.status)}<span class="ell"><b>${fmtS(nx.data)}</b> <span class="mute">${h(nx.titulo)}</span></span>`:'<span class="dim">Nada agendado</span>'}</div>
+   <div class="c-rev">${ac?`<span class="tag solid">${ac} ${ac>1?'ações':'ação'}</span>`:'<span class="dim">–</span>'}</div>
+   <div class="c-meta">${m?`<div class="bar"><i style="width:${pct}%"></i></div><small>${num(m.atual)} de ${num(m.alvo)}</small>`:''}</div></div>`}).join('')}</div>
+  <p class="note">Quadrado cheio: post aprovado, agendado ou publicado. Listrado: post em produção. Vazio: dia sem post.</p></section>
+  <section class="card mb"><div class="bh">${rot(WTITLE+', todos os perfis')}<span class="sp"></span><span class="note hide-m">Arraste um post para trocar o dia</span></div>${weekStrip(days,ps)}</section>
+  <section class="card"><div class="bh">${rot('Pipeline')}<span class="sp"></span><span class="count">${ps.length} posts</span></div>${pipeline(ps)}</section>`}
+ const nxt=prox[0];const m=P.metas,pct=m&&m.alvo?Math.min(100,Math.round(m.atual/m.alvo*100)):0;
+ return head+acoes+`<section class="card mb"><div class="bh">${rot(WTITLE)}<span class="sp"></span><span class="note">${fmtS(days[0])} a ${fmtS(days[6])}</span></div>${weekStrip(days,ps)}</section>
+ <div class="g">
+  <section class="card s5"><div class="bh">${rot(nxt&&nxt.data===TODAY?'Sai hoje':'Próximo post')}<span class="sp"></span>${nxt?`<span class="tag">${stI(nxt.status)}${ST[nxt.status]} · ${fmtS(nxt.data)}</span>`:''}</div>${nxt?`<div style="cursor:pointer" data-act="open" data-id="${nxt.id}">${liPost(nxt)}</div>`:empty('Nada agendado. Transforme uma ideia em post no Estúdio.','estudio','Abrir Estúdio')}</section>
+  <div class="s4 stack">
+   ${kitCard(P)}
+   <section class="card"><div class="bh">${rot('Merece resposta no LinkedIn')}</div>${P.inbox.length?`<ul class="rows">${P.inbox.map(x=>`<li class="r" style="cursor:default">${I(x.onde==='Mensagem'?'msg':'user','dim')}<span class="grow"><b>${h(x.quem)}</b><small>${h(x.onde)} · ${h(x.texto)}</small></span></li>`).join('')}</ul><p class="note">Hoje vem das notificações; com a integração, entra sozinho.</p>`:empty('Sem comentários ou mensagens pendentes no LinkedIn. Com a integração ligada, eles aparecem aqui.')}</section>
+  </div>
+  <div class="s3 stack wide-md">
+   ${m?`<section class="card card--destaque"><span class="card-rotulo t-legenda">Meta · ${pct}%</span><div class="card-numero">${num(m.atual)}</div><p class="card-texto t-pequeno">de ${num(m.alvo)} ${h(m.label)}</p><div class="bar"><i style="width:${pct}%"></i></div></section>`:''}
+   <section class="card"><div class="bh">${rot('Pipeline')}<span class="sp"></span><span class="count">${ps.length}</span></div>${pipeline(ps)}</section>
+  </div>
+ </div>
+ <section class="card mt"><div class="bh">${rot('Ideias')}<span class="sp"></span><a class="${B.s} sm" href="#ideias">Ver todas</a></div>${ideaForm(P)}
+ <ul class="rows">${P.ideias.slice(0,5).map(i=>`<li class="r" style="cursor:default">${I('bulb','dim')}<span class="grow"><b>${h(i.t)}</b><small>${h(pilOf(P,i.pilar))} · ${h(i.origem||'')}</small></span><button class="${B.s} sm" data-act="ideaStudio" data-pid="${P.id}" data-id="${i.id}">Escrever</button></li>`).join('')||'<li class="note">Nenhuma ideia guardada ainda.</li>'}</ul></section>`};
+
+function fposts(){return scopePosts().filter(p=>(!U.f.status||p.status===U.f.status)&&(!U.f.modelo||p.modelo===U.f.modelo)&&(U.scope!=='all'||!U.f.pessoa||p.pid===U.f.pessoa)&&(U.scope==='all'||!U.f.pilar||p.pilar===U.f.pilar))}
+const fsel=(k,label,opts)=>`<label class="chipsel ${U.f[k]?'on':''}"><span>${label}</span><select data-filter="${k}" aria-label="Filtrar por ${label}"><option value="">Todos</option>${opts.map(([v,n])=>`<option value="${v}" ${U.f[k]===v?'selected':''}>${h(n)}</option>`).join('')}</select></label>`;
+V.calendario=()=>{const P=cur();const mode=U.cal.mode;const c=parse(U.cal.cursor);const mob=isMobile();
+ let title='';
+ if(mode==='mes')title=cap(MES[c.getMonth()])+' '+c.getFullYear();
+ else if(mode==='semana'){const m0=monday(c),m6=addD(m0,6);title=m0.getDate()+(m0.getMonth()!==m6.getMonth()?' de '+MES[m0.getMonth()]:'')+' a '+m6.getDate()+' de '+MES[m6.getMonth()]}
+ else title=mode==='quadro'?'Quadro por status':'Todos os posts';
+ const ps=fposts();
+ const anyF=U.f.status||U.f.modelo||U.f.pessoa||U.f.pilar;
+ const bar=`<div class="cal-bar"><h1 class="cal-title t-h2">${title}</h1>${['mes','semana'].includes(mode)?`<div class="cal-nav"><button class="${B.f} icon" data-act="calnav" data-d="-1" aria-label="Anterior">${I('chl')}</button><button class="${B.s} sm" data-act="calnav" data-d="0">Hoje</button><button class="${B.f} icon" data-act="calnav" data-d="1" aria-label="Próximo">${I('chr')}</button></div>`:''}<span class="sp"></span>
+ <div class="seg" role="tablist">${[['mes','Mês','cal'],['semana','Semana','week'],['quadro','Quadro','board'],['lista','Lista','list']].map(([k,n,i])=>`<button class="${mode===k?'on':''}" data-act="calmode" data-m="${k}" role="tab" aria-selected="${mode===k}">${I(i)}<span class="hide-s">${n}</span></button>`).join('')}</div>
+ <button class="${B.p} hide-m" data-act="new">${I('plus')}Novo post</button></div>
+ <div class="filters">${U.scope==='all'?fsel('pessoa','Pessoa',S.profiles.map(x=>[x.id,x.nome])):fsel('pilar','Pilar',P.marca.pilares.map(x=>[x.id,x.id+' · '+x.nome]))}${fsel('status','Status',STK.map(k=>[k,ST[k]]))}${fsel('modelo','Modelo',Object.entries(MOD))}${anyF?`<button class="${B.f} sm" data-act="clearF">Limpar filtros</button>`:''}<span class="sp"></span><span class="note hide-m">${ps.length} posts · ${I('copy')} copia o texto pronto para o LinkedIn${mode==='mes'||mode==='semana'?' · arraste para mudar o dia':mode==='quadro'?' · arraste para mudar o status':''}</span></div>`;
+ let body='';
+ if(mode==='mes'){const y=c.getFullYear(),mo=c.getMonth();const start=monday(new Date(y,mo,1));const last=new Date(y,mo+1,0);const end=addD(monday(last),6);const days=[];for(let d=start;d<=end;d=addD(d,1))days.push(iso(d));
+  if(mob){const sel=U.cal.sel&&U.cal.sel.slice(0,7)===iso(c).slice(0,7)?U.cal.sel:(TODAY.slice(0,7)===iso(c).slice(0,7)?TODAY:iso(c));const dl=ps.filter(p=>p.data===sel);
+   body=`<div class="mini">${WK.map(w=>`<div class="wh t-legenda">${w[0]}</div>`).join('')}${days.map(d=>{const dd=parse(d);const n=ps.filter(p=>p.data===d).length;return `<button class="${dd.getMonth()!==mo?'out':''} ${d===TODAY?'today':''} ${d===sel?'sel':''}" data-act="calsel" data-d="${d}"><span>${dd.getDate()}</span><span class="dots">${'<i></i>'.repeat(Math.min(3,n))}</span></button>`}).join('')}</div>
+   <div class="agenda"><div class="ag-h t-legenda azul">${fmtL(sel)}</div>${dl.map(p=>pcard(p,{lg:true})).join('')||'<div class="empty">Nada neste dia.</div>'}<button class="${B.s}" data-act="new" data-d="${sel}">${I('plus')}Novo post neste dia</button></div>`}
+  else body=`<div class="month"><div class="mhead">${WK.map(w=>`<div class="t-legenda">${w}</div>`).join('')}</div><div class="mgrid">${days.map((d,i)=>{const dd=parse(d);const dp=ps.filter(p=>p.data===d);const show=dp.slice(0,4);return `<div class="cell ${dd.getMonth()!==mo?'out':''} ${d===TODAY?'today':''} ${i%7>4?'wk':''}" data-drop="${d}"><div class="dn"><button class="add" data-act="new" data-d="${d}" aria-label="Novo post em ${fmtS(d)}">${I('plus')}</button><span>${dd.getDate()===1?dd.getDate()+' '+MES[dd.getMonth()].slice(0,3):dd.getDate()}</span></div>${show.map(p=>pcard(p)).join('')}${dp.length>4?`<button class="more" data-act="dayweek" data-d="${d}">+${dp.length-4} mais</button>`:''}</div>`}).join('')}</div></div>`}
+ else if(mode==='semana'){const m0=monday(c);const days=[...Array(7)].map((_,i)=>iso(addD(m0,i)));
+  body=`<div class="wk7">${days.map((d,i)=>{const dd=parse(d);const dp=ps.filter(p=>p.data===d);return `<div class="col ${i>4?'wk':''} ${d===TODAY?'today':''}"><div class="ch"><b class="t-h3">${dd.getDate()}</b><small class="t-legenda">${DOWL[dd.getDay()]}</small><span class="sp"></span><button class="${B.f} icon" data-act="new" data-d="${d}" aria-label="Novo post">${I('plus')}</button></div><div class="cb" data-drop="${d}">${dp.map(p=>pcard(p,{lg:true})).join('')}</div></div>`}).join('')}</div>`}
+ else if(mode==='quadro'){body=`<div class="board">${STK.map(k=>{const cp=ps.filter(p=>p.status===k).sort(byDate);return `<div class="bcol" data-drop-st="${k}"><div class="bcol-h">${stI(k)}<span>${ST[k]}</span><span class="count">${cp.length}</span></div>${cp.map(p=>pcard(p,{lg:true})).join('')}</div>`}).join('')}</div>`}
+ else{const rows=ps.slice().sort(byDate);let lastM='';const cols=U.scope==='all'?8:7;
+  body=`<div class="tbl-wrap"><table class="tbl"><thead><tr><th class="t-legenda">Nome</th><th class="t-legenda">Status</th><th class="t-legenda">Postar em</th>${U.scope==='all'?'<th class="t-legenda">Pessoa</th>':''}<th class="t-legenda">Pilar</th><th class="t-legenda">Modelo</th><th class="t-legenda">Funil</th><th class="t-legenda">Texto</th></tr></thead><tbody>${rows.map(p=>{const pr=prof(p.pid);const mk=p.data.slice(0,7);const g=mk!==lastM?(lastM=mk,`<tr class="grp"><td colspan="${cols}" class="t-legenda">${MES[parse(p.data).getMonth()]} ${parse(p.data).getFullYear()}</td></tr>`):'';
+   return g+`<tr data-act="open" data-id="${p.id}"><td class="nm">${h(p.titulo||'Sem título')}</td><td><span class="stc">${stI(p.status)}${ST[p.status]}</span></td><td>${fmtS(p.data)}</td>${U.scope==='all'?`<td><span class="stc">${av(pr,'xs')}${h(first(pr.nome))}</span></td>`:''}<td>${h(pilOf(pr,p.pilar))}</td><td><span class="tag">${MOD[p.modelo]}</span></td><td>${FUN[p.funil]||'–'}</td><td><button class="${B.s} sm" data-act="copyText" data-id="${p.id}" ${p.texto?'':'disabled'}>${I('copy')}Copiar texto</button></td></tr>`}).join('')||`<tr><td colspan="${cols}">Nenhum post com esses filtros.</td></tr>`}</tbody></table></div>`}
+ const legend=`<div class="legend-row">${STK.map(k=>`<span>${stI(k)}${ST[k]}</span>`).join('')}</div>`;
+ return bar+body+legend};
+
+V.ideias=()=>{const P=cur();
+ const icard=(i,pr)=>`<div class="icard"><p>${h(i.t)}</p><div class="m">${U.scope==='all'?av(pr,'xs')+`<span>${h(first(pr.nome))}</span>·`:''}<span>${h(pilOf(pr,i.pilar))}</span>·<span>${h(i.origem||'')}</span>${i.data?`·<span>${fmtS(i.data)}</span>`:''}</div><div class="acts"><button class="${B.s} sm" data-act="ideaStudio" data-pid="${pr.id}" data-id="${i.id}">${I('pen')}Escrever</button><button class="${B.f} sm" data-act="ideaSched" data-pid="${pr.id}" data-id="${i.id}">${I('cal')}Agendar</button><span class="sp"></span><button class="${B.f} icon" data-act="ideaDel" data-pid="${pr.id}" data-id="${i.id}" aria-label="Apagar ideia">${I('trash')}</button></div></div>`;
+ const cols=P?P.marca.pilares.map(pl=>({h:`<span class="tag strong">${pl.id}</span>${h(pl.nome)}`,items:P.ideias.filter(i=>i.pilar===pl.id).map(i=>icard(i,P))})):S.profiles.map(pr=>({h:`${av(pr,'xs')}${h(pr.nome)}`,items:pr.ideias.map(i=>icard(i,pr))}));
+ const total=P?P.ideias.length:S.profiles.reduce((a,p)=>a+p.ideias.length,0);
+ const refs=P?S.refs.filter(r=>r.pid===P.id||r.pid==='geral'):[];
+ return pageHead('Ideias','Joga a ideia aqui no momento em que ela surge. Ela fica guardada até virar post: escreve no Estúdio ou agenda direto no calendário.',`<span class="tag strong">${total} ideias</span>`)+
+ `<div class="split"><div class="stack">${ideaForm(P)}<div class="icols">${cols.map(c=>`<div class="icol"><div class="icol-h">${c.h}<span class="count">${c.items.length}</span></div>${c.items.join('')||'<div class="note" style="padding:var(--esp-2)">Vazio por enquanto.</div>'}</div>`).join('')}</div>
+ <p class="note">Próxima versão: o founder manda um áudio no celular e a ideia chega aqui transcrita, já com o pilar sugerido.</p></div>
+ <aside class="stack">${P?`<section class="card"><div class="bh">${rot('Referências de '+h(first(P.nome)))}<span class="sp"></span><button class="${B.s} sm" data-act="go" data-v="referencias">Abrir</button></div><ul class="rows">${refs.slice(0,5).map(r=>`<li class="r" data-act="refUse" data-id="${r.id}" title="Usar no Estúdio"><span class="av t3">${I(r.tipo==='post'?'text':'user')}</span><span class="grow"><b>${h(r.titulo||r.url)}</b><small>${h(r.nota||'')}</small></span>${I('pen','dim')}</li>`).join('')||'<li class="note">Nenhuma referência salva.</li>'}</ul><p class="note">Clique numa referência para usá-la como base no Estúdio.</p></section>
+ <section class="card"><div class="bh">${rot('Banco de ganchos')}</div><ul class="rows">${P.ganchos.map(g=>`<li class="r" data-act="copy" data-t="${h(g.texto)}"><span class="grow"><b>${h(g.texto)}</b><small>${h(g.padrao)}</small></span>${I('copy','dim')}</li>`).join('')}</ul></section>`:`<section class="card">${rot('Dica')}<p class="card-texto t-pequeno">Escolha um perfil na barra lateral para ver as ideias por pilar, as referências e o banco de ganchos de cada um.</p></section>`}</aside></div>`};
+
+/* Estúdio: kit do perfil primeiro (★), tudo da Biblioteca escolhível sem sair da tela */
+function syncStudio(){if(!studio.pid||!prof(studio.pid))studio.pid=U.scope!=='all'?U.scope:S.profiles[0].id;const P=prof(studio.pid);
+ if(!studio.frame)studio.frame=P.kit.fr[0]||'pas';if(!studio.modelo)studio.modelo=P.kit.mod[0]||'img';
+ if(!studio.skills)studio.skills=P.kit.sk.filter(id=>SKN[id]&&SKN[id].st);
+ if(!P.marca.pilares.some(x=>x.id===studio.pilar))studio.pilar=P.marca.pilares[0]?.id||'';
+ if(studio.ref&&!S.refs.some(r=>r.id===studio.ref))studio.ref='';return P}
+const kitFirst=(keys,kit)=>[...kit.filter(k=>keys.includes(k)),...keys.filter(k=>!kit.includes(k))];
+V.estudio=()=>{const P=syncStudio();const K=P.kit;
+ const d={id:'draft',pid:P.id,titulo:studio.ideia,arte:studio.titulo,modelo:studio.modelo,texto:studio.texto,data:studio.data};
+ const known=P.ideias.some(i=>i.t===studio.ideia);
+ const refs=S.refs.filter(r=>r.pid===P.id||r.pid==='geral');const ref=S.refs.find(r=>r.id===studio.ref);
+ const star=on=>on?I('star'):'';
+ return pageHead('Estúdio',`O rascunho sai na voz de ${h(first(P.nome))}, com o que você escolher da Biblioteca. O post vai para o calendário, e é lá que você copia o texto final.`,studio.editId?'<span class="tag strong">Editando post do calendário</span>':'')+
+ `<div class="studio"><div class="stack">
+ <section class="card">${rot('O post')}
+  <div class="two"><div class="fld"><span class="lbl">Perfil</span><select class="in" data-s="pid" aria-label="Perfil">${S.profiles.map(x=>`<option value="${x.id}" ${x.id===P.id?'selected':''}>${h(x.nome)}</option>`).join('')}</select></div><div class="fld"><span class="lbl">Postar em</span><input class="in" type="date" data-s="data" value="${h(studio.data)}"></div></div>
+  <div class="fld"><span class="lbl">Ideia</span><select class="in" data-s="ideiaSel"><option value="">Escrever uma ideia nova…</option>${P.ideias.map(i=>`<option ${i.t===studio.ideia?'selected':''}>${h(i.t)}</option>`).join('')}</select>${known?'':`<input class="in" data-s="ideia" placeholder="Sobre o que é o post?" value="${h(studio.ideia)}">`}</div>
+  <div class="two"><div class="fld"><span class="lbl">Pilar</span><select class="in" data-s="pilar">${P.marca.pilares.map(x=>`<option value="${x.id}" ${x.id===studio.pilar?'selected':''}>${x.id} · ${h(x.nome)}</option>`).join('')}</select></div><div class="fld"><span class="lbl">Funil</span><select class="in" data-s="funil">${Object.entries(FUN).map(([k,v])=>`<option value="${k}" ${studio.funil===k?'selected':''}>${v}</option>`).join('')}</select></div></div>
+ </section>
+ <section class="card"><div class="bh">${rot('Da Biblioteca · kit de '+h(first(P.nome))+' primeiro (★)')}<span class="sp"></span><button class="${B.f} sm" data-act="go" data-v="biblioteca">${I('book')}Biblioteca</button></div>
+  <div class="libsec"><span class="lbl">Framework de escrita</span><div class="pills">${kitFirst(Object.keys(FR),K.fr).map(k=>`<button class="pill ${studio.frame===k?'on':''} ${K.fr.includes(k)?'kit':''}" data-act="sPick" data-k="frame" data-v="${k}" title="${FR[k][1]}">${star(K.fr.includes(k))}${FR[k][0]}</button>`).join('')}</div><span class="note">${FR[studio.frame][0]}: ${FR[studio.frame][1]}</span></div>
+  <div class="libsec"><span class="lbl">Modelo de post</span><div class="pills">${kitFirst(Object.keys(MOD),K.mod).map(k=>`<button class="pill ${studio.modelo===k?'on':''} ${K.mod.includes(k)?'kit':''}" data-act="sPick" data-k="modelo" data-v="${k}">${star(K.mod.includes(k))}${MOD[k]}</button>`).join('')}</div></div>
+  <div class="libsec"><span class="lbl">Skills aplicadas na geração</span><div class="pills">${kitFirst(SKILLS.filter(s=>s.st).map(s=>s.id),K.sk).map(id=>`<button class="pill ${studio.skills.includes(id)?'on':''} ${K.sk.includes(id)?'kit':''}" data-act="sSkill" data-v="${id}" title="${h(SKN[id].d)}" aria-pressed="${studio.skills.includes(id)}">${star(K.sk.includes(id))}${SKN[id].n}</button>`).join('')}</div></div>
+  <div class="libsec"><span class="lbl">Referência como base (opcional)</span><select class="in" data-s="ref"><option value="">Sem referência</option>${refs.map(r=>`<option value="${r.id}" ${r.id===studio.ref?'selected':''}>${r.tipo==='post'?'Post':'Perfil'} · ${h(r.titulo||r.url)}</option>`).join('')}</select>${ref?`<span class="note">${h(ref.nota||'')}</span>`:''}<button class="${B.f} sm" data-act="go" data-v="referencias" style="justify-self:start">${I('bookmark')}Salvar nova referência</button></div>
+ </section>
+ <section class="card">${rot('Rascunho')}
+  <div class="btns"><button class="${B.p}" data-act="sGen">${I('spark')}Gerar rascunho na voz de ${h(first(P.nome))}</button><button class="${B.s}" data-act="sHooks">Sugerir ganchos</button></div>
+  <div id="sHookList"></div>
+  ${studio.modelo!=='txt'?`<div class="fld"><span class="lbl">${studio.modelo==='enq'?'Pergunta da enquete':'Frase da arte'}</span><input class="in" data-s="titulo" value="${h(studio.titulo)}" placeholder="Frase curta que vai na imagem"></div>`:''}
+  <div class="fld"><span class="lbl">Texto</span><textarea class="in" data-s="texto" rows="14" placeholder="O rascunho aparece aqui. Ajuste o que quiser.">${h(studio.texto)}</textarea><div class="cc"><span id="sCount"><b>${studio.texto.length}</b> caracteres</span><span>Até 210 aparecem antes do "… mais"</span></div></div>
+  <div class="btns"><button class="${B.s}" data-act="sSave">${I('cal')}${studio.editId?'Salvar no post':'Mandar para o calendário'}</button>${studio.editId?`<button class="${B.f}" data-act="sReset">Começar do zero</button>`:''}</div>
+  ${SAMPLE?'':'<p class="note">Neste arquivo local o rascunho sai de um modelo pronto. Publicado como artefato no Claude, a geração usa o Claude de verdade com o cérebro da marca, o kit e a referência escolhida.</p>'}
+ </section></div>
+ <div class="pv"><div class="row">${rot('Prévia no feed')}<span class="sp"></span><div class="seg"><button class="${U.device==='desk'?'on':''}" data-act="device" data-v="desk">${I('desk')}<span class="hide-s">Desktop</span></button><button class="${U.device==='mob'?'on':''}" data-act="device" data-v="mob">${I('phone')}<span class="hide-s">Celular</span></button></div></div><div class="pv-bg" id="sPrev">${liPost(d,{mobile:U.device==='mob'})}</div></div></div>`};
+
+V.resultados=()=>{const P=cur();const pub=scopePosts().filter(p=>p.status==='publicado').sort(byDate).reverse();
+ const sum=k=>pub.reduce((a,p)=>a+(+(p.r&&p.r[k])||0),0);
+ const groups=P?P.marca.pilares.map(pl=>({n:pl.id+' · '+pl.nome,ps:pub.filter(p=>p.pilar===pl.id)})):S.profiles.map(pr=>({n:pr.nome,ps:pub.filter(p=>p.pid===pr.id)}));
+ const avg=(ps,k)=>{const v=ps.filter(p=>p.r&&p.r[k]!=null);return v.length?v.reduce((a,p)=>a+(+p.r[k]||0),0)/v.length:0};
+ const g1=groups.map(g=>({n:g.n,v:avg(g.ps,'comentarios')}));const mx1=Math.max(1,...g1.map(x=>x.v));
+ const mods=Object.keys(MOD).map(k=>({n:MOD[k],v:avg(pub.filter(p=>p.modelo===k),'impressoes'),c:pub.filter(p=>p.modelo===k).length})).filter(x=>x.c);const mx2=Math.max(1,...mods.map(x=>x.v));
+ const top=pub.filter(p=>p.r).sort((a,b)=>(b.r.comentarios||0)-(a.r.comentarios||0))[0];
+ const kpi=(l,v,t,d)=>`<div class="card ${d?'card--destaque':''}"><span class="card-rotulo t-legenda">${l}</span><div class="card-numero">${v}</div><p class="card-texto t-pequeno">${t}</p></div>`;
+ return pageHead('Resultados',`${top?`O que mais gerou conversa: <b>${h(top.titulo)}</b>${U.scope==='all'?' ('+h(first(prof(top.pid).nome))+')':''}. `:''}Anote os números em segundos; com a integração ligada, esta parte fica automática.`)+
+ `<div class="kpis">${kpi('Publicados',pub.length,'posts no período')}${kpi('Impressões',num(sum('impressoes')),'somadas')}${kpi('Comentários',num(sum('comentarios')),'somados')}${kpi('Conversas',num(sum('conversas')),'geradas pelos posts',true)}</div>
+ <div class="g"><section class="card s8"><div class="bh">${rot('Posts publicados')}</div>${pub.length?`<div class="tbl-wrap"><table class="tbl" style="min-width:640px"><thead><tr><th class="t-legenda">Post</th>${['Impressões','Reações','Coment.','Conversas'].map(x=>`<th class="n t-legenda">${x}</th>`).join('')}</tr></thead><tbody>${pub.map(p=>`<tr style="cursor:default"><td class="nm"><span data-act="open" data-id="${p.id}" style="cursor:pointer">${h(p.titulo)}</span><br><span class="note">${fmtS(p.data)} · ${U.scope==='all'?h(first(prof(p.pid).nome))+' · ':''}${MOD[p.modelo]}</span></td>${['impressoes','reacoes','comentarios','conversas'].map(k=>`<td class="n"><input inputmode="numeric" data-r="${p.id}" data-k="${k}" value="${p.r&&p.r[k]!=null?p.r[k]:''}" placeholder="–" aria-label="${k}"></td>`).join('')}</tr>`).join('')}</tbody></table></div>`:empty('Nenhum post publicado ainda.')}</section>
+ <div class="s4 stack"><section class="card"><div class="bh">${rot('Comentários por '+(P?'pilar':'perfil'))}<span class="sp"></span><span class="note">média</span></div>${g1.map(x=>`<div class="hbar"><span class="ell">${h(x.n)}</span><div class="bar"><i style="width:${x.v/mx1*100}%"></i></div><b>${x.v?x.v.toFixed(0):'–'}</b></div>`).join('')}</section>
+ <section class="card"><div class="bh">${rot('Impressões por modelo')}<span class="sp"></span><span class="note">média</span></div>${mods.map(x=>`<div class="hbar"><span class="ell">${h(x.n)}</span><div class="bar"><i style="width:${x.v/mx2*100}%"></i></div><b>${x.v?(x.v/1000).toFixed(1)+'k':'–'}</b></div>`).join('')||'<p class="note">Sem dados ainda.</p>'}</section></div></div>`};
+
+V.marca=()=>{const P=cur();if(!P)return pickProfile('Cérebro da marca','Tudo que o sistema escreve parte daqui. Escolha de quem.');const M=P.marca;
+ return pageHead('Cérebro da marca',`Preenchido uma vez com a ${MARCA}. Tudo que o Estúdio escreve parte daqui, junto com o kit da Biblioteca.`,M.rascunho?'<span class="tag solid">Rascunho para revisar</span>':'')+
+ `<div class="g"><section class="card card--destaque s12"><span class="card-rotulo t-legenda">Posicionamento</span><h2 class="card-titulo t-h1 quote">${h(M.posicionamento)}</h2><p class="card-texto t-corpo">${h(M.frase)}</p></section>
+ <section class="card s6">${rot('Para quem fala')}<p class="card-texto t-corpo" style="color:var(--cor-texto)">${h(M.publico)}</p>${rot('Promessa')}<h3 class="card-titulo t-h3">${h(M.promessa)}</h3></section>
+ <section class="card s6">${rot('Pilares de conteúdo')}<div>${M.pilares.map(p=>`<div class="pil"><div class="top2"><span>${p.id} · ${h(p.nome)}</span><span class="azul">${p.pct}%</span></div><div class="bar"><i style="width:${p.pct}%"></i></div><small>${h(p.desc)}</small></div>`).join('')}</div></section>
+ ${kitCard(P,{cls:'s12'})}
+ <section class="card s4">${rot('Tom de voz')}<span class="lbl">Sempre</span><div class="chips">${M.tom.sempre.map(t=>`<span class="tag strong">${h(t)}</span>`).join('')}</div><span class="lbl">Nunca</span><div class="chips no">${M.tom.nunca.map(t=>`<span class="tag">${h(t)}</span>`).join('')}</div><span class="lbl">Vocabulário</span><div class="chips">${M.vocabulario.map(t=>`<span class="tag line">${h(t)}</span>`).join('')}</div></section>
+ <section class="card s4">${rot('Teses')}<ol class="ol">${M.teses.map(t=>`<li>${h(t)}</li>`).join('')}</ol></section>
+ <section class="card s4">${rot('Histórias e provas')}<ol class="ol">${M.historias.map(t=>`<li>${h(t)}</li>`).join('')}</ol><div class="chips">${M.provas.map(t=>`<span class="tag strong">${h(t)}</span>`).join('')}</div></section></div>`};
+
+V.raiox=()=>{const P=cur();if(!P)return pickProfile('Raio-X do perfil','O diagnóstico da vitrine antes da primeira conversa. Escolha de quem.');const r=P.raiox;
+ return pageHead('Raio-X do perfil',h(r.resumo))+
+ `<div class="g"><section class="card s8">${rot('O que encontramos')}<div>${r.pontos.map(p=>`<div class="rx"><div class="dot d-${p.tipo}">${p.tipo==='alerta'?'!':p.tipo==='forca'?'+':'→'}</div><div><b>${h(p.titulo)}</b><span class="mute">${h(p.texto)}</span></div></div>`).join('')||empty('Rode a análise de perfil para preencher.')}</div>
+ <div class="legend-row"><span><span class="dot mini d-alerta">!</span>Alerta</span><span><span class="dot mini d-oportunidade">→</span>Oportunidade</span><span><span class="dot mini d-forca">+</span>Força</span></div></section>
+ <div class="s4 stack">${r.nota!=null?`<section class="card card--destaque"><span class="card-rotulo t-legenda">Nota da vitrine</span><div class="card-numero">${r.nota}<span class="t-h3"> /100</span></div><div class="bar"><i style="width:${r.nota}%"></i></div><p class="card-texto t-pequeno">Headline, Sobre, banner, destaque e últimos posts.</p></section>`:''}
+ <section class="card">${rot('Plano dos primeiros 30 dias')}<ol class="ol">${r.plano.map(x=>`<li>${h(x)}</li>`).join('')}</ol></section></div>
+ <section class="card s12">${rot('Vitrine: hoje e como fica')}<div class="cmp"><div class="vbox"><span class="lbl">Headline atual</span><p>${h(P.perfil.atual.headline||P.headline)}</p><span class="lbl">Sobre atual</span><p class="mute">${h(P.perfil.atual.sobre||'–')}</p></div><div class="vbox new"><span class="lbl azul">Headline proposta</span><p>${h(P.perfil.otimizado.headline||'–')}</p><span class="lbl azul">Sobre proposto</span><p>${h(P.perfil.otimizado.sobre||'–')}</p></div></div></section></div>`};
+
+V.aprovacao=()=>{const P=cur();if(!P)return pickProfile('Aprovação','A tela que o founder recebe pelo link. Escolha de quem.');
+ const ps=S.posts.filter(p=>p.pid===P.id&&['revisar','aprovado'].includes(p.status)&&p.data>=iso(addD(today,-14))).sort(byDate);
+ return `<div class="apr">${pageHead('Posts para aprovar',`É esta tela que ${h(first(P.nome))} recebe pelo link: vê como cada post vai aparecer no feed e aprova, comenta ou pede ajuste, pelo celular.`,`<button class="${B.s} sm" data-act="aprLink">${I('link')}Copiar link</button>`)}
+ ${ps.map(p=>{const cs=p.comentarios||[];return `<section class="card"><div class="bh"><span class="t-legenda azul">${fmtL(p.data)}</span><span class="sp"></span><span class="tag ${p.status==='aprovado'?'strong':''}">${stI(p.status)}${ST[p.status]}</span></div>${liPost(p)}
+ ${cs.length?`<div class="cmts">${cs.map(c=>`<div class="cmt ${c.resolvido?'res':''}"><span class="cmt-h">${c.tipo==='ajuste'?'<span class="tag solid">Pedido de ajuste</span>':'<span class="tag">Comentário</span>'}<b>${h(c.autor)}</b><small>${fmtS(c.data)}${c.resolvido?' · resolvido':''}</small></span><span class="cmt-t">${h(c.texto)}</span></div>`).join('')}</div>`:''}
+ <div class="btns">${p.status==='aprovado'?`<span class="note grow">Aprovado. A ${MARCA} agenda a publicação.</span><button class="${B.f} sm" data-act="comment" data-id="${p.id}" data-t="comentario">Comentar</button><button class="${B.f} sm" data-act="unapprove" data-id="${p.id}">Desfazer</button>`:`<button class="${B.p}" data-act="approve" data-id="${p.id}">${I('check')}Aprovar</button><button class="${B.s}" data-act="comment" data-id="${p.id}" data-t="ajuste">Pedir ajuste</button><button class="${B.f}" data-act="comment" data-id="${p.id}" data-t="comentario">Comentar</button>`}</div></section>`}).join('')||empty('Nada para aprovar agora.')}</div>`};
+
+V.perfis=()=>{const n=S.profiles.length;const wk=S.posts.filter(p=>WDAYS.includes(p.data)).length;
+ return pageHead('Perfis e clientes','Cada founder que assina ganha a própria cópia do sistema: cérebro da marca, kit da Biblioteca, Raio-X, calendário e Estúdio na voz dele.',`<button class="${B.p}" data-act="newProfile">${I('plus')}Novo founder</button>`)+
+ `<div class="pgrid"><div class="card card--destaque"><span class="card-rotulo t-legenda">No sistema</span><div class="card-numero">${n}</div><p class="card-texto t-pequeno">perfis ativos e ${wk} posts ${WEEKEND?'na próxima semana':'nesta semana'}.</p></div>${S.profiles.filter(p=>p.tipo==='interno').map(profileCard).join('')}</div>
+ <div class="sec-h t-legenda">Clientes</div><div class="pgrid">${S.profiles.filter(p=>p.tipo!=='interno').map(profileCard).join('')}<button class="card pcard new" data-act="newProfile">${I('plus')}<span>Adicionar founder</span></button></div>`};
+
+V.biblioteca=()=>{const P=cur();const K=P?P.kit:null;
+ const pin=(kind,id)=>{if(!P)return '';const on=K[kind].includes(id);return `<button class="pin ${on?'on':''}" data-act="kitToggle" data-k="${kind}" data-v="${id}" aria-pressed="${on}" title="${on?'Tirar do kit de ':'Colocar no kit de '}${h(first(P.nome))}">${I('star')}${on?'No kit':'Usar'}</button>`};
+ const nk=K?K.fr.length+K.mod.length+K.sk.length:0;
+ return pageHead('Biblioteca',P?`Frameworks, modelos e skills que a ${MARCA} já testou. Marque o que entra no kit de ${h(first(P.nome))}: o Estúdio mostra esse kit primeiro na hora de gerar.`:`O que a ${MARCA} já testou e sabe que funciona. Escolha um perfil na barra lateral para montar o kit dele.`)+
+ `<div class="g mb"><div class="card card--destaque s4"><span class="card-rotulo t-legenda">${P?'Kit de '+h(first(P.nome)):'Skills'}</span><div class="card-numero">${P?nk:SKILLS.length}</div><p class="card-texto t-pequeno">${P?'itens marcados para usar no Estúdio.':'etapas do fluxo de conteúdo já automatizadas com o Claude.'}</p></div>
+ <button class="card pcard s4" data-act="go" data-v="referencias"><span class="card-rotulo t-legenda">Swipe file</span><span class="card-titulo t-h3">Referências</span><span class="card-texto t-pequeno">${S.refs.filter(r=>!P||r.pid===P.id||r.pid==='geral').length} posts e perfis de referência salvos${P?' para '+h(first(P.nome)):''}.</span></button>
+ <button class="card pcard s4" data-act="go" data-v="leadmagnets"><span class="card-rotulo t-legenda">Em construção</span><span class="card-titulo t-h3">Lead magnets</span><span class="card-texto t-pequeno">${S.lms.length} lead magnet. O primeiro é a Análise de Perfil.</span></button></div>
+ <div class="g mb"><section class="card s6">${rot('Frameworks de escrita')}<div>${Object.entries(FR).map(([k,f])=>`<div class="librow"><span class="tag strong">${f[0]}</span><span class="grow"><b>${f[0]}</b><small>${f[1]}</small></span>${pin('fr',k)}</div>`).join('')}</div></section>
+ <section class="card s6">${rot('Modelos de post')}<div>${Object.entries(MOD).map(([k,m])=>`<div class="librow"><span class="grow"><b>${m}</b><small>Modelo do Calendário Editorial</small></span>${pin('mod',k)}</div>`).join('')}</div><p class="note">Os mesmos modelos do Calendário Editorial no Notion.</p></section></div>
+ <div class="sec-h t-legenda">Skills · ${SKILLS.length}</div>
+ <div class="lib">${SKILLS.map(s=>`<div class="card"><span class="card-rotulo t-legenda">${s.g} · ${s.id}</span><h3 class="card-titulo t-h3">${s.n}</h3><p class="card-texto t-pequeno">${s.d}</p>${s.st?'<span class="note">Disponível no Estúdio</span>':''}${pin('sk',s.id)}</div>`).join('')}</div>
+ <section class="card mt">${rot('Padrões de gancho')}<div class="chips">${HOOKS.map(x=>`<span class="tag line">${x}</span>`).join('')}</div></section>`};
+
+/* Swipe file: posts de alto desempenho e perfis de referência */
+V.referencias=()=>{const P=cur();const f=U.refF||'todos';
+ const list=S.refs.filter(r=>(!P||r.pid===P.id||r.pid==='geral')&&(f==='todos'||r.tipo===f)).slice().reverse();
+ const total=S.refs.filter(r=>!P||r.pid===P.id||r.pid==='geral').length;
+ return pageHead('Referências',`Swipe file com posts de alto desempenho e perfis de referência${P?' de '+h(first(P.nome)):''}. O Estúdio pode usar qualquer um como base na hora de gerar o rascunho.`,`<span class="tag strong">${total} salvas</span>`)+
+ `<section class="card mb">${rot('Salvar referência')}<form class="refform" data-form="ref"><select class="in" name="tipo" aria-label="Tipo"><option value="post">Post</option><option value="perfil">Perfil</option></select><input class="in" name="url" placeholder="Link do LinkedIn (post ou perfil)" autocomplete="off" aria-label="Link"><input class="in" name="nota" placeholder="Observação: por que é referência?" autocomplete="off" aria-label="Observação"><select class="in" name="pid" aria-label="Para quem">${P?`<option value="${P.id}">Para ${h(first(P.nome))}</option>`:''}<option value="geral">Para todos (geral)</option>${S.profiles.filter(x=>!P||x.id!==P.id).map(x=>`<option value="${x.id}">Para ${h(first(x.nome))}</option>`).join('')}</select><button class="${B.p}">Salvar</button></form></section>
+ <div class="row mb"><div class="seg">${[['todos','Todas'],['post','Posts'],['perfil','Perfis']].map(([k,n])=>`<button class="${f===k?'on':''}" data-act="refF" data-v="${k}">${n}</button>`).join('')}</div></div>
+ <div class="refgrid">${list.map(r=>{const pr=prof(r.pid);const u=safeUrl(r.url);return `<div class="card"><div class="bh"><span class="card-rotulo t-legenda">${r.tipo==='post'?'Post':'Perfil'} · ${pr?h(first(pr.nome)):'Geral'}</span><span class="sp"></span><button class="${B.f} icon" data-act="refDel" data-id="${r.id}" aria-label="Apagar referência">${I('trash')}</button></div>
+  <h3 class="card-titulo t-h3">${h(r.titulo||(u?u.replace(/^https?:\/\/(www\.)?/,'').slice(0,48):'Sem título'))}</h3>${u?`<a class="reflink sm" href="${h(u)}" target="_blank" rel="noopener noreferrer">${I('ext')} Abrir no LinkedIn</a>`:'<span class="note">Sem link salvo</span>'}
+  <p class="card-texto t-pequeno">${h(r.nota||'')}</p><div class="btns"><button class="${B.s} sm" data-act="refUse" data-id="${r.id}">${I('pen')}Usar no Estúdio</button></div></div>`}).join('')||empty('Nenhuma referência por aqui ainda. Cole um link acima.')}</div>`};
+
+/* Lead magnets: estrutura pronta; a Análise de Perfil é o primeiro */
+V.leadmagnets=()=>pageHead('Lead magnets',`Materiais gratuitos gerados com as skills de IA da ${MARCA} para atrair founders. O primeiro é a Análise de Perfil.`,`<button class="${B.s}" data-act="lmSoon">${I('plus')}Novo lead magnet</button>`)+
+ `<div class="g mb"><div class="card card--destaque s4"><span class="card-rotulo t-legenda">Lead magnets</span><div class="card-numero">${S.lms.length}</div><p class="card-texto t-pequeno">${S.lms.filter(l=>l.status==='Em construção').length} em construção. Os próximos entram aqui usando as skills da Biblioteca.</p></div>
+ <section class="card s8"><div class="bh">${rot('Análise de Perfil · em construção')}<span class="sp"></span><span class="tag line">skill: profile-audit</span></div><h3 class="card-titulo t-h3">Entra o link do LinkedIn, sai um PDF com o diagnóstico.</h3>
+  <div class="flow"><div><b>1. Link</b><small>O founder cola o link do perfil.</small></div><div><b>2. Análise</b><small>A skill lê headline, Sobre, banner e posts.</small></div><div><b>3. PDF</b><small>Diagnóstico com a identidade visual, pronto para enviar.</small></div></div>
+  <form class="cap" data-form="lm">${I('link')}<input name="url" placeholder="linkedin.com/in/..." autocomplete="off" aria-label="Link do LinkedIn"><button class="${B.p} sm">Gerar PDF</button></form>
+  <p class="note">A geração do PDF entra na próxima versão. Por enquanto esta é só a estrutura da tela.</p></section></div>
+ <section class="card">${rot('Todos os lead magnets')}<div class="tbl-wrap"><table class="tbl" style="min-width:640px"><thead><tr><th class="t-legenda">Nome</th><th class="t-legenda">Skill</th><th class="t-legenda">Entra</th><th class="t-legenda">Sai</th><th class="t-legenda">Status</th><th class="t-legenda n">Gerados</th></tr></thead><tbody>${S.lms.map(l=>`<tr style="cursor:default"><td class="nm">${h(l.nome)}</td><td>${h(l.skill)}</td><td>${h(l.entrada)}</td><td>${h(l.saida)}</td><td><span class="tag strong">${h(l.status)}</span></td><td class="n">${l.gerados}</td></tr>`).join('')}</tbody></table></div></section>`;
+
+/* Configurações: preferências deste navegador */
+V.config=()=>pageHead('Configurações','Preferências deste navegador. Nada aqui muda o conteúdo dos perfis, só a aparência e os dados de exemplo.')+
+ `<div class="g"><section class="card card--destaque s4"><span class="card-rotulo t-legenda">Versão</span><div class="card-numero">v0.6</div><p class="card-texto t-pequeno">Protótipo local. Os dados ficam salvos neste navegador.</p></section>
+ <section class="card s8">${rot('Aparência')}<div>
+  <div class="librow"><span class="grow"><b>Tema</b><small>Claro ou escuro para as telas. A barra lateral é sempre escura, de vidro fosco.</small></span><div class="seg"><button class="${U.theme==='light'?'on':''}" data-act="setTheme" data-v="light">${I('sun')}Claro</button><button class="${U.theme==='dark'?'on':''}" data-act="setTheme" data-v="dark">${I('moon')}Escuro</button></div></div>
+  <div class="librow"><span class="grow"><b>Barra lateral</b><small>Expandida com rótulos ou recolhida só com ícones. Atalho: Ctrl B.</small></span><div class="seg"><button class="${U.sbc?'':'on'}" data-act="setSb" data-v="0">Expandida</button><button class="${U.sbc?'on':''}" data-act="setSb" data-v="1">Recolhida</button></div></div></div></section>
+ <section class="card s6">${rot('Atalhos')}<div>${[['Ctrl K','Buscar ou comandar'],['N','Novo post'],['Ctrl B','Recolher ou expandir a barra'],['Esc','Fechar painel, busca ou seletor']].map(([k,d])=>`<div class="librow"><span class="kbd" style="margin:0">${k}</span><span class="grow"><b>${d}</b></span></div>`).join('')}</div></section>
+ <section class="card s6">${rot('Dados de exemplo')}<p class="card-texto t-pequeno">Restaura Arthur, Lucas e Marina como no início. Apaga as edições feitas neste navegador.</p><div class="btns"><button class="${B.s} danger" data-act="resetData">${I('trash')}<span>Restaurar dados de exemplo</span></button></div></section></div>`;
+
+/* ================= render ================= */
+/* Barra lateral v0.6: estilo de vidro fosco com todos os itens de antes (cada tela tem seu item) */
+const NAVG={};
+const SUBNAV={};
+function pswHTML(){const P=cur();
+ const item=(id,label,avh)=>`<button class="sbp-i ${U.scope===id?'sel':''}" data-act="scope" data-id="${id}" data-n="${h(label.toLowerCase())}">${avh}<span class="grow ell">${label}</span>${I('check2','chk')}</button>`;
+ const int=S.profiles.filter(p=>p.tipo==='interno'),cli=S.profiles.filter(p=>p.tipo!=='interno');
+ return `<div class="sb-psw"><button class="sb-prof" data-act="pswToggle" aria-expanded="${!!U.pswOpen}" aria-haspopup="dialog" aria-label="Perfil ativo: ${P?h(P.nome):'Todos os perfis'}. Trocar perfil" data-tip="${P?h(P.nome):'Todos os perfis'}">${P?av(P):avAll()}<span class="sb-lbl sb-prof-t"><b class="ell">${P?h(P.nome):'Todos os perfis'}</b><small class="ell">${P?h(P.cargo)+' · '+h(P.empresa):S.profiles.length+' perfis · visão geral'}</small></span><span class="sb-lbl sb-prof-chev">${I('updown')}</span></button>
+ ${U.pswOpen?`<div class="sbp" id="psw" role="dialog" aria-label="Trocar perfil"><span class="t-legenda sbp-h">Trocar perfil</span><input class="psw-q" data-psw-q placeholder="Buscar perfil" aria-label="Buscar perfil" autocomplete="off">
+ <div class="psw-list">${item('all','Todos os perfis',avAll('xs'))}
+ <div class="sbp-g t-legenda">${MARCA}</div>${int.map(p=>item(p.id,h(p.nome),av(p,'xs'))).join('')}
+ <div class="sbp-g t-legenda">Clientes</div>${cli.map(p=>item(p.id,h(p.nome),av(p,'xs'))).join('')}
+ <button class="sbp-i" data-act="newProfile">${I('plus')}<span>Novo founder</span></button></div></div>`:''}</div>`}
+function sbAfter(st){const s=document.querySelector('#side .sb-scroll');if(!s)return;s.scrollTop=st;const a=s.querySelector('.sb-item.on');if(a){const r=a.getBoundingClientRect(),q=s.getBoundingClientRect();if(r.top<q.top)s.scrollTop-=q.top-r.top+8;else if(r.bottom>q.bottom)s.scrollTop+=r.bottom-q.bottom+8}sbFade()}
+function sbFade(){const s=document.querySelector('#side .sb-scroll');if(s)s.classList.toggle('more',s.scrollTop+s.clientHeight<s.scrollHeight-4)}
+function renderSide(){const st=document.querySelector('#side .sb-scroll')?.scrollTop||0;const P=cur();const ac=actionCount();const rev=scopePosts().filter(p=>p.status==='revisar').length;
+ const nIdeas=P?P.ideias.length:S.profiles.reduce((a,p)=>a+p.ideias.length,0);
+ const nRefs=S.refs.filter(r=>!P||r.pid===P.id||r.pid==='geral').length;
+ /* badge: número na pílula; dot: número no canto do ícone quando a barra está recolhida (só para o que pede ação) */
+ const it=(v,label,icon,badge,dot)=>`<a class="sb-item ${U.view===v?'on':''}" href="#${v}" data-tip="${label}"${U.view===v?' aria-current="page"':''}>${I(icon)}<span class="sb-lbl">${label}</span>${badge?`<span class="sb-badge">${badge}</span>`:''}${dot?`<span class="sb-dot" aria-hidden="true">${dot}</span>`:''}</a>`;
+ const grp=t=>`<div class="sb-div"></div><div class="sb-h t-legenda sb-lbl">${t}</div>`;
+ $('#side').innerHTML=`<div class="sb-brand"><span class="sb-mark" aria-hidden="true">${MARCA.charAt(0)}</span><span class="sb-lbl sb-name"><b>${MARCA}</b><small>Sistema de conteúdo</small></span><button class="${B.f} icon menu-btn" data-act="drawer" aria-label="Fechar menu">${I('x')}</button></div>
+ ${pswHTML()}
+ <nav class="sb-scroll" aria-label="Navegação principal">
+  <button class="sb-item" data-act="cmd" data-tip="Buscar (Ctrl K)">${I('search')}<span class="sb-lbl">Buscar</span><span class="sb-badge sb-kbd">Ctrl K</span></button>
+  <div class="sb-div"></div>
+  ${it('overview','Overview','home',ac,ac)}${it('calendario','Calendário','cal')}${it('ideias','Ideias','bulb',nIdeas)}${it('estudio','Estúdio','pen')}${it('resultados','Resultados','chart')}
+  ${grp('Marca')}${it('marca','Cérebro da marca','target')}${it('raiox','Raio-X do perfil','scan')}${it('aprovacao','Aprovação','check',rev,rev)}
+  ${grp('Biblioteca')}${it('biblioteca','Frameworks e skills','book')}${it('referencias','Referências','bookmark',nRefs)}${it('leadmagnets','Lead magnets','magnet')}
+ </nav>
+ <div class="sb-foot"><div class="sb-div"></div>${it('perfis','Perfis e clientes','users')}${it('config','Configurações','gear')}<div class="sb-ver sb-lbl">${MARCA} · v0.6 · protótipo</div></div>
+ <button class="sb-toggle" data-act="sbToggle" aria-label="${U.sbc?'Expandir':'Recolher'} barra lateral" title="${U.sbc?'Expandir':'Recolher'} (Ctrl B)">${I(U.sbc?'chr':'chl')}</button>`;sbAfter(st)}
+/* Dica com o nome do item na barra recolhida (fica fora da área com rolagem, por isso é um elemento fixo) */
+const sbTip=document.createElement('div');sbTip.className='sb-tip';sbTip.setAttribute('data-theme','dark');sbTip.setAttribute('aria-hidden','true');document.body.appendChild(sbTip);
+document.addEventListener('mouseover',e=>{const t=e.target instanceof Element&&e.target.closest('#side [data-tip]');
+ if(!t||!U.sbc||U.pswOpen||matchMedia('(max-width:959px)').matches){sbTip.classList.remove('on');return}
+ const r=t.getBoundingClientRect();sbTip.textContent=t.dataset.tip;sbTip.style.top=(r.top+r.height/2)+'px';sbTip.style.left=(r.right+18)+'px';sbTip.classList.add('on')});
+document.addEventListener('scroll',e=>{sbTip.classList.remove('on');if(e.target instanceof Element&&e.target.matches('.sb-scroll'))sbFade()},true);
+window.addEventListener('resize',sbFade);
+/* Seletor de tema no topo: mostra o modo atual em texto (Claro / Escuro) para ficar claro que dá para clicar */
+const themeSeg=()=>`<div class="seg th-seg" role="group" aria-label="Tema">${[['light','Claro','sun'],['dark','Escuro','moon']].map(([v,n,i])=>`<button class="${U.theme===v?'on':''}" data-act="setTheme" data-v="${v}" aria-pressed="${U.theme===v}" title="Tema ${n.toLowerCase()}">${I(i)}<span class="lab">${n}</span></button>`).join('')}</div>`;
+function renderTop(){
+ $('#top').innerHTML=`<button class="${B.f} icon menu-btn" data-act="drawer" aria-label="Abrir menu">${I('menu')}</button><div class="crumb">${scopeChip()}<span class="sl">/</span><b class="ell">${VN[U.view]||'Overview'}</b></div><span class="sp"></span>
+ <button class="${B.f} sm hide-m" data-act="cmd">${I('search')}Buscar<span class="kbd">Ctrl K</span></button>${themeSeg()}<button class="${B.p} sm" data-act="new">${I('plus')}<span class="hide-s">Novo post</span></button>`}
+function renderTab(){const t=(v,l,i)=>`<a href="#${v}" class="${U.view===v?'on':''}">${I(i)}<span>${l}</span></a>`;
+ $('#tabbar').innerHTML=t('overview','Overview','home')+t('calendario','Agenda','cal')+`<button class="fab" data-act="new" aria-label="Novo post">${I('plus')}</button>`+t('estudio','Estúdio','pen')+`<button data-act="drawer">${I('menu')}<span>Menu</span></button>`}
+function subnavHTML(){const sn=SUBNAV[NAVG[U.view]];if(!sn)return '';const P=cur();const rev=scopePosts().filter(p=>p.status==='revisar').length;const nId=P?P.ideias.length:S.profiles.reduce((a,p)=>a+p.ideias.length,0);
+ return `<nav class="subnav seg" aria-label="Seções">${sn.map(([k,n])=>`<a class="${U.view===k?'on':''}" href="#${k}"${U.view===k?' aria-current="page"':''}>${n}${k==='aprovacao'&&rev?`<span class="count strong">${rev}</span>`:''}${k==='ideias'?`<span class="count">${nId}</span>`:''}</a>`).join('')}</nav>`}
+function renderView(){const v=$('#view');const wide=U.view==='calendario';v.className='page fade'+(wide?' wide':'');const html=(V[U.view]||V.overview)();const sn=subnavHTML();v.innerHTML=sn&&html.startsWith('<div class="apr">')?html.replace('<div class="apr">','<div class="apr">'+sn):sn+html;void v.offsetWidth;if(U.after){const f=U.after;U.after=null;setTimeout(f,40)}}
+function render(){renderSide();renderTop();renderTab();renderView()}
+let rvT;const renderViewSoon=()=>{clearTimeout(rvT);rvT=setTimeout(()=>{renderView();renderSide()},350)};
+function route(){let k=location.hash.slice(1);if(k==='hoje'){k='overview';try{history.replaceState(null,'','#overview')}catch(e){}}U.view=V[k]?k:'overview';closeDrawer();render();window.scrollTo(0,0)}
+window.addEventListener('hashchange',route);
+const go=v=>{if(location.hash.slice(1)===v){U.view=v;render()}else location.hash=v};
+/* Trocar de perfil: mantém a tela atual e atualiza tudo para o novo contexto */
+const setScope=id=>{if(id!=='all'&&!prof(id))return;
+ if(id!=='all'&&studio.pid!==id){if(studio.pid)drafts[studio.pid]=studio;studio=drafts[id]||freshStudio(id)}
+ U.scope=id;U.f.pilar='';U.f.pessoa='';U.pswOpen=false;
+ if(U.peek){const p=post(U.peek);if(!p||(id!=='all'&&p.pid!==id))closePeek()}
+ saveUI();closeDrawer();render()};
+
+/* ================= painel lateral do post ================= */
+function openPeek(id,opt){U.peek=id;renderPeek();$('#peek').classList.add('on');$('#scrim').classList.add('on');
+ if(opt===true)setTimeout(()=>$('#peek .pk-title')?.focus(),60);
+ else if(opt&&opt.cmt)setTimeout(()=>{const el=document.getElementById('cmt-'+opt.cmt);if(el){el.scrollIntoView({block:'center',behavior:'smooth'});el.classList.add('flash')}},280)}
+function closePeek(){U.peek=null;$('#peek').classList.remove('on');if(!$('#side').classList.contains('on'))$('#scrim').classList.remove('on')}
+function autosize(el){if(!el)return;el.style.height='auto';el.style.height=el.scrollHeight+'px'}
+function renderPeek(){const p=post(U.peek);if(!p){closePeek();return}const pr=prof(p.pid);const len=(p.texto||'').length;const cs=p.comentarios||[];const oc=openCmts(p).length;
+ const row=(ic,k,v)=>`<div class="k">${I(ic)}${k}</div><div class="v">${v}</div>`;
+ const sel=(f,opts,val)=>`<select data-f="${f}" aria-label="${f}">${opts.map(([v,n])=>`<option value="${v}" ${v===val?'selected':''}>${h(n)}</option>`).join('')}</select>`;
+ $('#peek').innerHTML=`<div class="pk-top"><button class="${B.f} icon" data-act="peekClose" aria-label="Fechar">${I('x')}</button><span class="crumb">${av(pr,'xs')}<span class="ell">${h(pr.nome)}</span></span><span class="sp"></span><button class="${B.f} sm" data-act="toStudio" data-id="${p.id}">${I('pen')}<span class="hide-s">Estúdio</span></button><button class="${B.f} sm" data-act="copyText" data-id="${p.id}">${I('copy')}<span class="hide-s">Copiar texto</span></button></div>
+ <div class="pk-body"><textarea class="pk-title" rows="1" data-f="titulo" placeholder="Sem título">${h(p.titulo)}</textarea>
+ <div class="props">
+  ${row('status','Status',stI(p.status)+sel('status',STK.map(k=>[k,ST[k]]),p.status))}
+  ${row('cal','Postar em',`<input type="date" data-f="data" value="${h(p.data)}">`)}
+  ${row('user','Pessoa',av(pr,'xs')+sel('pid',S.profiles.map(x=>[x.id,x.nome]),p.pid))}
+  ${row('target','Pilar',sel('pilar',pr.marca.pilares.map(x=>[x.id,x.id+' · '+x.nome]),p.pilar))}
+  ${row('image','Modelo',sel('modelo',Object.entries(MOD),p.modelo))}
+  ${row('funnel','Funil',sel('funil',Object.entries(FUN),p.funil))}
+ </div>
+ ${cs.length?`<details class="tg" open id="pkCmts"><summary>${I('chr','chev')}${I('msg')}Comentários do cliente<span class="count ${oc?'strong':''}">${oc?oc+' em aberto':'resolvidos'}</span></summary><div class="tg-b"><div class="cmts">${cs.map(c=>`<div class="cmt ${c.resolvido?'res':''}" id="cmt-${c.id}"><span class="cmt-h">${c.tipo==='ajuste'?'<span class="tag solid">Pedido de ajuste</span>':'<span class="tag">Comentário</span>'}<b>${h(c.autor)}</b><small>${fmtS(c.data)}</small><span class="sp"></span><button class="${B.f} sm" data-act="resolveCmt" data-id="${p.id}" data-c="${c.id}">${c.resolvido?'Reabrir':I('check2')+'Resolver'}</button></span><span class="cmt-t">${h(c.texto)}</span></div>`).join('')}</div></div></details>`:''}
+ <div class="hr"></div>
+ ${p.modelo!=='txt'?`<details class="tg" open><summary>${I('chr','chev')}${I('image')}Imagem</summary><div class="tg-b"><textarea class="doc short" data-f="arte" rows="1" placeholder="Frase da arte, referência ou briefing do design">${h(p.arte||'')}</textarea></div></details>`:''}
+ <details class="tg" open><summary>${I('chr','chev')}${I('text')}Texto</summary><div class="tg-b"><textarea class="doc" data-f="texto" placeholder="Escreva o post ou mande para o Estúdio gerar o rascunho.">${h(p.texto||'')}</textarea><div class="cc"><span id="pkCount"><b>${len}</b> caracteres</span><span>210 aparecem antes do "… mais"</span></div></div></details>
+ <details class="tg" ${isMobile()?'':'open'}><summary>${I('chr','chev')}${I('eye')}Prévia no LinkedIn</summary><div class="tg-b" id="pkPrev">${liPost(p)}</div></details>
+ ${p.status==='publicado'?`<details class="tg" open><summary>${I('chr','chev')}${I('chart')}Resultados</summary><div class="tg-b"><div class="mgrid4">${[['impressoes','Impressões'],['reacoes','Reações'],['comentarios','Comentários'],['conversas','Conversas']].map(([k,n])=>`<label>${n}<input inputmode="numeric" data-r="${p.id}" data-k="${k}" value="${p.r&&p.r[k]!=null?p.r[k]:''}" placeholder="–"></label>`).join('')}</div></div></details>`:''}
+ <div class="pk-foot"><button class="${B.s} sm" data-act="dup" data-id="${p.id}">${I('copy')}Duplicar</button><span class="sp"></span><button class="${B.s} sm danger" data-act="del" data-id="${p.id}">${I('trash')}<span>Excluir</span></button></div></div>`;
+ $$('#peek .pk-title,#peek .doc').forEach(autosize)}
+function newPost(d,pid){pid=pid||(U.scope!=='all'?U.scope:S.profiles[0].id);const pr=prof(pid);
+ const p={id:uid('p'),pid,titulo:'',status:'ideia',data:d||nextFree(pid),modelo:pr.kit?.mod[0]||'img',pilar:pr.marca.pilares[0]?.id||'',funil:'topo',texto:'',arte:'',r:null,comentarios:[]};
+ S.posts.push(p);save();renderView();renderSide();openPeek(p.id,true)}
+function nextFree(pid){for(let i=1;i<60;i++){const d=wd(i);if(!S.posts.some(p=>p.pid===pid&&p.data===d))return d}return wd(1)}
+
+/* ================= modais ================= */
+const modal=html=>{$('#md').innerHTML=html;$('#ov').classList.add('on');setTimeout(()=>$('#md input,#md textarea')?.focus(),40)};
+const closeModal=()=>$('#ov').classList.remove('on');
+function commentModal(id,tipo){const p=post(id);const aj=tipo==='ajuste';modal(`<h3 class="t-h2">${aj?'Pedir ajuste':'Comentar'}</h3><p class="mute" style="margin:0">${h(p.titulo)}</p><textarea class="in" id="cmT" rows="4" placeholder="${aj?'O que você quer mudar?':'Escreva seu comentário'}"></textarea>${aj?'<p class="note">O post volta para "Texto pronto" até a Oak ajustar.</p>':''}<div class="btns"><button class="${B.p}" data-act="cmOk" data-id="${id}" data-t="${tipo}">Enviar para a ${MARCA}</button><button class="${B.s}" data-act="modalClose">Cancelar</button></div>`)}
+function profileModal(){modal(`<div class="row"><h3 class="t-h2 grow">Novo founder</h3><button class="${B.f} icon" data-act="modalClose" aria-label="Fechar">${I('x')}</button></div><p class="mute" style="margin:0">Antes da call, o sistema vira o sistema dele: marca, Raio-X, ideias e os primeiros posts. Comece pelo básico; o resto a skill de análise de perfil preenche.</p>
+ <div class="two"><div class="fld"><span class="lbl">Nome</span><input class="in" id="nN" autocomplete="off"></div><div class="fld"><span class="lbl">Empresa</span><input class="in" id="nE" autocomplete="off"></div></div>
+ <div class="two"><div class="fld"><span class="lbl">Cargo</span><input class="in" id="nC" placeholder="Founder"></div><div class="fld"><span class="lbl">Seguidores hoje</span><input class="in" id="nF" inputmode="numeric" placeholder="0"></div></div>
+ <div class="fld"><span class="lbl">Headline atual do LinkedIn</span><input class="in" id="nH"></div>
+ <div class="fld"><span class="lbl">Pilares (um por linha, opcional)</span><textarea class="in" id="nP" rows="3" placeholder="Bastidores&#10;Ensino&#10;Opinião"></textarea></div>
+ <details class="tg"><summary>${I('chr','chev')}Colar o JSON da skill de análise de perfil</summary><div class="tg-b" style="padding-left:0"><textarea class="in" id="nJ" rows="6" placeholder='{"nome": "...", "marca": {...}}'></textarea></div></details>
+ <div class="btns"><button class="${B.p}" data-act="profOk">Criar o sistema dele</button><button class="${B.s}" data-act="modalClose">Cancelar</button></div>`)}
+function createProfile(){const j=$('#nJ').value.trim();let o={};
+ if(j){try{o=JSON.parse(j.slice(j.indexOf('{'),j.lastIndexOf('}')+1))}catch(e){toast('Esse JSON não abriu. Confira se copiou inteiro.');return}}
+ const nome=$('#nN').value.trim()||o.nome;if(!nome){toast('Coloque pelo menos o nome');return}
+ const emp=$('#nE').value.trim()||o.empresa||'Empresa';const pls=$('#nP').value.split('\n').map(s=>s.trim()).filter(Boolean);
+ const defP=(pls.length?pls:['Bastidores','Ensino','Opinião']).slice(0,5).map((n,i,a)=>({id:'P'+(i+1),nome:n,pct:Math.round(100/a.length),desc:''}));
+ const m=o.marca||{};
+ const P={id:uid('f'),tone:S.profiles.length%4,tipo:'cliente',nome,cargo:$('#nC').value.trim()||o.cargo||'Founder',empresa:emp,headline:$('#nH').value.trim()||o.headline||'',
+  marca:{posicionamento:m.posicionamento||'A definir na call de diagnóstico.',frase:m.frase||'',publico:m.publico||'A definir.',promessa:m.promessa||'A definir.',pilares:m.pilares||defP,tom:m.tom||{sempre:['Direto','Próximo'],nunca:['Corporativo']},vocabulario:m.vocabulario||[],teses:m.teses||[],historias:m.historias||[],provas:m.provas||[]},
+  perfil:o.perfil||{atual:{headline:$('#nH').value.trim(),sobre:''},otimizado:{headline:'',sobre:''}},
+  raiox:o.raiox||{nota:null,resumo:'Rode a skill de análise de perfil para preencher o Raio-X.',pontos:[],plano:[]},
+  metas:{atual:+$('#nF').value||0,alvo:Math.max(1000,Math.round((+$('#nF').value||0)*1.5)),label:'seguidores em 90 dias'},
+  kit:{fr:['pas'],mod:['img','car'],sk:['viral-hook-creator','linkedin-copy','linkedin-anti-ai']},
+  ideias:(o.ideias||[]).map(i=>({id:uid('i'),t:i.t,pilar:i.pilar||'P1',origem:i.origem||'Skill',data:TODAY})),ganchos:o.ganchos||[],inbox:[]};
+ (o.referencias||[]).forEach(r=>S.refs.push({id:uid('r'),tipo:'perfil',pid:P.id,url:'',titulo:r.nome,nota:r.motivo,data:TODAY}));
+ S.profiles.push(P);save();closeModal();toast('Sistema de '+first(nome)+' pronto');setScope(P.id);go('overview')}
+
+/* ================= busca (Ctrl K) ================= */
+let cmdSel=0,cmdItems=[];
+function openCmd(){$('#cmd').classList.add('on');const i=$('#cmdIn');i.value='';cmdSel=0;drawCmd();setTimeout(()=>i.focus(),10)}
+function closeCmd(){$('#cmd').classList.remove('on')}
+function drawCmd(){const raw=$('#cmdIn').value.trim();const q=raw.toLowerCase();const L=[];
+ const add=(g,label,icon,run,hint='',d='')=>L.push({g,label,icon,run,hint,d});
+ if(raw)add('Ação',`Guardar ideia: “${raw}”`,'bulb',()=>{addIdea(raw)},U.scope==='all'?first(S.profiles[0].nome):first(cur().nome));
+ add('Ação','Novo post','plus',()=>newPost(),'N');
+ add('Ação',U.theme==='dark'?'Tema claro':'Tema escuro',U.theme==='dark'?'sun':'moon',toggleTheme);
+ VIEWS.forEach(v=>add('Ir para',v[1],v[2],()=>go(v[0])));
+ add('Perfil','Todos os perfis','users',()=>setScope('all'));
+ S.profiles.forEach(p=>add('Perfil',p.nome,'user',()=>setScope(p.id),p.empresa));
+ S.posts.slice().sort(byDate).forEach(p=>add('Posts',p.titulo||'Sem título','cal',()=>{if(U.view!=='calendario')go('calendario');setTimeout(()=>openPeek(p.id),30)},first(prof(p.pid).nome)+' · '+fmtS(p.data),p.data));
+ cmdItems=q?L.filter(x=>x.label.startsWith('Guardar ideia')||(x.label+' '+x.hint).toLowerCase().includes(q))
+  :L.filter(x=>x.g!=='Posts').concat(L.filter(x=>x.g==='Posts'&&x.d>=TODAY).slice(0,5));
+ cmdSel=Math.min(cmdSel,Math.max(0,cmdItems.length-1));let lastG='';
+ $('#cmdList').innerHTML=cmdItems.map((x,i)=>{const gh=x.g!==lastG?(lastG=x.g,`<div class="cmd-g t-legenda">${x.g}</div>`):'';return gh+`<div class="cmd-i ${i===cmdSel?'on':''}" data-ci="${i}">${I(x.icon)}<span class="ell">${h(x.label)}</span>${x.hint?`<small>${h(x.hint)}</small>`:''}</div>`}).join('')||'<div class="cmd-g t-legenda">Nada encontrado</div>';
+ $('#cmdList .cmd-i.on')?.scrollIntoView({block:'nearest'})}
+function runCmd(i){const x=cmdItems[i];if(!x)return;closeCmd();x.run()}
+$('#cmdIn').addEventListener('input',()=>{cmdSel=0;drawCmd()});
+$('#cmdIn').addEventListener('keydown',e=>{if(e.key==='ArrowDown'){e.preventDefault();cmdSel=Math.min(cmdItems.length-1,cmdSel+1);drawCmd()}else if(e.key==='ArrowUp'){e.preventDefault();cmdSel=Math.max(0,cmdSel-1);drawCmd()}else if(e.key==='Enter'){e.preventDefault();runCmd(cmdSel)}});
+$('#cmdList').addEventListener('click',e=>{const it=e.target.closest('[data-ci]');if(it)runCmd(+it.dataset.ci)});
+$('#cmdList').addEventListener('mousemove',e=>{const it=e.target.closest('[data-ci]');if(it&&+it.dataset.ci!==cmdSel){cmdSel=+it.dataset.ci;$$('#cmdList .cmd-i').forEach(x=>x.classList.toggle('on',+x.dataset.ci===cmdSel))}});
+
+/* ================= ações ================= */
+function addIdea(t,pid,pilar){pid=pid||(U.scope!=='all'?U.scope:S.profiles[0].id);const pr=prof(pid);pr.ideias.unshift({id:uid('i'),t,pilar:pilar||pr.marca.pilares[0]?.id||'',origem:'Captura rápida',data:TODAY});save();toast('Ideia guardada para '+first(pr.nome));renderView();renderSide()}
+const toggleTheme=()=>{U.theme=U.theme==='dark'?'light':'dark';applyTheme();saveUI();renderSide();renderTop()};
+const openDrawer=()=>{$('#side').classList.add('on');$('#scrim').classList.add('on')};
+function closeDrawer(){$('#side').classList.remove('on');if(!U.peek)$('#scrim').classList.remove('on')}
+const skillsTxt=()=>(studio.skills||[]).map(id=>SKN[id]).filter(Boolean);
+function draftTemplate(P){const i=studio.ideia||'o tema';const secs=FR[studio.frame][2];const ref=S.refs.find(r=>r.id===studio.ref);
+ return `${i}.\n\n`+secs.map(x=>`[${x}] Escreva aqui usando uma história de ${first(P.nome)}: ${P.marca.historias[0]||''}`).join('\n\n')+`\n\n(Modelo pronto. Com o Claude conectado, este texto sai escrito na voz de ${first(P.nome)}, no tom "${P.marca.tom.sempre.slice(0,3).join(', ')}", com ${FR[studio.frame][0]}${skillsTxt().length?' e as skills '+skillsTxt().map(s=>s.n).join(', '):''}${ref?', tendo como base a referência "'+(ref.titulo||ref.url)+'"':''}.)`}
+function brief(P){const M=P.marca;return `Perfil: ${P.nome}, ${P.cargo} da ${P.empresa}.\nPosicionamento: ${M.posicionamento}\nPúblico: ${M.publico}\nPilares: ${M.pilares.map(p=>p.id+' '+p.nome+' ('+p.desc+')').join('; ')}\nTom sempre: ${M.tom.sempre.join(', ')}. Nunca: ${M.tom.nunca.join(', ')}.\nVocabulário: ${M.vocabulario.join(', ')}\nTeses: ${M.teses.join(' | ')}\nHistórias: ${M.historias.join(' | ')}\nProvas: ${M.provas.join(' | ')}`}
+const updStudioPrev=()=>{const pv=$('#sPrev');if(pv)pv.innerHTML=liPost({id:'draft',pid:studio.pid,titulo:studio.ideia,arte:studio.titulo,modelo:studio.modelo,texto:studio.texto,data:studio.data},{mobile:U.device==='mob'});const c=$('#sCount');if(c)c.innerHTML=`<b>${studio.texto.length}</b> caracteres`};
+function calFocus(id){const p=post(id);if(!p)return;const d=parse(p.data);
+ if(U.cal.mode==='mes'||U.cal.mode==='lista'||U.cal.mode==='quadro'){if(U.cal.mode==='mes')U.cal.cursor=iso(new Date(d.getFullYear(),d.getMonth(),1))}else U.cal.cursor=p.data;
+ U.cal.sel=p.data;U.f={status:'',pessoa:'',pilar:'',modelo:''};
+ U.after=()=>{const c=document.querySelector(`.pc[data-id="${id}"],tr[data-id="${id}"]`);if(c){c.scrollIntoView({block:'center',behavior:'smooth'});c.classList.remove('flash');void c.offsetWidth;c.classList.add('flash')}};
+ if(U.view==='calendario')renderView();else go('calendario')}
+
+const ACT={
+ go:t=>go(t.dataset.v),
+ new:t=>newPost(t.dataset.d),
+ open:t=>openPeek(t.dataset.id),
+ openCmt:t=>openPeek(t.dataset.id,{cmt:t.dataset.c}),
+ calFocus:t=>calFocus(t.dataset.id),
+ scope:t=>setScope(t.dataset.id),
+ pswToggle:()=>{U.pswOpen=!U.pswOpen;renderSide();if(U.pswOpen)setTimeout(()=>$('#psw .psw-q')?.focus(),20)},
+ sbToggle:()=>{U.sbc=!U.sbc;U.pswOpen=false;applySb();saveUI();renderSide()},
+ setSb:t=>{U.sbc=t.dataset.v==='1';U.pswOpen=false;applySb();saveUI();render()},
+ setTheme:t=>{U.theme=t.dataset.v;applyTheme();saveUI();render()},
+ resetData:t=>{const lab=t.querySelector('span');if(!t.classList.contains('arm')){t.classList.add('arm');lab.textContent='Clique de novo para restaurar';setTimeout(()=>{if(t.isConnected){t.classList.remove('arm');lab.textContent='Restaurar dados de exemplo'}},2600);return}
+  S=seed();ensure();save();studio=freshStudio(null);for(const k in drafts)delete drafts[k];U.scope='all';closePeek();saveUI();render();toast('Dados de exemplo restaurados')},
+ pswOpen:()=>{U.pswOpen=true;if(matchMedia('(max-width:959px)').matches)openDrawer();renderSide();setTimeout(()=>{$('#psw')?.scrollIntoView({block:'nearest'});$('#psw .psw-q')?.focus()},60)},
+ drawer:()=>{$('#side').classList.contains('on')?closeDrawer():openDrawer()},
+ closeAll:()=>{closePeek();closeDrawer()},
+ peekClose:closePeek,
+ cmd:openCmd,
+ cmdBg:(t,e)=>{if(e.target===t)closeCmd()},
+ ovBg:(t,e)=>{if(e.target===t)closeModal()},
+ modalClose:closeModal,
+ theme:toggleTheme,
+ calmode:t=>{U.cal.mode=t.dataset.m;saveUI();renderView()},
+ calnav:t=>{const d=+t.dataset.d;const c=parse(U.cal.cursor);if(d===0){U.cal.cursor=U.cal.mode==='mes'?iso(new Date(today.getFullYear(),today.getMonth(),1)):TODAY;U.cal.sel=TODAY}else if(U.cal.mode==='mes'){U.cal.cursor=iso(new Date(c.getFullYear(),c.getMonth()+d,1))}else U.cal.cursor=iso(addD(c,7*d));renderView()},
+ calsel:t=>{U.cal.sel=t.dataset.d;renderView()},
+ dayweek:t=>{U.cal.mode='semana';U.cal.cursor=t.dataset.d;renderView()},
+ clearF:()=>{U.f={status:'',pessoa:'',pilar:'',modelo:''};renderView()},
+ more:t=>{expanded.add(t.dataset.id);if(U.peek&&t.closest('#peek'))$('#pkPrev').innerHTML=liPost(post(U.peek));else if(t.closest('#sPrev'))updStudioPrev();else renderView()},
+ copy:t=>copy(t.dataset.t),
+ copyText:async t=>{const p=post(t.dataset.id);if(!p||!(p.texto||'').trim()){toast('Este post ainda não tem texto');return}
+  const pronto=['aprovado','agendado','publicado'].includes(p.status);
+  const ok=await copy(p.texto,pronto?'Texto copiado. É só colar no LinkedIn.':`Texto copiado (o post ainda está em "${ST[p.status]}")`);
+  if(ok&&t.classList.contains('cp')){t.classList.add('ok');t.innerHTML=I('check2');setTimeout(()=>{if(t.isConnected){t.classList.remove('ok');t.innerHTML=I('copy')}},1400)}},
+ toStudio:t=>{const p=post(t.dataset.id);if(U.scope!=='all'&&U.scope!==p.pid)setScope(p.pid);studio={...freshStudio(p.pid),ideia:p.titulo,modelo:p.modelo,pilar:p.pilar,funil:p.funil,titulo:p.arte||'',texto:p.texto||'',data:p.data,editId:p.id};closePeek();go('estudio')},
+ dup:t=>{const p=post(t.dataset.id);const c={...p,id:uid('p'),titulo:p.titulo+' (cópia)',status:'ideia',r:null,comentarios:[]};S.posts.push(c);save();renderView();openPeek(c.id);toast('Post duplicado')},
+ del:t=>{const lab=t.querySelector('span');if(!t.classList.contains('arm')){t.classList.add('arm');lab.textContent='Clique de novo para excluir';setTimeout(()=>{if(t.isConnected){t.classList.remove('arm');lab.textContent='Excluir'}},2600);return}
+  S.posts=S.posts.filter(p=>p.id!==t.dataset.id);save();closePeek();renderView();renderSide();toast('Post excluído')},
+ resolveCmt:t=>{const p=post(t.dataset.id);const c=(p.comentarios||[]).find(x=>x.id===t.dataset.c);if(!c)return;c.resolvido=!c.resolvido;save();const b=$('#peek .pk-body');const sc=b?b.scrollTop:0;renderPeek();const b2=$('#peek .pk-body');if(b2)b2.scrollTop=sc;renderView();renderSide();toast(c.resolvido?'Comentário resolvido':'Comentário reaberto')},
+ approve:t=>{post(t.dataset.id).status='aprovado';save();renderView();renderSide();toast('Post aprovado')},
+ unapprove:t=>{post(t.dataset.id).status='revisar';save();renderView();renderSide()},
+ comment:t=>commentModal(t.dataset.id,t.dataset.t),
+ cmOk:t=>{const p=post(t.dataset.id);const tx=$('#cmT').value.trim();if(!tx){toast('Escreva o comentário antes');return}const aj=t.dataset.t==='ajuste';
+  p.comentarios=p.comentarios||[];p.comentarios.push({id:uid('c'),autor:first(prof(p.pid).nome),tipo:aj?'ajuste':'comentario',texto:tx,data:TODAY,resolvido:false});if(aj)p.status='texto';
+  save();closeModal();renderView();renderSide();toast(aj?'Ajuste enviado; o post voltou para Texto pronto':'Comentário enviado')},
+ aprLink:()=>copy(location.href.split('#')[0]+'#aprovacao','Link copiado'),
+ newProfile:()=>{U.pswOpen=false;renderSide();closeDrawer();profileModal()},
+ profOk:createProfile,
+ ideaStudio:t=>{const pr=prof(t.dataset.pid);const i=pr.ideias.find(x=>x.id===t.dataset.id);if(U.scope!=='all'&&U.scope!==pr.id)setScope(pr.id);if(studio.pid!==pr.id){if(studio.pid)drafts[studio.pid]=studio;studio=drafts[pr.id]||freshStudio(pr.id)}studio={...studio,ideia:i.t,pilar:i.pilar,titulo:'',texto:'',editId:null,data:nextFree(pr.id)};go('estudio')},
+ ideaSched:t=>{const pr=prof(t.dataset.pid);const i=pr.ideias.find(x=>x.id===t.dataset.id);const d=nextFree(pr.id);S.posts.push({id:uid('p'),pid:pr.id,titulo:i.t,status:'ideia',data:d,modelo:pr.kit?.mod[0]||'img',pilar:i.pilar,funil:'topo',texto:'',arte:'',r:null,comentarios:[]});pr.ideias=pr.ideias.filter(x=>x!==i);save();renderView();renderSide();toast('Agendada para '+fmtS(d))},
+ ideaDel:t=>{const pr=prof(t.dataset.pid);pr.ideias=pr.ideias.filter(x=>x.id!==t.dataset.id);save();renderView();renderSide();toast('Ideia apagada')},
+ kitToggle:t=>{const P=cur();if(!P)return;const k=t.dataset.k,v=t.dataset.v;const a=P.kit[k];const i=a.indexOf(v);if(i>=0)a.splice(i,1);else a.push(v);if(studio.pid===P.id&&k==='sk')studio.skills=null;save();renderView();toast(i>=0?'Tirado do kit de '+first(P.nome):'Adicionado ao kit de '+first(P.nome))},
+ refF:t=>{U.refF=t.dataset.v;renderView()},
+ refDel:t=>{S.refs=S.refs.filter(r=>r.id!==t.dataset.id);if(studio.ref===t.dataset.id)studio.ref='';save();renderView();renderSide();toast('Referência apagada')},
+ refUse:t=>{const r=S.refs.find(x=>x.id===t.dataset.id);if(!r)return;if(r.pid!=='geral'&&U.scope!==r.pid)setScope(r.pid);syncStudio();studio.ref=r.id;go('estudio');toast('Referência pronta no Estúdio')},
+ lmSoon:()=>toast('Novos lead magnets entram na próxima versão'),
+ device:t=>{U.device=t.dataset.v;renderView()},
+ sPick:t=>{studio[t.dataset.k]=t.dataset.v;renderView()},
+ sSkill:t=>{const v=t.dataset.v;const a=studio.skills||[];const i=a.indexOf(v);if(i>=0)a.splice(i,1);else a.push(v);studio.skills=a;renderView()},
+ sReset:()=>{studio={...freshStudio(studio.pid)};renderView()},
+ sSave:()=>{if(!studio.texto.trim()&&!studio.ideia.trim()){toast('Escreva a ideia ou o texto antes');return}
+  let id=studio.editId;
+  if(id){const p=post(id);Object.assign(p,{pid:studio.pid,titulo:studio.ideia||p.titulo,arte:studio.titulo,texto:studio.texto,modelo:studio.modelo,pilar:studio.pilar,funil:studio.funil,data:studio.data});if(p.texto&&p.status==='ideia')p.status='texto'}
+  else{id=uid('p');S.posts.push({id,pid:studio.pid,titulo:(studio.ideia||studio.texto.split('\n')[0]).slice(0,90),arte:studio.titulo,texto:studio.texto,modelo:studio.modelo,pilar:studio.pilar,funil:studio.funil,data:studio.data,status:studio.texto.trim()?'texto':'ideia',r:null,comentarios:[]})}
+  save();studio={...freshStudio(studio.pid)};toast('Salvo no calendário');calFocus(id);setTimeout(()=>openPeek(id),120)},
+ sGen:async t=>{const P=prof(studio.pid);if(!studio.ideia.trim()){toast('Escolha ou escreva uma ideia');return}
+  if(!SAMPLE){studio.texto=draftTemplate(P);if(!studio.titulo)studio.titulo=studio.ideia.slice(0,70);renderView();toast('Rascunho criado');return}
+  t.disabled=true;t.innerHTML='<span class="ai-dot"></span>Escrevendo na voz de '+h(first(P.nome))+'…';
+  const sk=skillsTxt();const ref=S.refs.find(r=>r.id===studio.ref);
+  const prompt=`Você é o ghostwriter de LinkedIn deste perfil. Escreva UM post em português do Brasil.\n\n${brief(P)}\n\nIdeia do post: ${studio.ideia}\nModelo: ${MOD[studio.modelo]}\nFunil: ${FUN[studio.funil]}\nEstrutura: ${FR[studio.frame][0]} (${FR[studio.frame][1]})\n${sk.length?'Skills a aplicar:\n'+sk.map(s=>'- '+s.n+': '+(s.p||s.d)).join('\n')+'\n':''}${ref?`Referência para usar como base (formato e ritmo, sem copiar o texto): ${ref.titulo||''} ${ref.url||''}. Observação: ${ref.nota||''}\n`:''}\nRegras: primeira linha é o gancho e cabe em 210 caracteres junto com a segunda; parágrafos de 1 a 3 frases; use história, número ou prova do perfil quando couber; entre 1.200 e 2.000 caracteres; nunca use a estrutura "Não é X, é Y", nunca termine com frase de efeito ou moral, não use travessão, não use hashtags nem emojis. Responda só com o texto do post.`;
+  try{const r=await SAMPLE(prompt,{modelTier:'default',onText:({text})=>{const ta=$('[data-s="texto"]');if(ta){ta.value=text;studio.texto=text;updStudioPrev()}}});studio.texto=r.text.trim();if(!studio.titulo)studio.titulo=studio.ideia.slice(0,70)}catch(err){toast(err&&err.code==='rate_limited'?'Limite de uso; tente em instantes':'Não deu para gerar agora');studio.texto=studio.texto||draftTemplate(P)}
+  renderView()},
+ sHooks:async()=>{const P=prof(studio.pid);if(!studio.ideia.trim()){toast('Escolha ou escreva uma ideia');return}const box=$('#sHookList');let hooks=null;
+  if(SAMPLE){box.innerHTML='<p class="note"><span class="ai-dot"></span> Pensando em ganchos…</p>';try{const r=await SAMPLE(`${brief(P)}\n\nIdeia: ${studio.ideia}\n\nEscreva 5 ganchos de LinkedIn (primeira linha do post, até 120 caracteres cada) na voz deste perfil, cada um usando um padrão diferente entre: ${HOOKS.join(', ')}. Sem emojis, sem travessão, sem "Não é X, é Y". Responda só com JSON: [{"padrao":"...","texto":"..."}]`,{modelTier:'quick'});hooks=JSON.parse(r.text.slice(r.text.indexOf('['),r.text.lastIndexOf(']')+1))}catch(e){hooks=null}}
+  if(!hooks)hooks=P.ganchos.length?P.ganchos:[{padrao:'O Específico',texto:'Comece pelo número mais concreto da história.'}];
+  box.innerHTML='<span class="lbl">Clique para usar como abertura</span><ul class="hooks">'+hooks.map(g=>`<li><button class="${B.s} sm" data-act="useHook" data-t="${h(g.texto)}">Usar</button><span>${h(g.texto)}<small>${h(g.padrao)}</small></span></li>`).join('')+'</ul>'},
+ useHook:t=>{const ta=$('[data-s="texto"]');const v=ta.value.trim()?ta.value.replace(/^[^\n]*/,t.dataset.t):t.dataset.t+'\n\n';ta.value=v;studio.texto=v;updStudioPrev();toast('Gancho aplicado')}
+};
+document.addEventListener('click',e=>{
+ if(U.pswOpen&&!e.target.closest('.sb-psw')&&!e.target.closest('.active-chip')){U.pswOpen=false;renderSide()}
+ const t=e.target.closest('[data-act]');if(!t)return;if(t.tagName==='A')return;const a=t.dataset.act;if(ACT[a]){if(t.tagName==='BUTTON'||a==='open')e.preventDefault();ACT[a](t,e)}});
+document.addEventListener('keydown',e=>{
+ const typing=/^(INPUT|TEXTAREA|SELECT)$/.test(document.activeElement?.tagName)||document.activeElement?.isContentEditable;
+ if((e.ctrlKey||e.metaKey)&&e.key.toLowerCase()==='k'){e.preventDefault();$('#cmd').classList.contains('on')?closeCmd():openCmd();return}
+ if(e.key==='Escape'){if($('#cmd').classList.contains('on'))closeCmd();else if($('#ov').classList.contains('on'))closeModal();else if(U.peek)closePeek();else if(U.pswOpen){U.pswOpen=false;renderSide()}else closeDrawer();return}
+ if((e.ctrlKey||e.metaKey)&&e.key.toLowerCase()==='b'&&!typing){e.preventDefault();ACT.sbToggle();return}
+ if(!typing&&!e.ctrlKey&&!e.metaKey&&!e.altKey&&e.key.toLowerCase()==='n'&&!$('#cmd').classList.contains('on')&&!$('#ov').classList.contains('on')){e.preventDefault();newPost();return}
+ if(!typing&&(e.key==='Enter'||e.key===' ')&&document.activeElement?.getAttribute('role')==='button'){e.preventDefault();document.activeElement.click()}
+});
+document.addEventListener('input',e=>{const el=e.target;
+ if(el.matches('[data-psw-q]')){const q=el.value.trim().toLowerCase();$$('#psw .psw-list [data-n]').forEach(b=>b.style.display=!q||b.dataset.n.includes(q)?'':'none');return}
+ if(el.dataset.f&&el.closest('#peek')&&el.tagName==='TEXTAREA'){const p=post(U.peek);if(!p)return;p[el.dataset.f]=el.value;autosize(el);if(el.dataset.f==='texto'){$('#pkCount').innerHTML=`<b>${el.value.length}</b> caracteres`}if(['texto','arte','titulo'].includes(el.dataset.f))$('#pkPrev').innerHTML=liPost(p);save();renderViewSoon();return}
+ if(el.dataset.s&&['texto','titulo','ideia'].includes(el.dataset.s)){studio[el.dataset.s]=el.value;updStudioPrev()}
+});
+document.addEventListener('change',e=>{const el=e.target;
+ if(el.dataset.f&&el.closest('#peek')&&el.tagName!=='TEXTAREA'){const p=post(U.peek);if(!p)return;const f=el.dataset.f;if(f==='data'&&!el.value)return;p[f]=el.value;if(f==='pid'){const pr=prof(el.value);p.pilar=pr.marca.pilares[0]?.id||''}save();renderPeek();renderView();renderSide();return}
+ if(el.dataset.filter){U.f[el.dataset.filter]=el.value;renderView();return}
+ if(el.dataset.r){const p=post(el.dataset.r);p.r=p.r||{};p.r[el.dataset.k]=el.value===''?null:+String(el.value).replace(/\D/g,'');save();if(!el.closest('#peek'))renderView();return}
+ if(el.dataset.s){const k=el.dataset.s;
+  if(k==='pid'){setScope(el.value);return}
+  if(k==='ideiaSel'){studio.ideia=el.value;const i=prof(studio.pid).ideias.find(x=>x.t===el.value);if(i)studio.pilar=i.pilar;renderView();if(!el.value)setTimeout(()=>$('[data-s="ideia"]')?.focus(),20);return}
+  studio[k]=el.value;if(k==='data'||k==='ref')renderView();else updStudioPrev()}
+});
+document.addEventListener('submit',e=>{const f=e.target;const kind=f.dataset.form;if(!kind)return;e.preventDefault();const fd=new FormData(f);
+ if(kind==='idea'){const t=String(fd.get('t')||'').trim();if(!t){f.querySelector('input').focus();return}addIdea(t,fd.get('pid')||null,fd.get('pilar')||null);setTimeout(()=>$('form[data-form="idea"] input')?.focus(),20);return}
+ if(kind==='ref'){let url=String(fd.get('url')||'').trim();const nota=String(fd.get('nota')||'').trim();if(!url&&!nota){toast('Cole o link ou escreva uma observação');return}
+  if(url&&!/^https?:\/\//i.test(url))url='https://'+url.replace(/^\/+/,'');
+  S.refs.push({id:uid('r'),tipo:fd.get('tipo')==='perfil'?'perfil':'post',pid:String(fd.get('pid')||'geral'),url,titulo:'',nota,data:TODAY});save();renderView();renderSide();toast('Referência salva');return}
+ if(kind==='lm'){toast('A geração do PDF entra na próxima versão');return}
+});
+let dragId=null;
+document.addEventListener('dragstart',e=>{const c=e.target instanceof Element&&e.target.closest('.pc[draggable]');if(!c)return;dragId=c.dataset.id;e.dataTransfer.effectAllowed='move';try{e.dataTransfer.setData('text/plain',dragId)}catch(_){}requestAnimationFrame(()=>c.classList.add('dragging'))});
+document.addEventListener('dragend',()=>{$$('.dragging').forEach(x=>x.classList.remove('dragging'));$$('.over').forEach(x=>x.classList.remove('over'));dragId=null});
+document.addEventListener('dragover',e=>{if(!dragId)return;const z=e.target instanceof Element&&e.target.closest('[data-drop],[data-drop-st]');if(!z)return;e.preventDefault();e.dataTransfer.dropEffect='move';$$('.over').forEach(x=>x!==z&&x.classList.remove('over'));z.classList.add('over')});
+document.addEventListener('dragleave',e=>{const z=e.target instanceof Element&&e.target.closest('[data-drop],[data-drop-st]');if(z&&!z.contains(e.relatedTarget))z.classList.remove('over')});
+document.addEventListener('drop',e=>{if(!dragId)return;const z=e.target instanceof Element&&e.target.closest('[data-drop],[data-drop-st]');if(!z)return;e.preventDefault();const p=post(dragId);if(!p)return;
+ if(z.dataset.drop){if(p.data===z.dataset.drop)return;p.data=z.dataset.drop;toast('Movido para '+fmtS(p.data))}else{if(p.status===z.dataset.dropSt)return;p.status=z.dataset.dropSt;toast(ST[p.status])}
+ save();renderView();renderSide();if(U.peek===p.id)renderPeek()});
+matchMedia('(max-width:719px)').addEventListener('change',()=>{if(U.view==='calendario')renderView()});
+
+/* Regra do design system: sem Manrope, não segue com outra fonte. */
+document.fonts.ready.then(()=>{if(!document.fonts.check('16px Manrope')){const b=document.createElement('div');b.className='fontbar';b.textContent='A fonte Manrope não carregou. Confira se a pasta artie-design-system está ao lado deste arquivo.';document.body.appendChild(b)}});
+
+route();
+})();
+</script>
+</body>
+</html>

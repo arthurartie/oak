@@ -1,0 +1,90 @@
+/* =========================================================
+   ARTIË DESIGN SYSTEM · TOKENS
+   Fonte única da verdade para cores e tipografia.
+   As peças usam SOMENTE os nomes das variáveis, nunca os valores.
+   ========================================================= */
+
+@import url("fonts/fonts.css");
+
+/* ---------- Cores · Tema claro (padrão) ---------- */
+:root, [data-theme="light"] {
+  /* Base */
+  --cor-fundo:            #FFFFFF;
+  --cor-texto:            #000000;
+  --cor-texto-2:          rgba(0, 0, 0, 0.60);   /* subtítulo, descrição */
+  --cor-texto-3:          rgba(0, 0, 0, 0.40);   /* legenda, metadados */
+  --cor-borda:            rgba(0, 0, 0, 0.12);   /* linhas, contorno */
+  --cor-superficie:       rgba(0, 0, 0, 0.04);   /* fundo de card neutro */
+
+  /* Destaque */
+  --cor-destaque:         #0F2DBD;               /* botão principal, card de destaque */
+  --cor-destaque-escuro:  #000B40;               /* botão secundário, pressionado, faixas */
+  --cor-destaque-texto:   #0F2DBD;               /* palavra/título em destaque sobre o fundo */
+  --cor-sobre-destaque:   #FFFFFF;               /* texto sobre fundo azul */
+  --cor-sobre-destaque-2: rgba(255, 255, 255, 0.78);
+  --cor-sobre-destaque-3: rgba(255, 255, 255, 0.62);
+  --cor-destaque-suave:   rgba(15, 45, 189, 0.10); /* fundo de tag/pill */
+}
+
+/* ---------- Cores · Tema escuro ---------- */
+[data-theme="dark"] {
+  --cor-fundo:            #000000;
+  --cor-texto:            #FFFFFF;
+  --cor-texto-2:          rgba(255, 255, 255, 0.60);
+  --cor-texto-3:          rgba(255, 255, 255, 0.40);
+  --cor-borda:            rgba(255, 255, 255, 0.14);
+  --cor-superficie:       rgba(255, 255, 255, 0.06);
+
+  --cor-destaque:         #0F2DBD;
+  --cor-destaque-escuro:  #000B40;               /* no escuro: só como fundo de card, com borda */
+  --cor-destaque-texto:   #BACBFF;               /* azul claro, legível no preto */
+  --cor-sobre-destaque:   #FFFFFF;
+  --cor-sobre-destaque-2: rgba(255, 255, 255, 0.78);
+  --cor-sobre-destaque-3: rgba(255, 255, 255, 0.62);
+  --cor-destaque-suave:   rgba(186, 203, 255, 0.14);
+}
+
+/* ---------- Tipografia · base 1920x1080 ---------- */
+:root {
+  --fonte: "Manrope", system-ui, sans-serif;
+
+  --display-tamanho: 64px;  --display-peso: 800; --display-entrelinha: 1.1;  --display-espaco: -0.02em;
+  --t1-tamanho:      48px;  --t1-peso:      800; --t1-entrelinha:      1.15; --t1-espaco:      -0.015em;
+  --t2-tamanho:      32px;  --t2-peso:      700; --t2-entrelinha:      1.25; --t2-espaco:      -0.01em;
+  --t3-tamanho:      24px;  --t3-peso:      700; --t3-entrelinha:      1.3;
+  --corpo-tamanho:   18px;  --corpo-peso:   500; --corpo-entrelinha:   1.55;
+  --pequeno-tamanho: 16px;  --pequeno-peso: 500; --pequeno-entrelinha: 1.5;
+  --legenda-tamanho: 13px;  --legenda-peso: 600; --legenda-entrelinha: 1.4;  --legenda-espaco: 0.04em;
+}
+
+/* ---------- Espaçamento (escala de 8 em 8) ---------- */
+:root {
+  --esp-1: 4px;  --esp-2: 8px;  --esp-3: 12px; --esp-4: 16px;
+  --esp-5: 24px; --esp-6: 32px; --esp-7: 40px; --esp-8: 48px;
+  --esp-9: 56px; --esp-10: 64px; --esp-11: 72px; --esp-12: 96px;
+
+  /* Aplicações · base 1920x1080 */
+  --pagina-borda-x:  var(--esp-11); /* 72px nas laterais */
+  --pagina-borda-y:  var(--esp-9);  /* 56px no topo e na base */
+  --gap-blocos:      var(--esp-7);  /* 40px entre blocos/seções */
+  --gap-cards:       var(--esp-5);  /* 24px entre cards */
+  --card-interno:    var(--esp-6);  /* 32px dentro do card */
+  --gap-botoes:      var(--esp-4);  /* 16px entre botões */
+  --gap-texto:       var(--esp-3);  /* 12px entre itens de texto num card */
+}
+
+/* ---------- Arredondamento ---------- */
+:root {
+  --raio-card:  20px;
+  --raio-botao: 12px;
+  --raio-tag:   999px;  /* pílula */
+}
+
+.t-display { font: var(--display-peso) var(--display-tamanho)/var(--display-entrelinha) var(--fonte); letter-spacing: var(--display-espaco); }
+.t-h1      { font: var(--t1-peso) var(--t1-tamanho)/var(--t1-entrelinha) var(--fonte); letter-spacing: var(--t1-espaco); }
+.t-h2      { font: var(--t2-peso) var(--t2-tamanho)/var(--t2-entrelinha) var(--fonte); letter-spacing: var(--t2-espaco); }
+.t-h3      { font: var(--t3-peso) var(--t3-tamanho)/var(--t3-entrelinha) var(--fonte); }
+.t-corpo   { font: var(--corpo-peso) var(--corpo-tamanho)/var(--corpo-entrelinha) var(--fonte); }
+.t-pequeno { font: var(--pequeno-peso) var(--pequeno-tamanho)/var(--pequeno-entrelinha) var(--fonte); }
+.t-legenda { font: var(--legenda-peso) var(--legenda-tamanho)/var(--legenda-entrelinha) var(--fonte);
+             letter-spacing: var(--legenda-espaco); text-transform: uppercase; }

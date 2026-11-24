@@ -1,0 +1,33 @@
+/* =========================================================
+   COMPONENTE · BOTÕES
+   Principal: fundo azul, texto branco.
+   Secundário: transparente, contorno fino, texto na cor do tema.
+   ========================================================= */
+
+.btn {
+  font: 700 var(--pequeno-tamanho)/1 var(--fonte);   /* 16px · 700 */
+  padding: 16px 28px;
+  border-radius: var(--raio-botao);
+  border: 0;
+  cursor: pointer;
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  text-decoration: none;
+}
+
+.btn--principal {
+  background: var(--cor-destaque);
+  color: var(--cor-sobre-destaque);
+}
+
+.btn--secundario {
+  background: transparent;
+  color: var(--cor-texto);
+  box-shadow: inset 0 0 0 1.5px var(--cor-borda);
+}
+
+.btns {
+  display: flex;
+  gap: var(--gap-botoes);
+}
