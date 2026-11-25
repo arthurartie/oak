@@ -1,7 +1,13 @@
 # Configuração local do Claude (caminhos desta máquina)
-.claude/
+.claude/*
+# ...menos os scripts que o atalho "Iniciar Oak.cmd" usa para ligar o servidor
+!.claude/iniciar-oak.ps1
+!.claude/serve.ps1
 
 # Sistema
 .DS_Store
 Thumbs.db
 desktop.ini
+
+# Pastas de trabalho que o Estúdio cria para o Claude (about-me, voice e posts de cada perfil)
+oak-ia/perfis/

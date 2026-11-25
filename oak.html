@@ -719,6 +719,38 @@ button.sb-item:hover{background:var(--sb-hover)}
 .sb-ver{font-size:12px;font-weight:600;color:var(--sb-text-muted);padding:8px 14px 0;white-space:nowrap}
 .sb-tip{position:fixed;transform:translateY(-50%);padding:7px 12px;border-radius:999px;white-space:nowrap;font:600 13px/1 var(--fonte);color:var(--sb-text-strong);background:linear-gradient(160deg,var(--sb-bg-top),var(--sb-bg-bottom)),var(--cor-fundo);border:1px solid var(--sb-border);pointer-events:none;z-index:70;opacity:0;transition:opacity .12s}
 .sb-tip.on{opacity:1}
+/* v0.7 · fluxo de skills do Estúdio */
+.sflow{display:grid;gap:var(--esp-3)}
+.steps{display:flex;flex-wrap:wrap;gap:var(--esp-2)}
+.step{flex:1 1 200px;display:flex;align-items:center;gap:var(--esp-2);padding:var(--esp-2) var(--esp-3);border-radius:var(--raio-botao);box-shadow:inset 0 0 0 1px var(--cor-borda);background:var(--cor-fundo);min-width:0}
+.step b{display:block;font-weight:800;font-size:var(--legenda-tamanho);line-height:1.3}
+.step small{display:block;color:var(--cor-texto-3);font-size:var(--legenda-tamanho);font-weight:600}
+.step-n{width:var(--esp-5);height:var(--esp-5);border-radius:50%;display:grid;place-items:center;font-weight:800;font-size:var(--legenda-tamanho);background:var(--cor-superficie);color:var(--cor-texto-2);flex:none}
+.step-n .ic{width:var(--esp-3);height:var(--esp-3)}
+.step.run{box-shadow:inset 0 0 0 1.5px var(--cor-destaque-texto)}
+.step.run .step-n{color:var(--cor-destaque-texto);background:var(--cor-destaque-suave)}
+.step.ok .step-n{background:var(--cor-destaque);color:var(--cor-sobre-destaque)}
+.step.err{box-shadow:inset 0 0 0 1.5px var(--cor-texto)}
+.step.err .step-n{background:var(--cor-texto);color:var(--cor-fundo)}
+.steps-static .step-n{background:var(--cor-destaque-suave);color:var(--cor-destaque-texto)}
+.flow-msg{color:var(--cor-texto-2)}
+.brief{white-space:pre-wrap;font:inherit;font-size:var(--legenda-tamanho);font-weight:500;line-height:1.55;margin:0;color:var(--cor-texto-2)}
+.chg{margin:0;padding-left:var(--esp-4);color:var(--cor-texto-2);font-size:var(--legenda-tamanho);display:grid;gap:var(--esp-1)}
+.hook-chip{display:flex;align-items:flex-start;gap:var(--esp-3);padding:var(--esp-3) var(--esp-4);border-radius:var(--raio-botao);background:var(--cor-destaque-suave)}
+.hook-chip b{display:block;font-weight:800;color:var(--cor-destaque-texto)}
+.hook-chip .lbl{display:block;margin-bottom:var(--esp-1)}
+.hooks li.rec{box-shadow:inset 0 0 0 1.5px var(--cor-destaque-texto)}
+.hook-p{display:flex;align-items:center;gap:var(--esp-2);font-size:var(--legenda-tamanho);font-weight:700;color:var(--cor-texto-3);margin-bottom:var(--esp-1)}
+.hook-l{display:block;font-weight:800;color:var(--cor-texto)}
+.hook-l + .hook-l{margin-top:var(--esp-1)}
+.hooks small{margin-top:var(--esp-1)}
+.hook-a{display:flex;flex-direction:column;gap:var(--esp-1);flex:none}
+@media (max-width:719px){.hooks li{flex-wrap:wrap}.hook-a{flex-direction:row}}
+mark.conf{background:var(--cor-destaque-suave);color:var(--cor-destaque-texto);border-radius:var(--esp-1);padding:0 var(--esp-1);box-shadow:inset 0 0 0 1px var(--cor-destaque-texto)}
+.conf-n{color:var(--cor-destaque-texto)!important}
+.conn{display:flex;align-items:flex-start;gap:var(--esp-1)}
+.conn .ic{width:var(--esp-4);height:var(--esp-4);flex:none;margin-top:2px}
+.conn.ok{color:var(--cor-destaque-texto)}
 /* v0.6 · seletor de tema no topo */
 .th-seg{flex:none}
 .th-seg button{height:var(--esp-6);padding:0 var(--esp-3)}
@@ -740,6 +772,25 @@ button.sb-item:hover{background:var(--sb-hover)}
 .subnav a.on{background:var(--cor-fundo);color:var(--cor-destaque-texto);box-shadow:inset 0 0 0 1px var(--cor-borda)}
 .subnav .count{margin-left:0}
 .apr .subnav{justify-self:start}
+
+/* v0.8 · títulos de seção menores e números no mesmo tamanho deles.
+   O design system pede Display (64px) no título da página; aqui o título usa o tamanho de H2
+   (32px) para sobrar espaço para o conteúdo. Uma variável só controla os dois. */
+:root{--titulo-sec:var(--t2-tamanho)}
+.ph .t-display{font-size:var(--titulo-sec);line-height:var(--t2-entrelinha);letter-spacing:var(--t2-espaco)}
+.card .card-numero{font-size:var(--titulo-sec);line-height:var(--t2-entrelinha);letter-spacing:var(--t2-espaco)}
+.card-numero .t-h3{font-size:var(--pequeno-tamanho)}
+.ph{margin-bottom:var(--esp-6)}
+.eyebrow{margin-bottom:var(--esp-2)}
+.sub{margin-top:var(--esp-2)}
+@media (max-width:719px){:root{--titulo-sec:var(--t3-tamanho)}}
+/* Biblioteca: botão "Usar / No kit" preso à base do card, centralizado e do tamanho do texto */
+.lib .card .pin{margin-top:auto;align-self:center;padding:0 var(--esp-4)}
+.lib .card:has(.pin){padding-bottom:15px}
+/* "No kit" ativo no azul principal dos botões (#0F2DBD), com texto e estrela brancos */
+.pin.on{background:var(--cor-destaque);color:var(--cor-sobre-destaque);box-shadow:none}
+.pin.on:hover{opacity:.88}
+.lib .card .note{margin-bottom:var(--esp-2)}
 </style>
 </head>
 <body>
@@ -1000,9 +1051,16 @@ function ensure(){
 ensure();save();
 
 /* ================= estado do Estúdio (um rascunho por perfil) ================= */
-const freshStudio=pid=>({pid,ideia:'',modelo:'',frame:'',pilar:'',funil:'topo',titulo:'',texto:'',data:wd(1),editId:null,skills:null,ref:''});
+const freshStudio=pid=>({pid,ideia:'',modelo:'',frame:'',pilar:'',funil:'topo',titulo:'',texto:'',data:wd(1),editId:null,skills:null,ref:'',hook:null,hooks:null,flow:null,gerado:false,hookApplied:0});
 let studio=freshStudio(U.scope!=='all'?U.scope:null);
 const drafts={};
+/* O rascunho do Estúdio (e o de cada perfil) fica salvo no navegador: recarregar a página não apaga um texto gerado */
+(()=>{const sv=LS.get('artie.studio',null);if(!sv||!sv.s)return;
+ const fix=x=>{const o=Object.assign(freshStudio(x.pid),x);if(o.flow)o.flow.running=false;if(o.hooks&&(o.hooks.loading||o.hooks.local||o.hooks.login))o.hooks=null;return o};
+ studio=fix(sv.s);Object.entries(sv.drafts||{}).forEach(([k,v])=>{if(v&&prof(k))drafts[k]=fix(v)})})();
+const saveStudio=()=>LS.set('artie.studio',{s:studio,drafts});
+window.addEventListener('beforeunload',saveStudio);
+document.addEventListener('visibilitychange',()=>{if(document.visibilityState==='hidden')saveStudio()});
 let SAMPLE=null;
 if(window.claude&&claude.use){claude.use('sample').then(s=>{SAMPLE=s;if(U.view==='estudio')renderView()}).catch(()=>{})}
 
@@ -1148,41 +1206,391 @@ V.ideias=()=>{const P=cur();
  <aside class="stack">${P?`<section class="card"><div class="bh">${rot('Referências de '+h(first(P.nome)))}<span class="sp"></span><button class="${B.s} sm" data-act="go" data-v="referencias">Abrir</button></div><ul class="rows">${refs.slice(0,5).map(r=>`<li class="r" data-act="refUse" data-id="${r.id}" title="Usar no Estúdio"><span class="av t3">${I(r.tipo==='post'?'text':'user')}</span><span class="grow"><b>${h(r.titulo||r.url)}</b><small>${h(r.nota||'')}</small></span>${I('pen','dim')}</li>`).join('')||'<li class="note">Nenhuma referência salva.</li>'}</ul><p class="note">Clique numa referência para usá-la como base no Estúdio.</p></section>
  <section class="card"><div class="bh">${rot('Banco de ganchos')}</div><ul class="rows">${P.ganchos.map(g=>`<li class="r" data-act="copy" data-t="${h(g.texto)}"><span class="grow"><b>${h(g.texto)}</b><small>${h(g.padrao)}</small></span>${I('copy','dim')}</li>`).join('')}</ul></section>`:`<section class="card">${rot('Dica')}<p class="card-texto t-pequeno">Escolha um perfil na barra lateral para ver as ideias por pilar, as referências e o banco de ganchos de cada um.</p></section>`}</aside></div>`};
 
+/* =========================================================
+   Fluxo de skills do Estúdio (v0.7)
+   Gerar rascunho:   linkedin-post-structure → linkedin-copy → linkedin-anti-ai
+   Sugerir ganchos:  viral-hook-creator
+   O app não alcança as skills do Claude Code: o método de cada skill vai
+   embutido no pedido ao Claude do artefato (capability "sample").
+   A voz vem do Cérebro da marca, do Raio-X e dos posts reais do perfil.
+   Os textos dos pedidos não usam travessão de propósito, para não ensinar o vício.
+   ========================================================= */
+const FLOW=[{k:'struct',n:'Estrutura',sk:'linkedin-post-structure'},{k:'copy',n:'Copy na voz',sk:'linkedin-copy'},{k:'anti',n:'Anti-IA',sk:'linkedin-anti-ai'}];
+const EXTRAS=['lead-magnet-generator','linkedin-post-design'];
+const skillsExtra=()=>(studio.skills||[]).filter(id=>EXTRAS.includes(id)).map(id=>SKN[id]).filter(Boolean);
+let FLOWCTL=null,samplePromise=null;
+const getSample=()=>{if(SAMPLE)return Promise.resolve(SAMPLE);if(!(window.claude&&claude.use))return Promise.resolve(null);samplePromise=samplePromise||claude.use('sample').then(s=>{SAMPLE=s;return s}).catch(()=>null);return samplePromise};
+const SERR={not_granted:'Você não permitiu que o app use o Claude nesta visualização. Recarregue a página para permitir.',sampling_disabled:'O Claude não está disponível para esta conta.',rate_limited:'Limite de uso do Claude atingido. Tente de novo daqui a pouco.',session_expired:'Sua sessão expirou. Entre de novo no Claude.',refused:'O Claude recusou este pedido. Ajuste a ideia e tente de novo.',empty_completion:'O Claude não devolveu texto. Tente simplificar a ideia.',invalid_json:'A resposta veio num formato inesperado. Tente de novo.',prompt_too_large:'O pedido ficou grande demais. Encurte o material.'};
+const serr=e=>e&&e.code==='bridge_error'?'O Claude Code não conseguiu terminar'+(e.message?': '+String(e.message).slice(0,240):'.'):SERR[e&&e.code]||'Não deu para falar com o Claude agora. Tente de novo.';
+SERR.bridge_down='O servidor local que liga o app ao Claude parou. Peça para religar a prévia.';
+
+/* =========================================================
+   Ponte local (v0.8): o servidor da pasta (.claude/serve.ps1) roda o Claude Code desta máquina
+   com as skills reais instaladas em oak-ia/skills. Assim o texto é gerado aqui mesmo, sem trocar
+   de aplicativo. Ordem de uso no Estúdio: ponte local → Claude do artefato → pedido para copiar.
+   ========================================================= */
+let BRIDGE=null,bridgeAt=0,FLOWJOB=null,FLOWPOLL=null,FLOWREJ=null;
+const api=async(path,body)=>{const r=await fetch(path,{method:body?'POST':'GET',headers:{'X-Oak':'1','Content-Type':'application/json'},body:body?JSON.stringify(body):undefined});let j=null;try{j=await r.json()}catch(e){}if(!r.ok)throw {code:r.status===503&&j&&j.error==='no_cli'?'no_cli':'bridge_down',status:r.status};return j};
+const getBridge=async force=>{if(!/^https?:$/.test(location.protocol)||!/^(localhost|127\.0\.0\.1)$/.test(location.hostname))return null;
+ if(!force&&BRIDGE!==null&&Date.now()-bridgeAt<30000)return BRIDGE||null;try{BRIDGE=await api('/api/status')}catch(e){BRIDGE=false}bridgeAt=Date.now();return BRIDGE||null};
+/* Separa a voz do perfil nos dois arquivos que as skills leem */
+const splitVoice=P=>{const t=voiceDoc(P,studio.editId);const i=t.indexOf('=== voice.md');return {about:'# about-me.md\n\n'+(i>=0?t.slice(0,i):t).replace(/^=== .*===\n/,'').trim()+'\n',voice:'# voice.md\n\n'+(i>=0?t.slice(i).replace(/^=== .*===\n/,''):'').trim()+'\n'}};
+/* Lê os eventos do Claude Code (um JSON por linha): quais skills rodaram, buscas na web e a resposta final */
+function parseStream(out){const ev={skills:[],web:0,result:null,isError:false};
+ for(const line of String(out||'').split('\n')){const s=line.trim();if(!s||s[0]!=='{')continue;let o;try{o=JSON.parse(s)}catch(e){continue}
+  if(o.type==='assistant'&&o.message&&Array.isArray(o.message.content))for(const c of o.message.content){if(c.type!=='tool_use')continue;
+   if(c.name==='Skill'){const inp=c.input||{};ev.skills.push(String(inp.skill||inp.name||inp.command||''))}else if(/^Web(Search|Fetch)$/.test(c.name))ev.web++}
+  if(o.type==='result'){ev.result=String(o.result||'');ev.isError=!!o.is_error}}
+ return ev}
+const between=(t,a)=>{const m=String(t||'').match(new RegExp('<<<'+a+'[^\\n]*\\n([\\s\\S]*?)\\n?\\s*'+a+'>>>'));return m?m[1].trim():''};
+const needsLogin=t=>/not logged in|please run \/login|invalid api key|oauth token|authentication_error/i.test(t||'');
+const jsonLoose=t=>{try{return JSON.parse(t)}catch(e){}const a=t.indexOf('['),b=t.lastIndexOf(']');if(a>=0&&b>a){try{return JSON.parse(t.slice(a,b+1))}catch(e){}}return null};
+function bridgeJob(kind,P,prompt,onEv){return new Promise(async(res,rej)=>{
+ const parts=splitVoice(P);let id;
+ try{({id}=await api('/api/job',{kind,pid:P.id,aboutMe:parts.about,voice:parts.voice,prompt}))}catch(e){rej(e);return}
+ FLOWJOB=id;FLOWREJ=rej;
+ const tick=async()=>{if(FLOWJOB!==id)return;let j;
+  try{j=await api('/api/job/'+id)}catch(e){FLOWJOB=null;FLOWREJ=null;rej({code:'bridge_down'});return}
+  if(FLOWJOB!==id)return;const ev=parseStream(j.out);onEv&&onEv(ev);
+  if(j.done){FLOWJOB=null;FLOWREJ=null;
+   if(ev.result===null){rej(needsLogin(j.err)?{code:'login'}:{code:'bridge_error',message:(j.err||'').trim().split('\n').pop()});return}
+   if(needsLogin(ev.result)){rej({code:'login'});return}
+   if(ev.isError){rej({code:'bridge_error',message:ev.result});return}
+   res(ev);return}
+  FLOWPOLL=setTimeout(tick,1500)};
+ tick()})}
+function cancelBridge(){if(!FLOWJOB)return;const id=FLOWJOB,rej=FLOWREJ;FLOWJOB=null;FLOWREJ=null;clearTimeout(FLOWPOLL);api('/api/job/'+id+'/cancel',{}).catch(()=>{});rej&&rej({code:'cancelled'})}
+const BRIDGE_RULES=`Você está rodando dentro do sistema de conteúdo Oak, em modo automático: não há ninguém para responder perguntas. Nunca use AskUserQuestion. Quando uma skill pedir uma escolha, siga o MODO RÁPIDO dela e decida sozinho, justificando em uma linha. Não crie nem salve arquivos: devolva tudo na resposta final.`;
+function bridgePromptDraft(P){return `${BRIDGE_RULES}
+
+Os arquivos about-me.md e voice.md desta pasta são de ${P.nome}. Leia os dois inteiros antes de qualquer etapa.
+
+Rode o fluxo LinkedIn usando a ferramenta Skill, nesta ordem e sem pular nenhuma:
+1. Skill ${skn('linkedin-post-structure')}: monte o briefing deste post (pode pesquisar na web; todo número precisa de fonte).
+2. Skill ${skn('linkedin-copy')}: escreva o post a partir do briefing.
+3. Skill ${skn('linkedin-anti-ai')}: faça a revisão final do texto.
+
+=== MATERIAL DO POST ===
+${materialDoc(P)}
+
+Quando terminar, sua resposta final deve conter exatamente estes três blocos, nesta ordem, e nada fora deles:
+<<<BRIEFING
+(o briefing da linkedin-post-structure)
+BRIEFING>>>
+<<<POST
+(o texto final do post depois da linkedin-anti-ai, com as quebras de linha do LinkedIn, sem code block)
+POST>>>
+<<<MUDANCAS
+- (o que a linkedin-anti-ai mudou, até 5 linhas)
+MUDANCAS>>>`}
+function bridgePromptHooks(P,padrao){return `${BRIDGE_RULES}
+
+Os arquivos about-me.md e voice.md desta pasta são de ${P.nome}. Leia os dois inteiros.
+
+Use a ferramenta Skill para rodar a skill ${skn('viral-hook-creator')} para o post abaixo. ${padrao?`Entregue 5 versões novas do padrão "${padrao}", todas diferentes entre si.`:'Escolha 6 padrões diferentes, os que o material sustenta melhor, e marque um como recomendado.'} Use o tom de voz, o vocabulário e o ritmo desta pessoa.
+
+=== MATERIAL DO POST ===
+${materialDoc(P,true)}
+
+Sua resposta final deve conter só este bloco, com um array JSON válido dentro:
+<<<HOOKS
+[{"padrao":"nome do padrão","linha1":"hook","linha2":"re-hook","entrega":"o que o corpo do post precisa entregar","recomendado":false,"motivo":"só no recomendado: por que, em uma frase"}]
+HOOKS>>>`}
+/* Linha de status da conexão, no Estúdio */
+/* Nome da skill como o agente enxerga: plugin da conta ("linkedin-copy:linkedin-copy") ou cópia do projeto */
+const skn=n=>BRIDGE&&BRIDGE.source==='conta'?n+':'+n:n;
+function bridgeLine(){if(BRIDGE&&BRIDGE.cli)return `<span class="note conn ok">${I('check2')}${BRIDGE.source==='conta'?`Claude conectado do jeito do Cowork: mesmo agente, com as skills dos plugins da sua conta (${h(BRIDGE.skills.join(', '))}).`:`Claude conectado: Claude Code ${h(BRIDGE.version||'')} desta máquina, com ${BRIDGE.skills.length} skills instaladas no projeto (${h(BRIDGE.skills.join(', '))}).`}</span>`;
+ if(BRIDGE&&!BRIDGE.cli)return `<span class="note conn">Claude Code não encontrado nesta máquina. Ele vem junto com o app do Claude; abra o app pelo menos uma vez na aba Code.</span>`;return ''}
+/* Ganchos pela ponte local (viral-hook-creator real). Devolve false quando a ponte não existe. */
+async function hooksViaBridge(P,padrao){const br=await getBridge(true);if(!(br&&br.cli))return false;
+ if(FLOWJOB){toast('Espere a geração atual terminar');return true}
+ studio.hooks={loading:true,bridge:true,list:[]};renderHooks();
+ try{const ev=await bridgeJob('hooks',P,bridgePromptHooks(P,padrao));const l=normHooks(jsonLoose(between(ev.result,'HOOKS')||ev.result));if(!l.length)throw {code:'invalid_json'};
+  if(padrao)l.forEach(x=>x.recomendado=false);studio.hooks={list:l,padrao:padrao||''}}
+ catch(e){if(e&&e.code==='login')studio.hooks={login:true,list:[]};else{studio.hooks=null;if(!(e&&e.code==='cancelled'))toast(serr(e))}}
+ renderHooks();saveStudio();return true}
+const loginCallout=k=>`<div class="callout">${I('user')}<span><b>Falta conectar sua conta do Claude, uma vez só.</b>O Claude Code desta máquina ainda não tem login. Clique abaixo: abre uma janela do terminal com o Claude. Se a tela de login não abrir sozinha, digite /login, entre com a sua conta no navegador e feche a janela. Depois é só ${k==='hooks'?'pedir os ganchos':'gerar'} de novo.<span class="btns" style="margin-top:var(--esp-3);display:flex"><button class="${B.p} sm" data-act="bridgeLogin">${I('link')}Conectar minha conta do Claude</button></span></span></div>`;
+
+const PROIB=`PROIBIÇÕES (valem sempre, em qualquer etapa):
+- Nenhum travessão longo ou curto e nenhum hífen separando ideias. Use vírgula, ponto final ou parênteses.
+- Nenhuma estrutura "Não é X, é Y", "Não se trata de X, mas de Y" ou variações. É o maior sinal de texto de IA.
+- Nenhum "Não apenas... mas também" e nenhum "Além de X, Y também é...".
+- Nenhuma frase de efeito ou moral da história no final. Troque por um fato concreto ou corte.
+- Nenhum par espelhado em sequência ("Problemas viram oportunidades. Obstáculos viram inovações.").
+- Nenhum número, resultado, tempo de experiência ou história sem origem no material ou no about-me.
+- Nenhuma transição mecânica: "No mundo acelerado de hoje", "Em conclusão", "Além disso", "Dito isto", "É importante notar que", "Em resumo".
+- Lista negra de palavras: aprofundar, alavancar, potencializar, revolucionar, transformar, garantir, navegar na paisagem, abraçar, desvendar, inovador, de vanguarda, disruptivo, resiliente, dinâmico, vibrante, crucial, fundamental, vital, game-changing, pivotal, tapeçaria, reino, testamento, jornada, ecossistema, excelência operacional.
+Regra de ouro: se a pessoa não diria a palavra numa mesa de café com um amigo inteligente, não use.`;
+
+const HOOK12=`OS 12 PADRÕES DE HOOK (estrutura e um exemplo):
+O Educativo: "Como [resultado]." + formato ou condição. Ex.: Como postar todos os dias. / (Sem ser genérico).
+O Contraditório: fato negativo + resultado positivo inesperado. Ex.: Perdi 5 clientes no mês passado. / Mas nunca faturei tão alto.
+A Transformação: antes + agora, em linhas paralelas. Ex.: Antes: Eu corria atrás de clientes. / Agora: Eles é que me procuram.
+O Contraste: conquista + "Sem [atalho comum]". Ex.: Cheguei a R$ 1 milhão em vendas. / Sem um escritório ou equipe.
+O Específico: resultado com número e prazo + promessa de mostrar. Ex.: Reduzi reuniões em 40% em um mês. / Meu playbook:
+A Citação: "frase que o público diz" + reação. Ex.: "Meu nicho já está saturado". / Vou te provar o contrário.
+A Maturação: tempo de experiência + aprendizado. Ex.: Por 4 anos eu ignorei networking. / Hoje entendo que foi um erro.
+A Referência: pessoa conhecida disse: + citação cortada (só com autoria confirmada). Ex.: Simon Sinek disse uma vez: / "As pessoas não compram o que…"
+O Direto: opinião firme + justificativa ou prova. Ex.: Trabalhar duro não é o suficiente. / E eu posso provar.
+A Lista: N itens para X: + qualificador. Ex.: 7 erros comuns no LinkedIn: / (Eu cometi todos.)
+O Utilitário: Todo [público] faz isto: + raridade. Ex.: Todo líder inteligente faz isto: / Mas quase ninguém percebe.
+A Isca: afirmação provocativa + confirmação seca. Ex.: Ninguém liga para o que você fala. / E isso é bom.`;
+
+const SK_STRUCT=`OS 13 FORMATOS (cada um lista os blocos que o post precisa conter)
+Autoridade
+1. Perspectiva Contrária: a crença comum, dita como o público diz | a posição oposta, direta | observação ou experiência pessoal que sustenta | consequência prática para o leitor | CTA: pergunta que convida ao debate.
+2. Baseado em Dados: o que foi analisado e quantos itens | o padrão encontrado em lista escaneável (só números com fonte) | o que isso muda na prática | CTA: pergunta que leva o leitor a se comparar com os dados.
+3. Filosofia Operacional: a crença, em primeira pessoa | princípios na prática, cada um como "fazemos X em vez de Y" | o custo dessa escolha, admitido com honestidade | o que esse custo traz de volta, com exemplo concreto | CTA implícito ou nenhum.
+Geração de leads
+4. Estudo de Caso: resultado em números (com origem) | o que mudou na estratégia | as ações em lista | o que o leitor pode aplicar | CTA no estilo da voz.
+5. Guia Como Fazer: a promessa, específica | passos numerados e repetíveis | métrica própria que comprova o método (com origem) | CTA: pergunta sobre o próximo passo do leitor.
+6. Produto Soft: dor do cliente, específica e quantificada | antes, intervenção, depois | o que a solução resolve, em lista | resultado em números + fala real do cliente | CTA: pergunta que identifica quem tem a mesma dor.
+Marca
+7. História Vulnerável: a admissão da quase falha | o problema em detalhe + o momento de autocrítica (fala ou pensamento real) | a decisão | a ação concreta e o resultado | CTA: pergunta de comunidade sobre experiência parecida.
+8. Bastidores: um micro evento do dia a dia | o que alguém da equipe fez, com detalhe | o que isso mostra sobre como a equipe trabalha, contado por mais um fato concreto | CTA: pergunta sobre a equipe do leitor.
+9. Humor Relacionável: situação ou diálogo engraçado do setor | o mesmo padrão em outros contextos | a necessidade real que esse pedido esconde | como a pessoa lida com isso na prática | CTA: pergunta leve.
+Engajamento
+10. Iniciador de Discussões: "Opinião impopular:" + a opinião | o argumento, com a razão | a exceção (nuance) | prova pessoal | CTA em duas partes: "Estou errado?" + pergunta sobre a experiência do leitor.
+11. Complete a Frase: a frase a completar | a resposta da própria pessoa | história curta que mostra de onde veio a resposta | CTA: "Sua vez."
+12. Teaser de Conteúdo: o material e o que ele cobre | principais aprendizados em lista | um item aprofundado | CTA duplo: pergunta + acesso ao material.
+13. Reconhecimento Colaborativo: agradecimento às pessoas, com o que cada uma fez de específico | o que a pessoa fez com o que recebeu | CTA: pedir que o leitor marque quem o ajudou.
+
+ESCOLHA RÁPIDA DE FORMATO
+Autoridade: opinião contrária forte → 1; dados próprios → 2; valores e jeito de trabalhar → 3.
+Leads: resultado de cliente → 4; método para ensinar → 5; solução sem parecer venda → 6.
+Marca: erro ou superação → 7; história de equipe → 8; personalidade e humor → 9.
+Engajamento: opinião polêmica defensável → 10; volume de comentários → 11; conteúdo longo → 12; ampliar rede → 13.
+Use a etapa do funil como pista: topo puxa para autoridade, marca ou engajamento; meio para autoridade ou marca; fundo para leads.
+
+FRAMEWORKS DE ESCRITA (o formato define os blocos; o framework define a ordem e a lógica de persuasão)
+PAS: Problema, Agitação, Solução (dor clara e o post entrega a saída).
+AIDA: Atenção, Interesse, Desejo, Ação (leva a uma ação concreta).
+BAB: Antes, Depois, Ponte (há uma transformação para mostrar).
+STAR: Situação, Tarefa, Ação, Resultado (case ou bastidor com resultado mensurável).
+SLAY: História, Lição, Conselho acionável, Você (história pessoal que vira orientação prática).
+PASTOR: Problema, Amplificação, História, Transformação, Oferta, Resposta (venda soft com história).
+4P: Promessa, Imagem, Prova, Empurrão (promessa forte que precisa de prova rápida).
+APP: Concordar, Prometer, Prévia (abre concordando com uma dor do leitor).
+História, Tensão, Virada: contexto, conflito, mudança, consequência (storytelling puro).
+Lição, transformação ou conclusão sempre em forma concreta (o que mudou, o que fazer, um resultado), nunca como moral da história. Agitação com fatos reais, sem exagero.
+
+COMPATIBILIDADE FORMATO x FRAMEWORK
+1: APP, PAS, HTV · 2: 4P, PAS, AIDA · 3: BAB, SLAY, APP · 4: STAR, BAB, PAS · 5: PAS, 4P, AIDA · 6: PASTOR, BAB, PAS · 7: SLAY, HTV, STAR · 8: STAR, HTV, SLAY · 9: HTV, SLAY, APP · 10: PAS, APP, SLAY · 11: SLAY, HTV · 12: AIDA, 4P, PAS · 13: STAR, SLAY (HTV = História, Tensão, Virada).
+Se o usuário fixou um framework, escolha um formato compatível com ele.
+Como decidir o framework: história com começo, meio e fim → SLAY, STAR ou HTV; antes e depois mensurável → BAB ou STAR; dor clara e saída → PAS; ação concreta → AIDA ou PASTOR; promessa forte com prova curta → 4P; abre com algo que o leitor já sente → APP. Em empate, o que os posts reais da pessoa usaram menos.
+
+HOOK DO BRIEFING
+Se o material trouxer um hook da viral-hook-creator, copie sem mudar, com o nome do padrão. Senão, proponha um usando um dos 12 padrões: linha 1 (hook), linha 2 (re-hook), cada uma com até uns 40 caracteres. Nunca invente o número ou a história do hook; a linha 2 não pode montar "não é X, é Y"; o corpo do post precisa entregar o que o hook promete.
+${HOOK12}
+
+ESQUELETO
+Cada item une uma etapa do framework a um bloco do formato. Exemplo: "Antes (BAB) / Resultado em números (Estudo de Caso): faturamento caiu 30% em 2 meses, dado do material". Diga o que cada bloco precisa conter e qual material ou prova usar. Não escreva o texto final.
+LACUNAS: se faltar algo essencial para o formato (um Estudo de Caso sem números, uma História Vulnerável sem a história), troque por um formato que o material sustente e registre em "lacunas".`;
+
+const SK_COPY=`PAPEL: copywriter sênior com anos de LinkedIn B2B e ghostwriting para fundadores. A estratégia já foi decidida no briefing. Você transforma o briefing em texto que soa exatamente como a pessoa. O fundador é o guia experiente; o leitor é o herói. Escreva como alguém conversando com um amigo inteligente num café. Se soar corporativo, está errado.
+HIERARQUIA quando houver conflito: 1) voice.md, 2) about-me.md, 3) briefing, 4) regras desta skill.
+
+VOZ: tom, ritmo, tamanho de frase e de parágrafo, vocabulário, expressões que a pessoa repete, estilo de CTA e de fechamento, uso de emojis e hashtags e as ausências vêm do voice.md. Público, histórias e dados vêm do about-me.md. Releia os posts reais da pessoa antes de escrever para pegar o ritmo.
+
+HOOK: use o hook do briefing, no padrão indicado: linha 1, linha em branco, linha 2, cada uma com até uns 40 caracteres. Se precisar ajustar para soar como a voz, mantenha o mesmo padrão e a mesma promessa. O corpo entrega exatamente o que o hook promete (se promete 5 passos, são 5 passos).
+CORPO: siga o esqueleto na ordem; cada item vira um ou dois blocos. Uma ideia por bloco, 1 a 3 frases por bloco. Logo depois do hook, a situação específica (nada de contexto de mercado que o leitor já conhece). Use as provas do briefing; todo número precisa ter origem no material.
+TÉCNICAS
+Storytelling P.A.S.T. quando houver história: lugar com um detalhe concreto, ação, fala real entre aspas, pensamento da pessoa entre parênteses (o LinkedIn não tem itálico).
+Ritmo: varie o comprimento das frases. Uma frase de três palavras depois de uma longa.
+Especificidade: troque o genérico pelo concreto ("muitos clientes" vira "3 dos 5 clientes do trimestre"), só com dados que existem no material.
+Listas: de 2 a 7 itens, sem cair sempre em 3. Cada item começa pelo ponto principal e os itens têm tamanhos diferentes.
+Linguagem: simples o bastante para alguém de fora da área entender de primeira. "Você" ao falar com o leitor. Contrações e expressões coloquiais só se a voz usar.
+FECHAMENTO E CTA: sem kicker (frase de efeito ou moral no final). A última linha de conteúdo é o fechamento do briefing, escrito como fato concreto: um resultado, uma consequência prática, o próximo passo do leitor ou uma admissão honesta. Depois, o CTA do briefing no estilo da voz; se a voz não definir, uma pergunta específica que só alguém do público consegue responder. CTAs de repost, "salve este post" e "comente PALAVRA" só se a voz usar ou o briefing pedir.
+FORMATAÇÃO MOBILE: alvo de 900 a 1.500 caracteres com espaços, teto de 2.000. Blocos de 1 a 3 linhas com uma linha em branco entre blocos; linhas curtas, em torno de 55 caracteres. Sem hashtags, a menos que a voz use. Símbolos funcionais com pouca frequência e no máximo 2 tipos por post: 1️⃣ 2️⃣ 3️⃣ para numerar itens com hierarquia, ↳ para expandir o item de cima, → para consequência ou progressão, ✅ para itens validados, 👉 para destacar um ponto de ação. Emoji decorativo no máximo 1 por post e nunca no hook, salvo se a voz disser outra coisa.
+EDIÇÃO: corte de 20% a 30% do primeiro rascunho e passe pelo C.U.B.: Confuso (tire jargão e frases que pedem segunda leitura), pouco crível (toda promessa forte tem prova; sem prova, suavize), chato (bloco sem tensão nem informação nova, corte ou mude o ritmo). Leia em voz alta mentalmente: se a pessoa não falaria aquela frase, reescreva.
+${PROIB}`;
+
+const SK_ANTI=`LIMITES DESTA REVISÃO: a voz da pessoa vale mais que as sugestões de estilo (contrações como "tá" e "pra" só se a voz usar). As proibições valem sempre, mesmo que o rascunho as tenha. Esta é a última etapa que mexe em palavras: preserve o layout (blocos, linhas em branco, símbolos de lista), a ordem dos blocos, o formato e o framework, o hook (salvo se tiver um padrão proibido) e os números e fatos exatamente como estão. Mude frases, não estrutura.
+FILTRO SINTÁTICO (anula qualquer padrão anterior): travessões e hífen separando ideias viram vírgula, ponto final ou parênteses. Comparativos de negação ("Não é X... é Y", "Não se trata de X... trata-se de Y") são reescritos. Construções paralelas ("Não apenas... mas também", "Além de X, Y também é") são reescritas. Frase de efeito ou moral no final vira fato concreto (resultado, consequência prática, próximo passo) ou sai. Pares espelhados em sequência saem.
+SUBSTITUIÇÃO (exemplos): "Utilizar esta ferramenta para alavancar resultados" vira "Use isso para melhorar os números". "É importante notar que a inovação é vital" vira "Se não mudar, você fica para trás". "Aprofundar na complexidade da jornada" vira "Entender de verdade o que está acontecendo".
+RITMO: alterne frases curtas e incisivas com frases longas e detalhadas. Quebre a regra de três: quando possível, use 2 ou 4 itens. Hesitação ("talvez", "eu suspeito", "provavelmente") com moderação e só se combinar com a voz.
+VOZ DO FUNDADOR: o conteúdo não pode ser neutro. Use experiência real do material e do about-me (nunca invente), pequenas observações laterais que mostram como a pessoa pensa e CTAs leves ("me conta o que você acha").
+PROTOCOLO: 1) leia a voz e o texto inteiro; 2) passe o filtro sintático e a lista negra e corrija cada ocorrência; 3) ajuste o ritmo onde houver frases do mesmo tamanho em sequência; 4) confira se a última linha de conteúdo é um fato concreto e se o CTA está no estilo da voz; 5) leia em voz alta mentalmente e simplifique até parecer conversa; 6) confirme que layout, ordem dos blocos, hook e números ficaram intactos.
+${PROIB}`;
+
+const SK_HOOKS=`O HOOK: no LinkedIn o leitor vê umas 3 linhas antes do "ver mais". O hook ocupa esse espaço em duas linhas separadas por uma linha em branco. Linha 1 (hook) para o scroll: afirma algo específico, inesperado ou reconhecível. Linha 2 (re-hook) dá o motivo para clicar: abre um loop, promete o conteúdo, vira a expectativa ou qualifica a linha 1. Cada linha com até uns 40 caracteres. A linha 2 nunca repete a linha 1 com outras palavras.
+MATÉRIA-PRIMA: antes de escrever, separe do material e do about-me: números reais (resultados, prazos, quantidades, valores), antes e depois, erros com consequência concreta, frases que o público diz ou pensa, crenças comuns que a pessoa discorda e tempo de experiência. Hooks bons saem desse material. Nunca invente número, resultado, tempo de experiência ou história. Se um padrão precisa de um dado que não existe, escolha outro padrão ou marque o ponto como [confirmar: ...].
+ESCOLHA DOS PADRÕES (os que o material sustenta melhor, sem ordem fixa): método ou guia → O Educativo, A Lista, O Específico; resultado com número e prazo → O Específico, O Contraste, A Transformação; resultado ruim que virou bom → O Contraditório, A Transformação; conquista sem o atalho que todos usam → O Contraste; frase que o público repete → A Citação; anos de experiência ou aprendizado lento → A Maturação; opinião firme → O Direto, A Isca; padrão que os melhores seguem → O Utilitário; ideia ancorada em alguém conhecido → A Referência. Se a voz evita algum estilo (provocação, frases de terceiros, números de faturamento), tire os padrões correspondentes.
+
+BIBLIOTECA (use como modelo de estrutura e tom; nunca copie a frase de um exemplo; adapte vocabulário e ritmo à voz):
+1. O Educativo: "Como [resultado que o leitor quer]." + re-hook com o formato do conteúdo ou a condição que remove o medo ("Este é o guia completo:", "(Em 6 passos simples):", "(Sem [dor comum]).", "É assim que eu faço:"). Exemplos: Como crescer no LinkedIn. / Este é o guia completo: · Como postar todos os dias. / (Sem ser genérico). · Como gerar leads sem forçar a barra. / A física da confiança:
+2. O Contraditório: fato negativo, de preferência com número + resultado positivo que parece não combinar. O corpo explica a relação. Exemplos: Meu alcance caiu 30% em agosto. / Mas foi o meu melhor mês. · Perdi 1.000 seguidores. / Ganhei 10 compradores. · Nunca viralizei no LinkedIn. / Ainda assim, minha agenda lotou.
+3. A Transformação: estado de antes (com ano ou marco) + estado de agora, em linhas paralelas ("2024: / 2025:", "Antes: / Agora:", "Ano passado: / Hoje:"). Exemplos: 2024: Quase desistindo de empreender. / 2025: Faturando 6 dígitos por mês. · Antes: Fazendo conteúdo aleatório. / Agora: Tenho uma audiência engajada.
+4. O Contraste: conquista + "Sem [o atalho, recurso ou sacrifício que todo mundo acha obrigatório]." Exemplos: Cheguei aos 50 mil seguidores. / Sem seguir os passos dos gurus. · Tenho 3 negócios lucrativos. / Sem trabalhar 12 horas por dia. Cuidado: "Pare de [X]. / Comece a [Y]." só com X e Y específicos do tema.
+5. O Específico: resultado com número e prazo exatos + promessa de mostrar como ("Vou te mostrar o processo:", "Meu playbook:", "Foram 5 passos simples."). Exemplos: Faturei R$ 30 mil só em julho. / Vou te mostrar o processo: · Dobrei meu salário em 6 meses. / Foram 5 passos simples.
+6. A Citação: entre aspas, uma frase que o público diz ou pensa + uma reação (identificação, provocação ou promessa). Exemplos: "Não tenho tempo para criar posts". / Aposto que você já disse isso. · "Minha audiência não compra nada". / Spoiler: o problema não são eles. · "Eu não sei me posicionar." / Vou te ajudar com isso em 4 passos:
+7. A Maturação: tempo ou experiência acumulada + o aprendizado (ou a promessa de ensinar rápido o que levou tempo). Exemplos: Depois de 5 anos, aprendi a negociar. / E vou te ensinar em 5 minutos: · Depois de 100 reuniões, eu aprendi: / Umas 99 poderiam ser e-mails. Cuidado: a linha 2 não pode virar moral genérica.
+8. A Referência: "[Pessoa conhecida] disse:" + o começo da frase, cortado com reticências. Exemplos: Simon Sinek disse uma vez: / "As pessoas não compram o que…" · David Ogilvy disse: / "Se não vende, não é criativo." Cuidado: muita frase famosa circula com autor errado; na dúvida, troque de padrão.
+9. O Direto: uma opinião firme em uma frase curta + a justificativa ou a promessa de provar ("Vou te dizer o porquê.", "E eu posso provar."). Exemplos: LinkedIn não é para emprego. / Vou te dizer o porquê. · Eu não romantizo madrugadas. / Prefiro energia estável todo dia. Cuidado: evite "Eu não faço X. / Faço Y." em espelho.
+10. A Lista: "[Número] [itens] para [público ou objetivo]:" + qualificador ("(Testadas por mim).", "(Eu cometi todos.)", "O terceiro abriu meus olhos."). Exemplos: 7 erros comuns no LinkedIn: / (Eu cometi todos.) · 8 passos para lançar seu produto: / Sem se perder no processo. Cuidado: o número do hook bate com o número de itens do post.
+11. O Utilitário: "Todo [público] [faz / precisa / já passou por] isto:" + re-hook de raridade ou mistério. Exemplos: Todo freelancer já passou por isso: / E quem não passou, vai passar. · Os melhores vendedores fazem isto: / É um tipo de diferencial oculto. Cuidado: não use "Sabe do que todo [público] precisa? / Não é [X]."
+12. A Isca: afirmação provocativa, quase absurda + confirmação seca ("É isso mesmo.", "E isso é bom.", "Aceite isso."). O corpo reenquadra. Exemplos: É impossível vender no LinkedIn. / É isso mesmo. · Seu primeiro produto será horrível. / É natural que seja assim. Cuidado: sem virada no corpo vira clickbait; para perfis conservadores, prefira O Direto.
+
+FILTRO DE QUALIDADE (reescreva ou troque o padrão se falhar): 1) É específico (número, prazo, nome, situação ou frase reconhecível)? 2) O post consegue pagar a promessa? 3) A linha 2 acrescenta (abre loop, promete, vira a expectativa)? 4) Soa como a pessoa, numa conversa? 5) É crível para o público? 6) Passa nas proibições: nenhum travessão, nenhum "Não é X, é Y" nem linha 2 que monte esse contraste, nenhum par espelhado genérico, nenhuma palavra da lista negra, nenhum emoji salvo se a voz usar.
+${PROIB}`;
+
+/* Voz do perfil no formato que as skills esperam (about-me.md + voice.md), montada do app */
+function voiceDoc(P,exceptId){const M=P.marca,R=P.raiox||{};const ok=['publicado','agendado','aprovado'];
+ const ex=S.posts.filter(p=>p.pid===P.id&&p.id!==exceptId&&(p.texto||'').trim().length>120).sort((a,b)=>(ok.includes(b.status)?1:0)-(ok.includes(a.status)?1:0)||(a.data<b.data?1:-1)).slice(0,3);
+ const L=(t,a)=>a&&a.length?`${t}:\n`+a.map(x=>'- '+x).join('\n'):'';
+ return [`=== about-me.md de ${P.nome} (vem do Cérebro da marca e do Raio-X do app) ===`,
+  `${P.nome}, ${P.cargo} da ${P.empresa}. Headline: ${P.headline||'(sem headline)'}`,
+  M.rascunho?'Atenção: o Cérebro da marca desta pessoa ainda é um rascunho. Use com cuidado e não invente o que falta.':'',
+  `Posicionamento: ${M.posicionamento}`,M.frase?`Frase-guia: ${M.frase}`:'',`Público: ${M.publico}`,`Promessa: ${M.promessa}`,
+  L('Pilares de conteúdo',M.pilares.map(x=>`${x.id} ${x.nome} (${x.pct}%)${x.desc?': '+x.desc:''}`)),
+  L('Teses (opiniões da pessoa)',M.teses),
+  L('Histórias reais (use só estas; nunca invente outras)',M.historias),
+  L('Provas e números próprios (os únicos números permitidos além dos do material)',M.provas),
+  R.resumo?`Raio-X do perfil: ${R.resumo}`:'',
+  L('Pontos do Raio-X',(R.pontos||[]).map(x=>`[${x.tipo}] ${x.titulo}: ${x.texto}`)),
+  '',`=== voice.md de ${P.nome} ===`,
+  L('Tom: sempre',M.tom.sempre),L('Ausências: nunca',M.tom.nunca),L('Vocabulário e expressões que a pessoa usa',M.vocabulario),
+  L('Ganchos que a pessoa já usou (padrão: texto)',(P.ganchos||[]).map(g=>`${g.padrao}: ${g.texto}`)),
+  ex.length?'Posts reais desta pessoa (para pegar ritmo, tamanho de frase e jeito de falar; nunca copie frases):\n'+ex.map((p,i)=>`--- post ${i+1} (${ST[p.status]}) ---\n${p.texto.slice(0,1800)}`).join('\n'):'Ainda não há posts escritos desta pessoa no app.'
+ ].filter(Boolean).join('\n')}
+/* O que este post é: ideia, pilar, funil, modelo, framework, hook e referência escolhidos no Estúdio */
+function materialDoc(P,forHooks){const pl=P.marca.pilares.find(x=>x.id===studio.pilar);const ref=S.refs.find(r=>r.id===studio.ref);const ex=skillsExtra();
+ return [`Tema / ideia do post: ${studio.ideia}`,pl?`Pilar: ${pl.id} ${pl.nome}${pl.desc?' ('+pl.desc+')':''}`:'',`Etapa do funil: ${FUN[studio.funil]}`,
+  `Modelo visual: ${MOD[studio.modelo]}${studio.modelo!=='txt'?' (o texto acompanha uma arte; a frase da arte é separada do texto)':''}`,
+  forHooks?'':(studio.frame&&studio.frame!=='auto'?`Framework escolhido pelo usuário (mantenha): ${FR[studio.frame][0]} (${FR[studio.frame][1]})`:'Framework: decida você.'),
+  !forHooks&&studio.hook?`Hook escolhido pelo usuário (veio da viral-hook-creator; copie sem mudar), padrão ${studio.hook.padrao}:\n${studio.hook.l1}\n\n${studio.hook.l2}`:'',
+  ref?`Referência de estrutura (copie a estrutura, nunca as frases): ${ref.titulo||''} ${ref.url||''}. Observação: ${ref.nota||''}`:'',
+  !forHooks&&ex.length?'Skills extras a considerar:\n'+ex.map(s=>'- '+s.n+': '+(s.p||s.d)).join('\n'):'',
+  studio.texto.trim()&&!studio.gerado?`Material bruto escrito pelo usuário (use como base; extraia ideias, falas e dados):\n${studio.texto.slice(0,3000)}`:''
+ ].filter(Boolean).join('\n')}
+const briefingText=b=>!b?'':[`Ângulo: ${b.angulo||''}`,`Objetivo: ${b.objetivo||''}`,`Formato: ${b.formato||''}`,`Framework: ${b.framework||''}`,(b.porque||[]).length?'Por quê:\n'+b.porque.map(x=>'- '+x).join('\n'):'',
+ b.hook?`Hook (padrão: ${b.hook.padrao||''}):\n${b.hook.linha1||''}\n\n${b.hook.linha2||''}`:'','Esqueleto:\n'+(b.esqueleto||[]).map((x,i)=>`${i+1}. ${x}`).join('\n'),
+ `Fechamento: ${b.fechamento||''}`,`CTA: ${b.cta||''}`,(b.provas||[]).length?'Provas disponíveis:\n'+b.provas.map(x=>'- '+x).join('\n'):'',`Lacunas: ${b.lacunas||'nenhuma'}`].filter(Boolean).join('\n');
+const promptStruct=(P,voice,mat)=>`Execute a skill linkedin-post-structure (Etapa 1 do fluxo LinkedIn) para ${P.nome}, em MODO RÁPIDO: não faça perguntas; decida ângulo, formato e framework sozinho e justifique cada decisão em uma linha. Você é o estrategista: NÃO escreva o post. Entregue o briefing com um esqueleto que a linkedin-copy vai preencher.
+Nesta etapa não há pesquisa na web: use só o material, o about-me e o voice abaixo. Regra de prova: todo número que entrar no post precisa vir desse material; nunca invente métrica, porcentagem ou resultado.
+
+${voice}
+
+=== MATERIAL DO POST ===
+${mat}
+
+=== MÉTODO DA SKILL ===
+${SK_STRUCT}
+
+Responda SOMENTE com um objeto JSON, em português do Brasil, neste formato:
+{"angulo":"...","objetivo":"autoridade | leads | marca | engajamento","formato":"número e nome","framework":"nome e sequência","porque":["uma linha por decisão"],"hook":{"padrao":"nome do padrão","linha1":"...","linha2":"..."},"esqueleto":["Etapa do framework / bloco do formato: o que precisa conter + material ou prova a usar"],"fechamento":"fato concreto que fecha o conteúdo","cta":"tipo de CTA, no estilo da voz","provas":["dado ou história do material"],"lacunas":"o que falta, ou nenhuma"}`;
+const promptCopy=(P,voice,mat,b)=>`Execute a skill linkedin-copy (Etapa 2 do fluxo LinkedIn) e escreva o post de ${P.nome} a partir do briefing. Siga ângulo, formato, framework, hook, esqueleto, fechamento e CTA exatamente; não troque o formato nem o framework.
+
+${voice}
+
+=== MATERIAL DO POST ===
+${mat}
+
+=== BRIEFING (da linkedin-post-structure) ===
+${briefingText(b)}
+
+=== MÉTODO DA SKILL ===
+${SK_COPY}
+
+Responda SOMENTE com o texto final do post, em português do Brasil, com as quebras de linha exatas que vão para o LinkedIn. Sem code block, sem título, sem comentário antes ou depois.`;
+const promptAnti=(P,voice,post,issues)=>`Execute a skill linkedin-anti-ai (Etapa 3, a última que mexe em palavras) sobre o post de ${P.nome} abaixo.
+
+${voice}
+
+=== MÉTODO DA SKILL ===
+${SK_ANTI}
+${issues&&issues.length?`\nA verificação automática ainda encontrou estes problemas no texto. Corrija todos, sem mexer no resto: ${issues.join('; ')}.\n`:''}
+=== POST PARA REVISAR ===
+${post}
+
+Responda exatamente neste formato, sem code block:
+POST:
+[versão final, com o layout intacto]
+===MUDANCAS===
+- [até 5 linhas dizendo o que foi mudado]`;
+const promptHooks=(P,voice,mat,padrao)=>`Execute a skill viral-hook-creator para ${P.nome}. ${padrao?`Entregue 5 versões novas do padrão "${padrao}", todas diferentes entre si.`:'Escolha 6 padrões diferentes entre os 12, os que o material sustenta melhor, e escreva um hook para cada um.'} Use o tom de voz, o vocabulário e o ritmo desta pessoa.
+
+${voice}
+
+=== MATERIAL DO POST ===
+${mat}
+
+=== MÉTODO DA SKILL ===
+${SK_HOOKS}
+
+Responda SOMENTE com um array JSON${padrao?' de 5 objetos':' de 6 objetos, com exatamente um marcado como recomendado'}, em português do Brasil:
+[{"padrao":"nome do padrão","linha1":"hook","linha2":"re-hook","entrega":"o que o corpo do post precisa entregar para cumprir a promessa","recomendado":false,"motivo":"só no recomendado: por que, em uma frase"}]`;
+/* Pedido pronto para colar numa conversa do Claude com as skills instaladas (quando o app roda fora do Claude) */
+function skillRequest(P,kind){const voice=voiceDoc(P,studio.editId);
+ if(kind==='hooks')return `Use a skill /viral-hook-creator:viral-hook-creator para criar os hooks deste post, sem me fazer perguntas. Use o perfil e a voz abaixo no lugar do about-me.md e do voice.md.\n\n${voice}\n\n=== MATERIAL DO POST ===\n${materialDoc(P,true)}`;
+ return `Rode o fluxo LinkedIn com estas skills, nesta ordem, em modo rápido (decida tudo, sem me fazer perguntas):\n1. /linkedin-post-structure:linkedin-post-structure: monte o briefing.\n2. /linkedin-copy:linkedin-copy: escreva o post a partir do briefing.\n3. /linkedin-anti-ai:linkedin-anti-ai: faça a revisão final.\n\nUse o perfil e a voz abaixo no lugar do about-me.md e do voice.md.\n\n${voice}\n\n=== MATERIAL DO POST ===\n${materialDoc(P)}`}
+/* Verificação local do texto final: o que a anti-IA proíbe e dá para checar sem IA */
+const BLACK=['aprofundar','alavancar','potencializar','revolucionar','transformar','garantir','navegar na paisagem','abraçar','desvendar','inovador','de vanguarda','disruptivo','resiliente','dinâmico','vibrante','crucial','fundamental','vital','game-changing','pivotal','tapeçaria','reino','testamento','jornada','ecossistema','excelência operacional','no mundo acelerado de hoje','em conclusão','além disso','dito isto','é importante notar','não apenas','em resumo'];
+function lintPost(t){const out=[];if(!t)return out;
+ if(/[—–]/.test(t))out.push('travessão');
+ if(/\bnão (é|são|se trata)\b[^.\n?!]{1,80}?[,;.]\s*(é|são|mas|trata-se)\b/i.test(t))out.push('estrutura "Não é X, é Y"');
+ BLACK.forEach(w=>{const re=new RegExp('(^|[^a-zà-úç])'+w.replace(/ /g,'\\s+')+'(?![a-zà-úç])','i');if(re.test(t))out.push('"'+w+'"')});
+ if(t.length>2000)out.push('acima de 2.000 caracteres');return out}
+const cleanPost=t=>String(t||'').replace(/^\s*```[a-z]*\s*\n?/i,'').replace(/\n?```\s*$/,'').replace(/^\s*POST:\s*\n?/i,'').replace(/\s+$/,'');
+const splitAnti=t=>{t=cleanPost(t);const i=t.indexOf('===MUDANCAS===');let p=i>=0?t.slice(0,i):t.replace(/\n?=+[A-Z]*$/,'');const m=i>=0?t.slice(i+14):'';return {post:p.trim(),changes:m.split('\n').map(s=>s.replace(/^\s*[-•*]\s*/,'').trim()).filter(Boolean).slice(0,6)}};
+const normHooks=a=>{const l=(Array.isArray(a)?a:[]).filter(g=>g&&g.linha1).map(g=>({padrao:String(g.padrao||''),linha1:String(g.linha1),linha2:String(g.linha2||''),entrega:String(g.entrega||''),recomendado:!!g.recomendado,motivo:String(g.motivo||'')}));let r=false;l.forEach(g=>{if(g.recomendado){if(r)g.recomendado=false;r=true}});return l};
+/* Partes da tela que atualizam sem redesenhar o Estúdio inteiro (o texto continua editável) */
+function flowHTML(){const f=studio.flow;if(!f)return '';const P=prof(studio.pid);
+ return `<div class="sflow"><div class="steps">${FLOW.map((s,i)=>{const st=f.st[s.k]||'idle';return `<div class="step ${st}"><span class="step-n">${st==='ok'?I('check2'):st==='run'?'<span class="ai-dot"></span>':st==='err'?'!':i+1}</span><span class="grow"><b>${s.n}</b><small class="ell">${s.sk}</small></span></div>`}).join('')}</div>
+ ${f.local?`<div class="callout">${I('spark')}<span><b>A geração com IA só roda com o app aberto no Claude.</b>Aberto como arquivo, o app não tem acesso ao Claude, então nada foi escrito no texto. Copie o pedido abaixo (já com as 3 skills, a voz de ${h(first(P.nome))} e o material deste post) e cole numa conversa do Claude com as skills instaladas.<span class="btns" style="margin-top:var(--esp-3);display:flex"><button class="${B.s} sm" data-act="sCopyReq" data-k="draft">${I('copy')}Copiar pedido para o Claude</button></span></span></div>`:''}
+ ${f.login?loginCallout('draft'):''}
+ ${f.msg?`<p class="note flow-msg">${h(f.msg)}</p>`:''}
+ ${f.briefing||f.briefTxt?`<details class="tg"><summary>${I('chr','chev')}Briefing da estrutura</summary><div class="tg-b"><pre class="brief">${h(f.briefing?briefingText(f.briefing):f.briefTxt)}</pre></div></details>`:''}
+ ${f.changes&&f.changes.length?`<details class="tg"><summary>${I('chr','chev')}O que a revisão anti-IA mudou</summary><div class="tg-b"><ul class="chg">${f.changes.map(c=>`<li>${h(c)}</li>`).join('')}</ul></div></details>`:''}
+ ${f.lint?`<p class="note">${f.lint.length?'Atenção, revise à mão: '+h(f.lint.join(', '))+'.':'Verificação final: sem travessão, sem "Não é X, é Y" e sem palavras da lista negra.'}</p>`:''}</div>`}
+const renderFlow=()=>{const el=$('#sFlow');if(el)el.innerHTML=flowHTML()};
+function hooksHTML(){const hs=studio.hooks;if(!hs)return '';const P=prof(studio.pid);
+ if(hs.loading)return `<p class="note"><span class="ai-dot"></span> A viral-hook-creator está escrevendo ganchos na voz de ${h(first(P.nome))}…${hs.bridge?' No Claude Code isso leva de 30 segundos a 2 minutos.':''}</p>`;
+ if(hs.login)return loginCallout('hooks');
+ if(hs.local)return `<div class="callout">${I('spark')}<span><b>Os ganchos com IA só rodam com o app aberto no Claude.</b>Copie o pedido para a viral-hook-creator (com a voz de ${h(first(P.nome))}) e cole numa conversa do Claude com as skills instaladas.<span class="btns" style="margin-top:var(--esp-3);display:flex"><button class="${B.s} sm" data-act="sCopyReq" data-k="hooks">${I('copy')}Copiar pedido para o Claude</button></span></span></div>${P.ganchos.length?`<span class="lbl">Ganchos já salvos de ${h(first(P.nome))}</span><ul class="hooks">${P.ganchos.map(g=>`<li><span class="grow">${h(g.texto)}<small>${h(g.padrao)}</small></span><button class="${B.s} sm" data-act="copy" data-t="${h(g.texto)}">Copiar</button></li>`).join('')}</ul>`:''}`;
+ return `<div class="row"><span class="lbl grow">${hs.padrao?`Variações de "${h(hs.padrao)}"`:'Ganchos da viral-hook-creator'} · "Usar" abre o post com ele e a estrutura mantém o gancho</span>${hs.padrao?`<button class="${B.f} sm" data-act="sHooks">Voltar aos 6 padrões</button>`:''}</div>
+ <ul class="hooks">${hs.list.map((g,i)=>`<li class="${g.recomendado?'rec':''}"><span class="grow"><span class="hook-p">${h(g.padrao)}${g.recomendado?'<span class="tag strong">Recomendado</span>':''}</span><b class="hook-l">${hlConf(g.linha1)}</b><b class="hook-l">${hlConf(g.linha2)}</b>${/\[confirmar:/i.test(g.linha1+g.linha2)?'<small class="conf-n">O trecho destacado é um dado que a skill não pôde confirmar. Ajuste antes de publicar.</small>':''}${g.entrega?`<small>O post precisa entregar: ${h(g.entrega)}</small>`:''}${g.recomendado&&g.motivo?`<small>Por quê: ${h(g.motivo)}</small>`:''}</span><span class="hook-a"><button class="${B.p} sm" data-act="useHook" data-i="${i}">Usar</button>${hs.padrao?'':`<button class="${B.f} sm" data-act="hookVar" data-i="${i}">Variações</button>`}</span></li>`).join('')}</ul>`}
+/* "[confirmar: X]" é como a viral-hook-creator marca um dado que ela não pôde confirmar */
+const hlConf=t=>h(t).replace(/\[confirmar:\s*([^\]]*)\]/gi,'<mark class="conf" title="Dado a confirmar antes de publicar">$1</mark>');
+const renderHooks=()=>{const el=$('#sHookList');if(el)el.innerHTML=hooksHTML()};
+
 /* Estúdio: kit do perfil primeiro (★), tudo da Biblioteca escolhível sem sair da tela */
 function syncStudio(){if(!studio.pid||!prof(studio.pid))studio.pid=U.scope!=='all'?U.scope:S.profiles[0].id;const P=prof(studio.pid);
- if(!studio.frame)studio.frame=P.kit.fr[0]||'pas';if(!studio.modelo)studio.modelo=P.kit.mod[0]||'img';
- if(!studio.skills)studio.skills=P.kit.sk.filter(id=>SKN[id]&&SKN[id].st);
+ if(!studio.frame)studio.frame='auto';if(!studio.modelo)studio.modelo=P.kit.mod[0]||'img';
+ if(!studio.skills)studio.skills=P.kit.sk.filter(id=>EXTRAS.includes(id));
  if(!P.marca.pilares.some(x=>x.id===studio.pilar))studio.pilar=P.marca.pilares[0]?.id||'';
  if(studio.ref&&!S.refs.some(r=>r.id===studio.ref))studio.ref='';return P}
 const kitFirst=(keys,kit)=>[...kit.filter(k=>keys.includes(k)),...keys.filter(k=>!kit.includes(k))];
-V.estudio=()=>{const P=syncStudio();const K=P.kit;
+V.estudio=()=>{const P=syncStudio();const K=P.kit;const run=!!(studio.flow&&studio.flow.running);
+ if(BRIDGE===null)getBridge().then(b=>{if(b&&U.view==='estudio'&&!(studio.flow&&studio.flow.running))renderView()});
  const d={id:'draft',pid:P.id,titulo:studio.ideia,arte:studio.titulo,modelo:studio.modelo,texto:studio.texto,data:studio.data};
  const known=P.ideias.some(i=>i.t===studio.ideia);
  const refs=S.refs.filter(r=>r.pid===P.id||r.pid==='geral');const ref=S.refs.find(r=>r.id===studio.ref);
  const star=on=>on?I('star'):'';
- return pageHead('Estúdio',`O rascunho sai na voz de ${h(first(P.nome))}, com o que você escolher da Biblioteca. O post vai para o calendário, e é lá que você copia o texto final.`,studio.editId?'<span class="tag strong">Editando post do calendário</span>':'')+
+ return pageHead('Estúdio',`O rascunho sai na voz de ${h(first(P.nome))}: a voz vem do Cérebro da marca, do Raio-X e dos posts reais do perfil. O post vai para o calendário, e é lá que você copia o texto final.`,studio.editId?'<span class="tag strong">Editando post do calendário</span>':'')+
  `<div class="studio"><div class="stack">
  <section class="card">${rot('O post')}
-  <div class="two"><div class="fld"><span class="lbl">Perfil</span><select class="in" data-s="pid" aria-label="Perfil">${S.profiles.map(x=>`<option value="${x.id}" ${x.id===P.id?'selected':''}>${h(x.nome)}</option>`).join('')}</select></div><div class="fld"><span class="lbl">Postar em</span><input class="in" type="date" data-s="data" value="${h(studio.data)}"></div></div>
+  <div class="two"><div class="fld"><span class="lbl">Perfil</span><select class="in" data-s="pid" aria-label="Perfil" ${run?'disabled':''}>${S.profiles.map(x=>`<option value="${x.id}" ${x.id===P.id?'selected':''}>${h(x.nome)}</option>`).join('')}</select></div><div class="fld"><span class="lbl">Postar em</span><input class="in" type="date" data-s="data" value="${h(studio.data)}"></div></div>
   <div class="fld"><span class="lbl">Ideia</span><select class="in" data-s="ideiaSel"><option value="">Escrever uma ideia nova…</option>${P.ideias.map(i=>`<option ${i.t===studio.ideia?'selected':''}>${h(i.t)}</option>`).join('')}</select>${known?'':`<input class="in" data-s="ideia" placeholder="Sobre o que é o post?" value="${h(studio.ideia)}">`}</div>
   <div class="two"><div class="fld"><span class="lbl">Pilar</span><select class="in" data-s="pilar">${P.marca.pilares.map(x=>`<option value="${x.id}" ${x.id===studio.pilar?'selected':''}>${x.id} · ${h(x.nome)}</option>`).join('')}</select></div><div class="fld"><span class="lbl">Funil</span><select class="in" data-s="funil">${Object.entries(FUN).map(([k,v])=>`<option value="${k}" ${studio.funil===k?'selected':''}>${v}</option>`).join('')}</select></div></div>
  </section>
  <section class="card"><div class="bh">${rot('Da Biblioteca · kit de '+h(first(P.nome))+' primeiro (★)')}<span class="sp"></span><button class="${B.f} sm" data-act="go" data-v="biblioteca">${I('book')}Biblioteca</button></div>
-  <div class="libsec"><span class="lbl">Framework de escrita</span><div class="pills">${kitFirst(Object.keys(FR),K.fr).map(k=>`<button class="pill ${studio.frame===k?'on':''} ${K.fr.includes(k)?'kit':''}" data-act="sPick" data-k="frame" data-v="${k}" title="${FR[k][1]}">${star(K.fr.includes(k))}${FR[k][0]}</button>`).join('')}</div><span class="note">${FR[studio.frame][0]}: ${FR[studio.frame][1]}</span></div>
+  <div class="libsec"><span class="lbl">Fluxo do rascunho · sempre ativo</span><div class="steps steps-static">${FLOW.map((s,i)=>`<div class="step"><span class="step-n">${i+1}</span><span class="grow"><b>${s.n}</b><small class="ell">${s.sk}</small></span></div>`).join('')}</div><span class="note">Sugerir ganchos usa a viral-hook-creator. Todas usam a voz de ${h(first(P.nome))}.</span>${bridgeLine()}</div>
+  <div class="libsec"><span class="lbl">Framework de escrita</span><div class="pills"><button class="pill ${studio.frame==='auto'?'on':''}" data-act="sPick" data-k="frame" data-v="auto" title="A linkedin-post-structure escolhe o framework que combina com o formato">Decida por você</button>${kitFirst(Object.keys(FR),K.fr).map(k=>`<button class="pill ${studio.frame===k?'on':''} ${K.fr.includes(k)?'kit':''}" data-act="sPick" data-k="frame" data-v="${k}" title="${FR[k][1]}">${star(K.fr.includes(k))}${FR[k][0]}</button>`).join('')}</div><span class="note">${studio.frame==='auto'?'A linkedin-post-structure escolhe o framework que combina com o formato do post.':FR[studio.frame][0]+': '+FR[studio.frame][1]+'. A estrutura escolhe um formato compatível.'}</span></div>
   <div class="libsec"><span class="lbl">Modelo de post</span><div class="pills">${kitFirst(Object.keys(MOD),K.mod).map(k=>`<button class="pill ${studio.modelo===k?'on':''} ${K.mod.includes(k)?'kit':''}" data-act="sPick" data-k="modelo" data-v="${k}">${star(K.mod.includes(k))}${MOD[k]}</button>`).join('')}</div></div>
-  <div class="libsec"><span class="lbl">Skills aplicadas na geração</span><div class="pills">${kitFirst(SKILLS.filter(s=>s.st).map(s=>s.id),K.sk).map(id=>`<button class="pill ${studio.skills.includes(id)?'on':''} ${K.sk.includes(id)?'kit':''}" data-act="sSkill" data-v="${id}" title="${h(SKN[id].d)}" aria-pressed="${studio.skills.includes(id)}">${star(K.sk.includes(id))}${SKN[id].n}</button>`).join('')}</div></div>
+  <div class="libsec"><span class="lbl">Skills extras (opcional)</span><div class="pills">${EXTRAS.map(id=>`<button class="pill ${studio.skills.includes(id)?'on':''} ${K.sk.includes(id)?'kit':''}" data-act="sSkill" data-v="${id}" title="${h(SKN[id].d)}" aria-pressed="${studio.skills.includes(id)}">${star(K.sk.includes(id))}${SKN[id].n}</button>`).join('')}</div></div>
   <div class="libsec"><span class="lbl">Referência como base (opcional)</span><select class="in" data-s="ref"><option value="">Sem referência</option>${refs.map(r=>`<option value="${r.id}" ${r.id===studio.ref?'selected':''}>${r.tipo==='post'?'Post':'Perfil'} · ${h(r.titulo||r.url)}</option>`).join('')}</select>${ref?`<span class="note">${h(ref.nota||'')}</span>`:''}<button class="${B.f} sm" data-act="go" data-v="referencias" style="justify-self:start">${I('bookmark')}Salvar nova referência</button></div>
  </section>
  <section class="card">${rot('Rascunho')}
-  <div class="btns"><button class="${B.p}" data-act="sGen">${I('spark')}Gerar rascunho na voz de ${h(first(P.nome))}</button><button class="${B.s}" data-act="sHooks">Sugerir ganchos</button></div>
-  <div id="sHookList"></div>
+  <div class="btns">${run?`<button class="${B.s}" data-act="sStop">Parar</button>`:`<button class="${B.p}" data-act="sGen">${I('spark')}Gerar rascunho na voz de ${h(first(P.nome))}</button><button class="${B.s}" data-act="sHooks">Sugerir ganchos</button>`}</div>
+  ${studio.hook?`<div class="hook-chip"><span class="grow"><span class="lbl">Gancho escolhido · ${h(studio.hook.padrao)}</span><b>${h(studio.hook.l1)}</b><b>${h(studio.hook.l2)}</b></span><button class="${B.f} sm" data-act="sUnhook" ${run?'disabled':''}>Remover</button></div>`:''}
+  <div id="sFlow">${flowHTML()}</div>
+  <div id="sHookList">${hooksHTML()}</div>
   ${studio.modelo!=='txt'?`<div class="fld"><span class="lbl">${studio.modelo==='enq'?'Pergunta da enquete':'Frase da arte'}</span><input class="in" data-s="titulo" value="${h(studio.titulo)}" placeholder="Frase curta que vai na imagem"></div>`:''}
-  <div class="fld"><span class="lbl">Texto</span><textarea class="in" data-s="texto" rows="14" placeholder="O rascunho aparece aqui. Ajuste o que quiser.">${h(studio.texto)}</textarea><div class="cc"><span id="sCount"><b>${studio.texto.length}</b> caracteres</span><span>Até 210 aparecem antes do "… mais"</span></div></div>
-  <div class="btns"><button class="${B.s}" data-act="sSave">${I('cal')}${studio.editId?'Salvar no post':'Mandar para o calendário'}</button>${studio.editId?`<button class="${B.f}" data-act="sReset">Começar do zero</button>`:''}</div>
-  ${SAMPLE?'':'<p class="note">Neste arquivo local o rascunho sai de um modelo pronto. Publicado como artefato no Claude, a geração usa o Claude de verdade com o cérebro da marca, o kit e a referência escolhida.</p>'}
+  <div class="fld"><span class="lbl">Texto</span><textarea class="in" data-s="texto" rows="16" placeholder="Gere o rascunho ou escreva aqui. Se você escrever antes de gerar, o texto entra como material bruto." ${run?'readonly':''}>${h(studio.texto)}</textarea><div class="cc"><span id="sCount"><b>${studio.texto.length}</b> caracteres</span><span>Até 210 aparecem antes do "… mais"</span></div></div>
+  <div class="btns"><button class="${B.s}" data-act="sSave" ${run?'disabled':''}>${I('cal')}${studio.editId?'Salvar no post':'Mandar para o calendário'}</button>${studio.editId?`<button class="${B.f}" data-act="sReset">Começar do zero</button>`:''}</div>
  </section></div>
  <div class="pv"><div class="row">${rot('Prévia no feed')}<span class="sp"></span><div class="seg"><button class="${U.device==='desk'?'on':''}" data-act="device" data-v="desk">${I('desk')}<span class="hide-s">Desktop</span></button><button class="${U.device==='mob'?'on':''}" data-act="device" data-v="mob">${I('phone')}<span class="hide-s">Celular</span></button></div></div><div class="pv-bg" id="sPrev">${liPost(d,{mobile:U.device==='mob'})}</div></div></div>`};
-
 V.resultados=()=>{const P=cur();const pub=scopePosts().filter(p=>p.status==='publicado').sort(byDate).reverse();
  const sum=k=>pub.reduce((a,p)=>a+(+(p.r&&p.r[k])||0),0);
  const groups=P?P.marca.pilares.map(pl=>({n:pl.id+' · '+pl.nome,ps:pub.filter(p=>p.pilar===pl.id)})):S.profiles.map(pr=>({n:pr.nome,ps:pub.filter(p=>p.pid===pr.id)}));
@@ -1317,7 +1725,7 @@ function renderTab(){const t=(v,l,i)=>`<a href="#${v}" class="${U.view===v?'on':
  $('#tabbar').innerHTML=t('overview','Overview','home')+t('calendario','Agenda','cal')+`<button class="fab" data-act="new" aria-label="Novo post">${I('plus')}</button>`+t('estudio','Estúdio','pen')+`<button data-act="drawer">${I('menu')}<span>Menu</span></button>`}
 function subnavHTML(){const sn=SUBNAV[NAVG[U.view]];if(!sn)return '';const P=cur();const rev=scopePosts().filter(p=>p.status==='revisar').length;const nId=P?P.ideias.length:S.profiles.reduce((a,p)=>a+p.ideias.length,0);
  return `<nav class="subnav seg" aria-label="Seções">${sn.map(([k,n])=>`<a class="${U.view===k?'on':''}" href="#${k}"${U.view===k?' aria-current="page"':''}>${n}${k==='aprovacao'&&rev?`<span class="count strong">${rev}</span>`:''}${k==='ideias'?`<span class="count">${nId}</span>`:''}</a>`).join('')}</nav>`}
-function renderView(){const v=$('#view');const wide=U.view==='calendario';v.className='page fade'+(wide?' wide':'');const html=(V[U.view]||V.overview)();const sn=subnavHTML();v.innerHTML=sn&&html.startsWith('<div class="apr">')?html.replace('<div class="apr">','<div class="apr">'+sn):sn+html;void v.offsetWidth;if(U.after){const f=U.after;U.after=null;setTimeout(f,40)}}
+function renderView(){if(U.view==='estudio')setTimeout(saveStudio,0);const v=$('#view');const wide=U.view==='calendario';v.className='page fade'+(wide?' wide':'');const html=(V[U.view]||V.overview)();const sn=subnavHTML();v.innerHTML=sn&&html.startsWith('<div class="apr">')?html.replace('<div class="apr">','<div class="apr">'+sn):sn+html;void v.offsetWidth;if(U.after){const f=U.after;U.after=null;setTimeout(f,40)}}
 function render(){renderSide();renderTop();renderTab();renderView()}
 let rvT;const renderViewSoon=()=>{clearTimeout(rvT);rvT=setTimeout(()=>{renderView();renderSide()},350)};
 function route(){let k=location.hash.slice(1);if(k==='hoje'){k='overview';try{history.replaceState(null,'','#overview')}catch(e){}}U.view=V[k]?k:'overview';closeDrawer();render();window.scrollTo(0,0)}
@@ -1418,10 +1826,6 @@ function addIdea(t,pid,pilar){pid=pid||(U.scope!=='all'?U.scope:S.profiles[0].id
 const toggleTheme=()=>{U.theme=U.theme==='dark'?'light':'dark';applyTheme();saveUI();renderSide();renderTop()};
 const openDrawer=()=>{$('#side').classList.add('on');$('#scrim').classList.add('on')};
 function closeDrawer(){$('#side').classList.remove('on');if(!U.peek)$('#scrim').classList.remove('on')}
-const skillsTxt=()=>(studio.skills||[]).map(id=>SKN[id]).filter(Boolean);
-function draftTemplate(P){const i=studio.ideia||'o tema';const secs=FR[studio.frame][2];const ref=S.refs.find(r=>r.id===studio.ref);
- return `${i}.\n\n`+secs.map(x=>`[${x}] Escreva aqui usando uma história de ${first(P.nome)}: ${P.marca.historias[0]||''}`).join('\n\n')+`\n\n(Modelo pronto. Com o Claude conectado, este texto sai escrito na voz de ${first(P.nome)}, no tom "${P.marca.tom.sempre.slice(0,3).join(', ')}", com ${FR[studio.frame][0]}${skillsTxt().length?' e as skills '+skillsTxt().map(s=>s.n).join(', '):''}${ref?', tendo como base a referência "'+(ref.titulo||ref.url)+'"':''}.)`}
-function brief(P){const M=P.marca;return `Perfil: ${P.nome}, ${P.cargo} da ${P.empresa}.\nPosicionamento: ${M.posicionamento}\nPúblico: ${M.publico}\nPilares: ${M.pilares.map(p=>p.id+' '+p.nome+' ('+p.desc+')').join('; ')}\nTom sempre: ${M.tom.sempre.join(', ')}. Nunca: ${M.tom.nunca.join(', ')}.\nVocabulário: ${M.vocabulario.join(', ')}\nTeses: ${M.teses.join(' | ')}\nHistórias: ${M.historias.join(' | ')}\nProvas: ${M.provas.join(' | ')}`}
 const updStudioPrev=()=>{const pv=$('#sPrev');if(pv)pv.innerHTML=liPost({id:'draft',pid:studio.pid,titulo:studio.ideia,arte:studio.titulo,modelo:studio.modelo,texto:studio.texto,data:studio.data},{mobile:U.device==='mob'});const c=$('#sCount');if(c)c.innerHTML=`<b>${studio.texto.length}</b> caracteres`};
 function calFocus(id){const p=post(id);if(!p)return;const d=parse(p.data);
  if(U.cal.mode==='mes'||U.cal.mode==='lista'||U.cal.mode==='quadro'){if(U.cal.mode==='mes')U.cal.cursor=iso(new Date(d.getFullYear(),d.getMonth(),1))}else U.cal.cursor=p.data;
@@ -1441,7 +1845,7 @@ const ACT={
  setSb:t=>{U.sbc=t.dataset.v==='1';U.pswOpen=false;applySb();saveUI();render()},
  setTheme:t=>{U.theme=t.dataset.v;applyTheme();saveUI();render()},
  resetData:t=>{const lab=t.querySelector('span');if(!t.classList.contains('arm')){t.classList.add('arm');lab.textContent='Clique de novo para restaurar';setTimeout(()=>{if(t.isConnected){t.classList.remove('arm');lab.textContent='Restaurar dados de exemplo'}},2600);return}
-  S=seed();ensure();save();studio=freshStudio(null);for(const k in drafts)delete drafts[k];U.scope='all';closePeek();saveUI();render();toast('Dados de exemplo restaurados')},
+  S=seed();ensure();save();studio=freshStudio(null);for(const k in drafts)delete drafts[k];saveStudio();U.scope='all';closePeek();saveUI();render();toast('Dados de exemplo restaurados')},
  pswOpen:()=>{U.pswOpen=true;if(matchMedia('(max-width:959px)').matches)openDrawer();renderSide();setTimeout(()=>{$('#psw')?.scrollIntoView({block:'nearest'});$('#psw .psw-q')?.focus()},60)},
  drawer:()=>{$('#side').classList.contains('on')?closeDrawer():openDrawer()},
  closeAll:()=>{closePeek();closeDrawer()},
@@ -1493,18 +1897,81 @@ const ACT={
   if(id){const p=post(id);Object.assign(p,{pid:studio.pid,titulo:studio.ideia||p.titulo,arte:studio.titulo,texto:studio.texto,modelo:studio.modelo,pilar:studio.pilar,funil:studio.funil,data:studio.data});if(p.texto&&p.status==='ideia')p.status='texto'}
   else{id=uid('p');S.posts.push({id,pid:studio.pid,titulo:(studio.ideia||studio.texto.split('\n')[0]).slice(0,90),arte:studio.titulo,texto:studio.texto,modelo:studio.modelo,pilar:studio.pilar,funil:studio.funil,data:studio.data,status:studio.texto.trim()?'texto':'ideia',r:null,comentarios:[]})}
   save();studio={...freshStudio(studio.pid)};toast('Salvo no calendário');calFocus(id);setTimeout(()=>openPeek(id),120)},
- sGen:async t=>{const P=prof(studio.pid);if(!studio.ideia.trim()){toast('Escolha ou escreva uma ideia');return}
-  if(!SAMPLE){studio.texto=draftTemplate(P);if(!studio.titulo)studio.titulo=studio.ideia.slice(0,70);renderView();toast('Rascunho criado');return}
-  t.disabled=true;t.innerHTML='<span class="ai-dot"></span>Escrevendo na voz de '+h(first(P.nome))+'…';
-  const sk=skillsTxt();const ref=S.refs.find(r=>r.id===studio.ref);
-  const prompt=`Você é o ghostwriter de LinkedIn deste perfil. Escreva UM post em português do Brasil.\n\n${brief(P)}\n\nIdeia do post: ${studio.ideia}\nModelo: ${MOD[studio.modelo]}\nFunil: ${FUN[studio.funil]}\nEstrutura: ${FR[studio.frame][0]} (${FR[studio.frame][1]})\n${sk.length?'Skills a aplicar:\n'+sk.map(s=>'- '+s.n+': '+(s.p||s.d)).join('\n')+'\n':''}${ref?`Referência para usar como base (formato e ritmo, sem copiar o texto): ${ref.titulo||''} ${ref.url||''}. Observação: ${ref.nota||''}\n`:''}\nRegras: primeira linha é o gancho e cabe em 210 caracteres junto com a segunda; parágrafos de 1 a 3 frases; use história, número ou prova do perfil quando couber; entre 1.200 e 2.000 caracteres; nunca use a estrutura "Não é X, é Y", nunca termine com frase de efeito ou moral, não use travessão, não use hashtags nem emojis. Responda só com o texto do post.`;
-  try{const r=await SAMPLE(prompt,{modelTier:'default',onText:({text})=>{const ta=$('[data-s="texto"]');if(ta){ta.value=text;studio.texto=text;updStudioPrev()}}});studio.texto=r.text.trim();if(!studio.titulo)studio.titulo=studio.ideia.slice(0,70)}catch(err){toast(err&&err.code==='rate_limited'?'Limite de uso; tente em instantes':'Não deu para gerar agora');studio.texto=studio.texto||draftTemplate(P)}
-  renderView()},
- sHooks:async()=>{const P=prof(studio.pid);if(!studio.ideia.trim()){toast('Escolha ou escreva uma ideia');return}const box=$('#sHookList');let hooks=null;
-  if(SAMPLE){box.innerHTML='<p class="note"><span class="ai-dot"></span> Pensando em ganchos…</p>';try{const r=await SAMPLE(`${brief(P)}\n\nIdeia: ${studio.ideia}\n\nEscreva 5 ganchos de LinkedIn (primeira linha do post, até 120 caracteres cada) na voz deste perfil, cada um usando um padrão diferente entre: ${HOOKS.join(', ')}. Sem emojis, sem travessão, sem "Não é X, é Y". Responda só com JSON: [{"padrao":"...","texto":"..."}]`,{modelTier:'quick'});hooks=JSON.parse(r.text.slice(r.text.indexOf('['),r.text.lastIndexOf(']')+1))}catch(e){hooks=null}}
-  if(!hooks)hooks=P.ganchos.length?P.ganchos:[{padrao:'O Específico',texto:'Comece pelo número mais concreto da história.'}];
-  box.innerHTML='<span class="lbl">Clique para usar como abertura</span><ul class="hooks">'+hooks.map(g=>`<li><button class="${B.s} sm" data-act="useHook" data-t="${h(g.texto)}">Usar</button><span>${h(g.texto)}<small>${h(g.padrao)}</small></span></li>`).join('')+'</ul>'},
- useHook:t=>{const ta=$('[data-s="texto"]');const v=ta.value.trim()?ta.value.replace(/^[^\n]*/,t.dataset.t):t.dataset.t+'\n\n';ta.value=v;studio.texto=v;updStudioPrev();toast('Gancho aplicado')}
+ /* Gerar rascunho: linkedin-post-structure → linkedin-copy → linkedin-anti-ai (+ verificação e uma correção extra se precisar) */
+ sGen:async()=>{const P=prof(studio.pid);if(!studio.ideia.trim()){toast('Escolha ou escreva uma ideia');return}
+  if(studio.flow&&studio.flow.running)return;
+  /* 1) Ponte local: Claude Code desta máquina com as skills reais */
+  const br=await getBridge(true);
+  if(br&&br.cli){
+   const f=studio.flow={st:{},running:true,mode:'bridge',msg:'Conectando ao Claude Code desta máquina…',briefing:null,briefTxt:'',changes:[],lint:null};studio.hooks=null;renderView();
+   const setTxt=v=>{studio.texto=v;const el=$('[data-s="texto"]');if(el)el.value=v;updStudioPrev()};
+   const t0=Date.now();
+   try{
+    const ev=await bridgeJob('draft',P,bridgePromptDraft(P),ev=>{const ss=ev.skills.join(' ');const seg=Math.round((Date.now()-t0)/1000);
+     if(/anti-ai/.test(ss)){f.st={struct:'ok',copy:'ok',anti:'run'};f.msg='Etapa 3 de 3: a linkedin-anti-ai está fazendo a revisão final.'}
+     else if(/linkedin-copy/.test(ss)){f.st={struct:'ok',copy:'run'};f.msg=`Etapa 2 de 3: a linkedin-copy está escrevendo o post na voz de ${first(P.nome)}.`}
+     else if(/post-structure/.test(ss)){f.st={struct:'run'};f.msg='Etapa 1 de 3: a linkedin-post-structure está montando o briefing'+(ev.web?` (já fez ${ev.web} ${ev.web>1?'buscas':'busca'} na web)`:'')+'.'}
+     else f.msg='O Claude Code está lendo o about-me.md e o voice.md de '+first(P.nome)+'…';
+     f.msg+=` ${seg}s.`;renderFlow()});
+    const r=ev.result;const post=cleanPost(between(r,'POST')||r);setTxt(post);
+    f.briefTxt=between(r,'BRIEFING');f.changes=between(r,'MUDANCAS').split('\n').map(s=>s.replace(/^\s*[-•*]\s*/,'').trim()).filter(Boolean).slice(0,6);f.lint=lintPost(post);
+    f.st={struct:'ok',copy:'ok',anti:'ok'};studio.gerado=true;studio.hookApplied=2;
+    if(!studio.titulo&&studio.modelo!=='txt')studio.titulo=post.split('\n')[0].slice(0,70);
+    const faltou=FLOW.filter(s=>!ev.skills.some(n=>n.includes(s.sk))).map(s=>s.sk);
+    f.msg=`Rascunho pronto em ${Math.round((Date.now()-t0)/1000)}s.`+(faltou.length?` Atenção: o Claude não chamou ${faltou.join(' e ')}; revise o texto com cuidado.`:' As 3 skills rodaram.')+' Ajuste o que quiser e mande para o calendário.';
+   }catch(e){const k=FLOW.find(s=>f.st[s.k]==='run');if(k)f.st[k.k]='err';
+    if(e&&e.code==='login'){f.login=true;f.msg=''}else f.msg=e&&e.code==='cancelled'?'Geração interrompida.':serr(e)}
+   finally{f.running=false;renderView();saveStudio()}
+   return}
+  /* 2) Claude do artefato (quando o app roda dentro do Claude) */
+  const sample=await getSample();
+  const f=studio.flow={st:{},running:false,local:!sample,msg:'',briefing:null,changes:[],lint:null};studio.hooks=null;
+  if(!sample){renderView();return}
+  const voice=voiceDoc(P,studio.editId),mat=materialDoc(P);
+  const ctl=new AbortController();FLOWCTL=ctl;f.running=true;renderView();
+  const setTxt=v=>{studio.texto=v;const el=$('[data-s="texto"]');if(el)el.value=v;updStudioPrev()};
+  const step=(k,s,msg)=>{f.st[k]=s;if(msg!==undefined)f.msg=msg;renderFlow()};
+  const anti=async(post,issues)=>{const r=await sample(promptAnti(P,voice,post,issues),{signal:ctl.signal,cache:false,onText:({text})=>{const p=splitAnti(text).post;if(p)setTxt(p)}});const o=splitAnti(r.text);if(!o.post)o.post=post;return o};
+  try{
+   step('struct','run','Etapa 1 de 3: a linkedin-post-structure está montando o briefing (ângulo, formato, framework e esqueleto). Costuma levar de 20 a 60 segundos.');
+   const b=await sample.json(promptStruct(P,voice,mat),{signal:ctl.signal,cache:false});
+   if(!b||typeof b!=='object'||!Array.isArray(b.esqueleto))throw {code:'invalid_json'};
+   f.briefing=b;step('struct','ok');
+   step('copy','run',`Etapa 2 de 3: a linkedin-copy está escrevendo o post na voz de ${first(P.nome)}.`);
+   const r1=await sample(promptCopy(P,voice,mat,b),{signal:ctl.signal,cache:false,onText:({text})=>setTxt(cleanPost(text))});
+   const post=cleanPost(r1.text);setTxt(post);step('copy','ok');
+   step('anti','run','Etapa 3 de 3: a linkedin-anti-ai está fazendo a revisão final.');
+   let res=await anti(post,null);let issues=lintPost(res.post);
+   if(issues.length){f.msg='Etapa 3 de 3: a verificação achou '+issues.join(', ')+'. A linkedin-anti-ai está corrigindo.';renderFlow();const res2=await anti(res.post,issues);res={post:res2.post,changes:[...res.changes,...res2.changes].slice(0,8)};issues=lintPost(res.post)}
+   setTxt(res.post);f.changes=res.changes;f.lint=issues;studio.gerado=true;
+   if(!studio.titulo&&studio.modelo!=='txt')studio.titulo=(b.hook&&b.hook.linha1)||studio.ideia.slice(0,70);
+   step('anti','ok','Rascunho pronto. Ajuste o que quiser e mande para o calendário.');
+  }catch(e){const k=FLOW.find(s=>f.st[s.k]==='run');if(k)f.st[k.k]='err';
+   if(e&&e.code==='refused')setTxt('');
+   f.msg=e&&e.code==='cancelled'?'Geração interrompida. O que já tinha sido escrito ficou no texto.':serr(e)}
+  finally{f.running=false;FLOWCTL=null;renderView();saveStudio()}},
+ sStop:()=>{FLOWCTL?.abort();cancelBridge()},
+ bridgeLogin:async()=>{try{await api('/api/login',{});toast('Abri uma janela do terminal com o Claude. Entre na sua conta e depois gere de novo.')}catch(e){toast(serr(e))}},
+ sCopyReq:t=>{const P=prof(studio.pid);copy(skillRequest(P,t.dataset.k),'Pedido copiado. Cole numa conversa do Claude.')},
+ /* Sugerir ganchos: viral-hook-creator na voz do perfil (6 padrões) e variações de um padrão */
+ sHooks:async()=>{const P=prof(studio.pid);if(!studio.ideia.trim()){toast('Escolha ou escreva uma ideia');return}
+  if(await hooksViaBridge(P))return;
+  const sample=await getSample();
+  if(!sample){studio.hooks={local:true,list:[]};renderHooks();return}
+  studio.hooks={loading:true,list:[]};renderHooks();
+  try{const l=normHooks(await sample.json(promptHooks(P,voiceDoc(P,studio.editId),materialDoc(P,true)),{cache:false}));if(!l.length)throw {code:'invalid_json'};studio.hooks={list:l}}
+  catch(e){studio.hooks=null;toast(serr(e))}renderHooks();saveStudio()},
+ hookVar:async t=>{const P=prof(studio.pid);const g=studio.hooks&&studio.hooks.list[+t.dataset.i];if(!g)return;
+  if(await hooksViaBridge(P,g.padrao))return;
+  const sample=await getSample();if(!sample)return;
+  studio.hooks={loading:true,list:[]};renderHooks();
+  try{const l=normHooks(await sample.json(promptHooks(P,voiceDoc(P,studio.editId),materialDoc(P,true),g.padrao),{cache:false}));if(!l.length)throw {code:'invalid_json'};l.forEach(x=>x.recomendado=false);studio.hooks={list:l,padrao:g.padrao}}
+  catch(e){studio.hooks=null;toast(serr(e))}renderHooks();saveStudio()},
+ useHook:t=>{const g=studio.hooks&&studio.hooks.list[+t.dataset.i];if(!g)return;
+  studio.hook={padrao:g.padrao,l1:g.linha1,l2:g.linha2};const head=`${g.linha1}\n\n${g.linha2}`;const txt=studio.texto||'';
+  if(!txt.trim())studio.texto=head+'\n\n';else if(studio.gerado||studio.hookApplied){const parts=txt.split(/\n\s*\n/);studio.texto=[head,...parts.slice(2)].join('\n\n')}else studio.texto=head+'\n\n'+txt;
+  studio.hookApplied=2;renderView();toast('Gancho aplicado. A estrutura mantém este gancho quando você gerar o rascunho.')},
+ sUnhook:()=>{studio.hook=null;renderView()}
 };
 document.addEventListener('click',e=>{
  if(U.pswOpen&&!e.target.closest('.sb-psw')&&!e.target.closest('.active-chip')){U.pswOpen=false;renderSide()}
@@ -1520,7 +1987,7 @@ document.addEventListener('keydown',e=>{
 document.addEventListener('input',e=>{const el=e.target;
  if(el.matches('[data-psw-q]')){const q=el.value.trim().toLowerCase();$$('#psw .psw-list [data-n]').forEach(b=>b.style.display=!q||b.dataset.n.includes(q)?'':'none');return}
  if(el.dataset.f&&el.closest('#peek')&&el.tagName==='TEXTAREA'){const p=post(U.peek);if(!p)return;p[el.dataset.f]=el.value;autosize(el);if(el.dataset.f==='texto'){$('#pkCount').innerHTML=`<b>${el.value.length}</b> caracteres`}if(['texto','arte','titulo'].includes(el.dataset.f))$('#pkPrev').innerHTML=liPost(p);save();renderViewSoon();return}
- if(el.dataset.s&&['texto','titulo','ideia'].includes(el.dataset.s)){studio[el.dataset.s]=el.value;updStudioPrev()}
+ if(el.dataset.s&&['texto','titulo','ideia'].includes(el.dataset.s)){studio[el.dataset.s]=el.value;updStudioPrev();clearTimeout(saveStudio.t);saveStudio.t=setTimeout(saveStudio,600)}
 });
 document.addEventListener('change',e=>{const el=e.target;
  if(el.dataset.f&&el.closest('#peek')&&el.tagName!=='TEXTAREA'){const p=post(U.peek);if(!p)return;const f=el.dataset.f;if(f==='data'&&!el.value)return;p[f]=el.value;if(f==='pid'){const pr=prof(el.value);p.pilar=pr.marca.pilares[0]?.id||''}save();renderPeek();renderView();renderSide();return}
